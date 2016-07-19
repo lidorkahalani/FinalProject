@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">פרויקט סוף קורס</string>
+    <string name="wellcome">ברוך הבא</string>
+    <string name="openGroup">פתח קבוצה חדשה</string>
+    <string name="addPlayer">הוסף שחקן</string>
+    <string name="remove">הסר</string>
+    <string name="newGame">התחל משחק חדש</string>
+    <string name="exit">יציאה</string>
+    <string name="startGame">התחל</string>
+    <string name="signUp">הירשם</string>
+    <string name="signIn">היכנס</string>
+    <string name="userName">שם משתמש</string>
+    <string name="password">סיסמא</string>
+    <string name="logIn">היכנס</string>
+    <string name="addNewCards">הוסף כרטיס</string>
+    <string name="logOut">צא</string>
+    <string name="add">הוסף</string>
+    <string name="exitWarning">אתה בטוח שברצונך לצאת?</string>
+    <string name="showRecords">השיאים</string>
+    <string name="changeLang">שנה שפה</string>
+    <string name="loading">טוען...</string>
+    <string name="yes">כן</string>
+    <string name="no">לא</string>
+    <string name="repassword">סססמא בשנית</string>
+</resources>
