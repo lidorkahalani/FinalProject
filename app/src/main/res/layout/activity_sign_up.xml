@@ -18,8 +18,8 @@
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true">
-
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="80dp">
 
         <EditText
             android:id="@+id/UserName"
@@ -35,7 +35,6 @@
             android:layout_marginTop="30dp"
             />
 
-
         <EditText
             android:id="@+id/password"
             android:layout_width="246dp"
@@ -50,7 +49,7 @@
             />
 
         <EditText
-            android:id="@+id/password2"
+            android:id="@+id/repassword"
             android:layout_width="246dp"
             android:layout_height="wrap_content"
             android:textColorHint="@android:color/darker_gray"
@@ -60,9 +59,6 @@
             android:layout_gravity="center_horizontal"
             android:background="@drawable/edit_text"
             />
-
-
-
 
         <Button
             android:background="@drawable/button"
@@ -105,15 +101,9 @@
             android:layout_centerVertical="true"
             android:layout_alignRight="@+id/Background"
             android:layout_alignEnd="@+id/Background"
-
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
             android:textSize="17dp" />
-
-
-
-
-
 
     </LinearLayout>
 </RelativeLayout>

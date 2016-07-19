@@ -111,7 +111,7 @@ public class AllRecords extends AppCompatActivity implements AdapterView.OnItemC
 
             userName.setText(user.getUserName());
             //pass.setText(user.getPassword());
-            score.setText("Score: "+Integer.toString(user.getScore()));
+            score.setText(Integer.toString(user.getScore()));
             return convertView;
 
         }

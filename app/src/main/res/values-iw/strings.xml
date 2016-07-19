@@ -21,5 +21,9 @@
     <string name="loading">טוען...</string>
     <string name="yes">כן</string>
     <string name="no">לא</string>
-    <string name="repassword">סססמא בשנית</string>
+    <string name="OpenRoom">פתח חדר</string>
+    <string name="roomName">שם החדר</string>
+    <string name="createRoom">צור חדר</string>
+    <string name="JoinToRoom">הצטרף לחדר</string>
+    <string name="EnterRoomName">הכנס את שם החדר</string>
 </resources>

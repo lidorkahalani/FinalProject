@@ -17,6 +17,7 @@ public class User implements Serializable {
         setPassword(password);
         setScore(score);
     }
+
     public int getScore() {
         return score;
     }

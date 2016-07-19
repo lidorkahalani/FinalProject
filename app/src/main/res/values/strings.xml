@@ -22,11 +22,18 @@
     <string name="LOCALE_IW">iw</string>
     <string name="LOCALE_ENGLISH">en</string>
     <string name="CreateUser">Creat User</string>
-    <string name="Back">back</string>
+    <string name="back">Back</string>
     <string name="loading">Loading Componutes...</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="repassword">repassword</string>
+    <string name="OpenRoom">Open Room</string>
+    <string name="roomName">Room Name</string>
+    <string name="createRoom">Create Room</string>
+    <string name="JoinToRoom">Join Room</string>
+    <string name="EnterRoomName">Enter Room Name</string>
+    <string name="Back">Back</string>
+    <string name="repassword">Re-Password</string>
+
 
 
 </resources>

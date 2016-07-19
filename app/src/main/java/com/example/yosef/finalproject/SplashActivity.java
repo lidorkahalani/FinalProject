@@ -9,7 +9,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class SplashActivity extends AppCompatActivity {
-    ProgressBar pbHorizontal;
     ProgressBar circleProgresBar;
     TextView Precent;
 
@@ -18,7 +17,6 @@ public class SplashActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        pbHorizontal= (ProgressBar)findViewById(R.id.progressBar);
         circleProgresBar= (ProgressBar)findViewById(R.id.circleProgresBar);
         Precent =(TextView)findViewById(R.id.Precent);
         MyLoaderTask openScreen=new MyLoaderTask();
@@ -32,7 +30,7 @@ public class SplashActivity extends AppCompatActivity {
         protected void onProgressUpdate(Integer... values) {
             circleProgresBar.setProgress(values[0]);
             Precent.setText(Integer.toString(values[0])+"%");
-            pbHorizontal.setProgress(values[0]);
+
 
         }
 
@@ -53,7 +51,7 @@ public class SplashActivity extends AppCompatActivity {
         //this run on UI
         @Override
         protected void onPostExecute(Boolean result) {
-            pbHorizontal.setProgress(100);
+
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 public class SignUp extends AppCompatActivity {
     EditText userName;
     EditText password;
+    EditText repassword;
     UsersDBHandler dbHandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +28,7 @@ public class SignUp extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
         userName=(EditText)findViewById(R.id.UserName);
         password=(EditText)findViewById(R.id.password);
+        repassword=(EditText)findViewById(R.id.repassword);
         dbHandler = new UsersDBHandler(this);
     }
     public void goBack(View v){
@@ -37,18 +39,24 @@ public class SignUp extends AppCompatActivity {
         boolean succsesAdd=false;
         String uName=userName.getText().toString();
         String pass=password.getText().toString();
+        String repass=repassword.getText().toString();
         if(uName.equals("")||pass.equals(""))
             emptyField=true;
 
+
         if(!emptyField) {
-            User b = new User(uName, pass, 0);
+            if (repass.equals(pass)) {
+                User b = new User(uName, pass, 0);
                 if (dbHandler.AddUser(b)) {
-                    succsesAdd=true;
+                    succsesAdd = true;
                     userName.setText("");
                     password.setText("");
                     Toast.makeText(this, "User added succesfuly", Toast.LENGTH_SHORT).show();
-                }else //need to cathch the exception but didnt sucseed so i use if else (not good)
+                } else //need to cathch the exception but didnt sucseed so i use if else (not good)
                     Toast.makeText(this, "User Name already in use", Toast.LENGTH_SHORT).show();
+            }
+            else
+                Toast.makeText(this, "Password not match!", Toast.LENGTH_SHORT).show();
         }
         else if(emptyField)
             Toast.makeText(this, "Cannot get empty field", Toast.LENGTH_SHORT).show();

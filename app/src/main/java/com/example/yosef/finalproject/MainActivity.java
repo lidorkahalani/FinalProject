@@ -164,5 +164,11 @@ public class MainActivity extends AppCompatActivity {
         } /*else if (newConfig.locale.toString() == LOCALE_IW){
             Toast.makeText(this, "Hebrew", Toast.LENGTH_SHORT).show();*/
         }
+
+    public void logInToFacebook(View v){
+
+        Toast.makeText(this,"Log in facebook",Toast.LENGTH_SHORT).show();
+
+        }
     }
 
