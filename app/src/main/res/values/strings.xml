@@ -1,0 +1,40 @@
+<resources>
+    <string name="facebook_app_id">597616363744470</string>
+    <string name="app_name">FinalProject</string>
+    <string name="wellcome">Welcome</string>
+    <string name="openGroup">Open new group</string>
+    <string name="addPlayer">Add new player</string>
+    <string name="remove">Remove</string>
+    <string name="newGame">Start new Game</string>
+    <string name="exit">Exit</string>
+    <string name="startGame">Start Game</string>
+    <string name="signUp">Sign Up</string>
+    <string name="signIn">Sign In</string>
+    <string name="userName">User Name</string>
+    <string name="password">Password</string>
+    <string name="logIn">Log In</string>
+    <string name="addNewCards">Add new cards</string>
+    <string name="logOut">Log Out</string>
+    <string name="add">Add</string>
+    <string name="exitWarning">Are you sure you want to exit?</string>
+    <string name="showRecords">Show records</string>
+    <string name="changeLang">Change lang</string>
+    <string name="LOCALE_IW">iw</string>
+    <string name="LOCALE_ENGLISH">en</string>
+    <string name="CreateUser">Creat User</string>
+    <string name="back">Back</string>
+    <string name="loading">Loading Componutes..</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="OpenRoom">Open Room</string>
+    <string name="roomName">Room Name</string>
+    <string name="createRoom">Create Room</string>
+    <string name="JoinToRoom">Join Room</string>
+    <string name="EnterRoomName">Enter Room Name</string>
+    <string name="Back">Back</string>
+    <string name="repassword">Re-Password</string>
+
+
+    
+
+</resources>
