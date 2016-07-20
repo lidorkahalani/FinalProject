@@ -52,6 +52,7 @@ public class SignUp extends AppCompatActivity {
                     userName.setText("");
                     password.setText("");
                     Toast.makeText(this, "User added succesfuly", Toast.LENGTH_SHORT).show();
+                    finish();
                 } else //need to cathch the exception but didnt sucseed so i use if else (not good)
                     Toast.makeText(this, "User Name already in use", Toast.LENGTH_SHORT).show();
             }
