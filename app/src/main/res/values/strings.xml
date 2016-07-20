@@ -23,7 +23,7 @@
     <string name="LOCALE_ENGLISH">en</string>
     <string name="CreateUser">Creat User</string>
     <string name="back">Back</string>
-    <string name="loading">Loading Componutes..</string>
+    <string name="loading">Loading Componutes...</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="OpenRoom">Open Room</string>
@@ -35,6 +35,5 @@
     <string name="repassword">Re-Password</string>
 
 
-    
 
 </resources>
