@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         dbHandler = new UsersDBHandler(this);
+
         SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(this);
         String uname = myPref.getString("username", null);
         if (uname != null && !uname.equals("")) {
@@ -47,24 +48,20 @@ public class MainActivity extends AppCompatActivity {
         userName = (EditText) findViewById(R.id.UserName);
         password = (EditText) findViewById(R.id.password);
 
-      /* String []a={"dsd","sds","cd","ds"};
-        Cards animel=new Cards("Animles","red",
-                             getFileStreamPath("C:\\Users\\Yosef\\AndroidStudioProjects\\FinalProject\\app\\src\\main\\res\\mipmap-hdpi")
-                             ,a,1);*/
     }
 
     public void logIn(View v) {
-        boolean userExsist=true;
+        boolean userExist=true;
         MySQLiteHelper dbHelper=new MySQLiteHelper(this, UserDBConstants.DBName, null, UserDBConstants.User_DB_VESRSION);
         inputUserName = userName.getText().toString();
         inputPassword = password.getText().toString();
 
         if(inputUserName.equals("")||inputPassword.equals("")){
-            userExsist=false;
+            userExist=false;
         }
         else {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            // select * from BOOKS User
+            // select * from User
             Cursor usersCursor = db.query(UserDBConstants.User_Table_Name, null, null, null, null, null, null);
             // each round in the loop is a record in the DB
             while (usersCursor.moveToNext()) {
@@ -72,14 +69,14 @@ public class MainActivity extends AppCompatActivity {
                 passwo = usersCursor.getString(1);
                 score=Integer.parseInt(usersCursor.getString(2));
                 if (inputUserName.equals(Name) && inputPassword.equals(passwo)) {
-                    userExsist = true;
+                    userExist = true;
                     break;
                 }
-                userExsist = false;
+                userExist = false;
             }
         }
 
-        if (userExsist) {
+        if (userExist) {
             SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(this);
             SharedPreferences.Editor editor = myPref.edit();
             editor.putString("username", Name);
@@ -94,6 +91,25 @@ public class MainActivity extends AppCompatActivity {
         } else
             Toast.makeText(this, "invalid user ! please try Again", Toast.LENGTH_LONG).show();
 
+    }
+
+    public void onBackPressed() {
+        // TODO Auto-generated method stub
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Are you sure you want to Exit")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        MainActivity.this.finish();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     public void SignUp(View v) {

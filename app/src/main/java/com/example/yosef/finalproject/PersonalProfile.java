@@ -44,7 +44,24 @@ public class PersonalProfile extends AppCompatActivity {
         startActivity(myIntent);
         finish();*/
     }
-
+    public void onBackPressed() {
+        // TODO Auto-generated method stub
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Are you sure you want to Exit?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        PersonalProfile.this.finish();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
     public void startGame(View v){
         Intent myIntent=new Intent(this,GameScreen.class);
         startActivity(myIntent);

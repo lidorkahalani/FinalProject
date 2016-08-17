@@ -34,6 +34,7 @@ public class UsersDBHandler {
 
         long result = db.insert(UserDBConstants.User_Table_Name, null, columnValues);
 
+
         db.close();
 
         // when result is -1 it means the insert has failed, so when NOT -1 it was successful

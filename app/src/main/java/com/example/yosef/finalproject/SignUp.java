@@ -31,6 +31,8 @@ public class SignUp extends AppCompatActivity {
         repassword=(EditText)findViewById(R.id.repassword);
         dbHandler = new UsersDBHandler(this);
     }
+
+
     public void goBack(View v){
         finish();
     }
