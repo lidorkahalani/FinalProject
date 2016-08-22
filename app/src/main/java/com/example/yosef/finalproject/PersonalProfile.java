@@ -8,21 +8,76 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
+import com.facebook.FacebookSdk;
+import com.facebook.Profile;
+import com.facebook.ProfileTracker;
+import com.facebook.login.widget.LoginButton;
 
 import java.util.ArrayList;
 
 public class PersonalProfile extends AppCompatActivity {
 
     UsersDBHandler dbHandler;
+    private ProfileTracker profileTracker;
+    private AccessTokenTracker accsessTokenTracker;
+    private Profile profile;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(this);
         setContentView(R.layout.activity_personalprofile);
+
+        accsessTokenTracker=new AccessTokenTracker() {
+            @Override
+            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+                AccessToken.refreshCurrentAccessTokenAsync();
+            }
+
+        };
+        accsessTokenTracker.startTracking();
+
+        profileTracker=new ProfileTracker() {
+            @Override
+            protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
+                profile=currentProfile;
+                if(profile==null) {
+                    SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(PersonalProfile.this);
+                    SharedPreferences.Editor editor = myPref.edit();
+                    editor.remove("username");
+                    editor.commit();
+                    Intent myIntent=new Intent(PersonalProfile.this,MainActivity.class);
+                    startActivity(myIntent);
+                    finish();
+
+                }
+
+
+            }
+        };
+
+        LoginButton authButton = (LoginButton)findViewById(R.id.facbookLogin);
+        Button loginBtn=(Button)findViewById(R.id.logOut);
+        if(profile==null) {
+            authButton.setVisibility(View.GONE);
+            loginBtn.setVisibility(View.VISIBLE);
+        }
+        else {
+            authButton.setVisibility(View.VISIBLE);
+            loginBtn.setVisibility(View.GONE);
+        }
+
         dbHandler = new UsersDBHandler(this);
         TextView t=(TextView)findViewById(R.id.WelcomUserName);
 
@@ -32,6 +87,14 @@ public class PersonalProfile extends AppCompatActivity {
         int score=myPref.getInt("score",0);
 
         t.setText("Hello "+uname+"\n"+"Toatal Score: "+Integer.toString(score));
+    }
+
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        accsessTokenTracker.stopTracking();
+        profileTracker.stopTracking();
     }
 
     public void addCardToDB(View v){
@@ -142,4 +205,6 @@ public class PersonalProfile extends AppCompatActivity {
         startActivity(myIntent);
         finish();
     }
+
+
 }
