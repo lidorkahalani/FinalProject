@@ -7,7 +7,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.support.annotation.BoolRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,7 +17,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class SignUp extends AppCompatActivity {
     EditText userName;
@@ -31,38 +37,62 @@ public class SignUp extends AppCompatActivity {
         repassword=(EditText)findViewById(R.id.repassword);
         dbHandler = new UsersDBHandler(this);
     }
+
+
     public void goBack(View v){
         finish();
     }
     public void addNewUserToDB(View v){
-        boolean emptyField=false;
-        boolean succsesAdd=false;
+        new signUp().execute();
+    }
+
+    public class signUp  extends AsyncTask<String, Void, Boolean>{
+        String reg_url = "http://mysite.lidordigital.co.il/Quertets/register.php";
+        HashMap<String,String> parms=new HashMap<>();
         String uName=userName.getText().toString();
         String pass=password.getText().toString();
         String repass=repassword.getText().toString();
-        if(uName.equals("")||pass.equals(""))
-            emptyField=true;
+        @Override
+        protected Boolean doInBackground(String... params) {
+
+            if(uName.equals("")||pass.equals("")||!repass.equals(pass))
+                return false;
+
+            parms.put("password",pass);
+            parms.put("username",uName);
+            JSONParser json=new JSONParser();
+            try {
+                JSONObject response=json.makeHttpRequest(reg_url,"POST",parms);
 
 
-        if(!emptyField) {
-            if (repass.equals(pass)) {
-                User b = new User(uName, pass, 0);
-                if (dbHandler.AddUser(b)) {
-                    succsesAdd = true;
-                    userName.setText("");
-                    password.setText("");
-                    Toast.makeText(this, "User added succesfuly", Toast.LENGTH_SHORT).show();
-                } else //need to cathch the exception but didnt sucseed so i use if else (not good)
-                    Toast.makeText(this, "User Name already in use", Toast.LENGTH_SHORT).show();
+                if(response.getInt("sucsses")==1){
+
+                    return true;
+                }else{
+                    return false;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return false;
+            }catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+
+
+        }
+        protected void onPostExecute(Boolean result) {
+            if(result) {
+                Toast.makeText(SignUp.this, "User added succesfuly", Toast.LENGTH_SHORT).show();
+                finish();
             }
             else
-                Toast.makeText(this, "Password not match!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SignUp.this, "User NOT added", Toast.LENGTH_SHORT).show();
+
+
+
+
+
         }
-        else if(emptyField)
-            Toast.makeText(this, "Cannot get empty field", Toast.LENGTH_SHORT).show();
-
-        else if(!succsesAdd)
-            Toast.makeText(this, "User NOT added", Toast.LENGTH_SHORT).show();
-
     }
 }

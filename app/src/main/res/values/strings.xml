@@ -1,6 +1,7 @@
 <resources>
     <string name="facebook_app_id">597616363744470</string>
-    <string name="app_name">FinalProject</string>
+    <string name="app_name">Quartets</string>
+    <string name="recordes">Table of records</string>
     <string name="wellcome">Welcome</string>
     <string name="openGroup">Open new group</string>
     <string name="addPlayer">Add new player</string>

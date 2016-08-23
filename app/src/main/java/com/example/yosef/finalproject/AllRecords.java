@@ -70,16 +70,6 @@ public class AllRecords extends AppCompatActivity implements AdapterView.OnItemC
         switch(item.getItemId()) {
             case R.id.delete:
                 Toast.makeText(this,"Delet",Toast.LENGTH_SHORT).show();
-               /* for(int i = 0; i< allCities.size(); i++) {
-                    if(allCities.get(i).getCityName().equals(allCities.get(info.position).getCityName())) {
-                        Toast.makeText(this,allCities.get(info.position).getCityName()+ " Sucssefuly Deleted! ", Toast.LENGTH_SHORT).show();
-                        allCities.remove(i);
-                        adapter= new MyClassAdapter(this, R.layout.single_city_layout, allCities);
-                        myListView.setAdapter(adapter);
-                        break;
-                    }
-                }*/
-
                 return true;
             default:
                 return super.onContextItemSelected(item);
