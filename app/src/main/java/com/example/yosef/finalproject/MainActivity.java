@@ -55,8 +55,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(this);
+        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_main);
+
+
+        SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(this);
+        String uname = myPref.getString("username", null);
+        //if the user alredy connected skeep log in screen
+        if (uname != null && !uname.equals("")) {
+            Intent myIntent = new Intent(this, PersonalProfile.class);
+            startActivity(myIntent);
+            finish();
+            return;
+        }
 
         accsessTokenTracker=new AccessTokenTracker() {
             @Override
@@ -67,15 +78,12 @@ public class MainActivity extends AppCompatActivity {
         };
         accsessTokenTracker.startTracking();
 
+
         callBack=CallbackManager.Factory.create();
        // LoginButton facebookBtn=(LoginButton)findViewById(R.id.facbookLogin);
         LoginManager.getInstance().registerCallback(callBack, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-
-                Intent myIntent = new Intent(MainActivity.this, PersonalProfile.class);
-                startActivity(myIntent);
-                finish();
             }
 
             @Override
@@ -96,9 +104,12 @@ public class MainActivity extends AppCompatActivity {
                 if(profile!=null) {
                     SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
                     SharedPreferences.Editor editor = myPref.edit();
+                    editor.putBoolean("loginWhitFacebook", true);
+                    editor.commit();
+
+                    new logIn().execute(profile.getFirstName(),profile.getId());
                     editor.putString("username", profile.getFirstName());
                     editor.putInt("score", score);
-
                     editor.commit();
 
                     Log.v("Facebook user name", profile.getFirstName());
@@ -116,25 +127,20 @@ public class MainActivity extends AppCompatActivity {
 
         dbHandler = new UsersDBHandler(this);
 
-        SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(this);
-        String uname = myPref.getString("username", null);
-        //if the user alredy connected skeep log in screen
-        if (uname != null && !uname.equals("")) {
 
-            Intent myIntent = new Intent(this, PersonalProfile.class);
-            startActivity(myIntent);
-            finish();
-        }
         userName = (EditText) findViewById(R.id.UserName);
         password = (EditText) findViewById(R.id.password);
 
     }
 
+
     @Override
     public void onDestroy(){
         super.onDestroy();
-        accsessTokenTracker.stopTracking();
-        profileTracker.stopTracking();
+        if(accsessTokenTracker!=null&&profileTracker!=null) {
+            accsessTokenTracker.stopTracking();
+            profileTracker.stopTracking();
+        }
     }
     @Override
     protected void onActivityResult(int requestCode,int resultCode,Intent data){
@@ -143,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     public void logIn(View v) {
-        new logIn().execute();
+        new logIn().execute(userName.getText().toString(),password.getText().toString());
     }
 
     public void onBackPressed() {
@@ -240,11 +246,14 @@ public class MainActivity extends AppCompatActivity {
         HashMap<String, String> parms = new HashMap<>();
 
         MySQLiteHelper dbHelper = new MySQLiteHelper(MainActivity.this, UserDBConstants.DBName, null, UserDBConstants.User_DB_VESRSION);
-        String inputUserName = userName.getText().toString();
-        String inputPassword = password.getText().toString();
+        String inputUserName ;
+        String inputPassword ;
 
         @Override
         protected Boolean doInBackground(String... params) {
+            inputUserName=params[0];
+            inputPassword=params[1];
+
             parms.put("password", inputPassword);
             parms.put("username", inputUserName);
             JSONParser json = new JSONParser();
@@ -269,8 +278,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(Boolean result) {
+            SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+            Boolean faceBookLogIN=myPref.getBoolean("loginWhitFacebook",false);
+
             if (result) {
-                SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
                 SharedPreferences.Editor editor = myPref.edit();
                 editor.putString("username", inputUserName);
                 editor.putInt("score", score);
@@ -281,11 +292,72 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(myIntent);
                 finish();
 
-            } else
+            } else if(faceBookLogIN)
+            {
+                new signUp().execute(inputUserName,inputPassword);
+
+            }else
                 Toast.makeText(MainActivity.this, "invalid user ! please try Again", Toast.LENGTH_LONG).show();
 
         }
     }
+
+    public class signUp  extends AsyncTask<String, Void, Boolean>{
+        String reg_url = "http://mysite.lidordigital.co.il/Quertets/register.php";
+        HashMap<String,String> parms=new HashMap<>();
+        String userName;
+        String password;
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+
+            userName=params[0];
+             password=params[1];
+
+            if(userName.equals("")||password.equals(""))
+                return false;
+
+            parms.put("password",password);
+            parms.put("username",userName);
+            JSONParser json=new JSONParser();
+            try {
+                JSONObject response=json.makeHttpRequest(reg_url,"POST",parms);
+
+
+                if(response.getInt("sucsses")==1){
+
+                    return true;
+                }else{
+                    return false;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return false;
+            }catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+
+
+        }
+        protected void onPostExecute(Boolean result) {
+            if(result) {
+                SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                Toast.makeText(MainActivity.this, "User added succesfuly", Toast.LENGTH_SHORT).show();
+                Intent myIntent = new Intent(MainActivity.this, PersonalProfile.class);
+                startActivity(myIntent);
+                SharedPreferences.Editor editor = myPref.edit();
+                editor.putString("username", userName);
+                editor.putInt("score", score);
+
+                editor.commit();
+                finish();
+            }
+            else
+                Toast.makeText(MainActivity.this, "User NOT added", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
 }
 
