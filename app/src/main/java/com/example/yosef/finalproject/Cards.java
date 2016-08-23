@@ -7,26 +7,33 @@ import java.io.File;
  */
 public class Cards {
     private String categoryName;
-    private String categoryColor;
+    private int categoryColor;
+    private int card_id;
     private File itemPicture;
     private String [] itemsArray=new String [4];
-    private int point;
+    //private int point;
     boolean customizeQuartest=false;
 
-    public Cards(String categoryName, String categoryColor, File itemPicture, String[] itemsArray, int point) {
+    public Cards(String categoryName, int categoryColor, File itemPicture, String[] itemsArray) {
         this.categoryName = categoryName;
         this.categoryColor = categoryColor;
         this.itemPicture = itemPicture;
         this.itemsArray = itemsArray;
-        this.point = point;
+
+    }
+    public Cards(int card_id,String categoryName, int categoryColor, String[] itemsArray ) {
+        this.categoryName = categoryName;
+        this.categoryColor = categoryColor;
+        this.itemsArray = itemsArray;
+
     }
 
-    public Cards(String categoryName, String categoryColor, File itemPicture, String[] itemsArray, int point, boolean customize) {
+    public Cards(String categoryName, int categoryColor, File itemPicture, String[] itemsArray, boolean customize) {
         this.categoryName = categoryName;
         this.categoryColor = categoryColor;
         this.itemPicture = itemPicture;
         this.itemsArray = itemsArray;
-        this.point = point;
+
         this.customizeQuartest=customize;
     }
 
@@ -38,13 +45,6 @@ public class Cards {
         this.customizeQuartest = customizeQuartest;
     }
 
-    public int getPoint() {
-        return point;
-    }
-
-    public void setPoint(int point) {
-        this.point = point;
-    }
 
     public String getCategoryName() {
         return categoryName;
@@ -54,11 +54,11 @@ public class Cards {
         this.categoryName = categoryName;
     }
 
-    public String getCategoryColor() {
+    public int getCategoryColor() {
         return categoryColor;
     }
 
-    public void setCategoryColor(String categoryColor) {
+    public void setCategoryColor(int categoryColor) {
         this.categoryColor = categoryColor;
     }
 

@@ -1,6 +1,7 @@
 <resources>
-    <string name="app_name">פרויקט סוף קורס</string>
+    <string name="app_name">מלך הרביעיות</string>
     <string name="wellcome">ברוך הבא</string>
+    <string name="recordes">תוצאות</string>
     <string name="openGroup">פתח קבוצה חדשה</string>
     <string name="addPlayer">הוסף שחקן</string>
     <string name="remove">הסר</string>
@@ -12,6 +13,10 @@
     <string name="userName">שם משתמש</string>
     <string name="password">סיסמא</string>
     <string name="logIn">היכנס</string>
+    <string name="LOCALE_IW">עברית</string>
+    <string name="LOCALE_ENGLISH">אנגלית</string>
+    <string name="CreateUser">צור משתמש</string>
+    <string name="back">חזור</string>
     <string name="addNewCards">הוסף כרטיס</string>
     <string name="logOut">צא</string>
     <string name="add">הוסף</string>
@@ -26,4 +31,8 @@
     <string name="createRoom">צור חדר</string>
     <string name="JoinToRoom">הצטרף לחדר</string>
     <string name="EnterRoomName">הכנס את שם החדר</string>
+    <string name="repassword">ודא סיסמה</string>
+    <string name="Back">Back</string>
+
+
 </resources>
