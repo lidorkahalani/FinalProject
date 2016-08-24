@@ -1,6 +1,7 @@
 package com.example.yosef.finalproject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by Yosef on 17/05/2016.
@@ -9,6 +10,7 @@ public class User implements Serializable {
     private String userName;
     private String password;
     private int score;
+    private ArrayList<Cards> playerCards=new ArrayList<>();
 
 
 
@@ -49,5 +51,13 @@ public class User implements Serializable {
                 ", password='" + getPassword() + '\'' +
                 ", Score='" + getScore() + '\'' +
                 '}';
+    }
+
+    public ArrayList<Cards> getPlayerCards() {
+        return playerCards;
+    }
+
+    public void setPlayerCards(ArrayList<Cards> playerCards) {
+        this.playerCards = playerCards;
     }
 }

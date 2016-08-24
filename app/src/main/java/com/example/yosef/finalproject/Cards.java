@@ -5,14 +5,14 @@ import java.io.File;
 /**
  * Created by Yosef on 22/05/2016.
  */
-public class Cards {
+public class Cards  {
     private String categoryName;
     private int categoryColor;
     private int card_id;
     private File itemPicture;
     private String [] itemsArray=new String [4];
     //private int point;
-    boolean customizeQuartest=false;
+    private boolean customizeQuartest=false;
 
     public Cards(String categoryName, int categoryColor, File itemPicture, String[] itemsArray) {
         this.categoryName = categoryName;
@@ -22,10 +22,10 @@ public class Cards {
 
     }
     public Cards(int card_id,String categoryName, int categoryColor, String[] itemsArray ) {
+        this.card_id=card_id;
         this.categoryName = categoryName;
         this.categoryColor = categoryColor;
         this.itemsArray = itemsArray;
-
     }
 
     public Cards(String categoryName, int categoryColor, File itemPicture, String[] itemsArray, boolean customize) {
@@ -78,4 +78,11 @@ public class Cards {
         this.itemsArray = itemsArray;
     }
 
+    public int getCard_id() {
+        return card_id;
+    }
+
+    public void setCard_id(int card_id) {
+        this.card_id=card_id;
+    }
 }

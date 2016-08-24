@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.yosef.finalproject">
      <uses-permission android:name="android.permission.INTERNET" />
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -19,7 +18,7 @@
         <activity android:name=".SplashActivity" android:theme="@style/NoTitle"/>
         <activity android:name=".PersonalProfile" android:theme="@style/NoTitle" />
         <activity android:name=".AllRecords" android:theme="@style/NoTitle" />
-        <activity android:name=".GameScreen" android:screenOrientation="landscape" android:theme="@style/NoTitle" />
+        <activity android:name=".GameScreen" android:theme="@style/NoTitle" />
         <activity android:name=".Room" android:theme="@style/NoTitle"/>
         <activity android:name="com.facebook.FacebookActivity"/>
         <provider
