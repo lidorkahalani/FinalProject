@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,15 +17,13 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class GameScreen extends AppCompatActivity {
-    static ArrayList<Integer> colors = new ArrayList<>();
     private ArrayList<Cards> deck = new ArrayList<Cards>();
     private ArrayList<User> playerList = new ArrayList<>();
     private User currentPlayer;
-    TextView card1;
-    TextView card2;
-    TextView card3;
-    TextView card4;
-
+    private TextView card1;
+    private TextView card2;
+    private TextView card3;
+    private TextView card4;
     private Random randomGenerator;
 
     @Override
@@ -68,19 +67,20 @@ public class GameScreen extends AppCompatActivity {
 
     public void insertDataToCard(Cards card, int cardNumber) {
         String cardData;
-        cardData = card.getCategoryName() + "\n";
-        cardData += card.getItemsArray()[0] + "\n";
-        cardData += card.getItemsArray()[1] + "\n";
-        cardData += card.getItemsArray()[2] + "\n";
-        cardData += card.getItemsArray()[3] + "\n";
+        cardData="<center>";
+        cardData+= card.getCategoryName() +"</center>"+ "<br>";
+        cardData += card.getItemsArray()[0] + "<br>";
+        cardData += card.getItemsArray()[1] + "<br>";
+        cardData += card.getItemsArray()[2] + "<br>";
+        cardData += card.getItemsArray()[3] + "<br>";
         if (cardNumber == 0)
-            card1.setText(cardData);
+            card1.setText(Html.fromHtml(cardData ));
         else if (cardNumber == 1)
-            card2.setText(cardData);
+            card2.setText(Html.fromHtml(cardData ));
         else if (cardNumber == 2)
-            card3.setText(cardData);
+            card3.setText(Html.fromHtml(cardData ));
         else if (cardNumber == 3)
-            card4.setText(cardData);
+            card4.setText(Html.fromHtml(cardData ));
 
     }
 
@@ -96,31 +96,30 @@ public class GameScreen extends AppCompatActivity {
                 JSONObject response = json.makeHttpRequest(get_all_card_url, "POST", parms);
 
                 if (response.getInt("succsses") == 1) {
-
                     JSONArray jsonArray = response.getJSONArray("AllCards");
-                    int colorNumber = 1;
                     int k = 0;
-                    int z=0;
-                    boolean finsihSidra=false;
+                    int z = 0;
+                    Cards card;
                     for (int i = 0; i < jsonArray.length(); i++) {
                         String[] cardLabel = new String[4];
                         for (int j = 0; j < 4; k++, j++) {
                             if (k == 28) {
-                                finsihSidra=true;
                                 k = 0;
                             }
                             cardLabel[j] = jsonArray.getJSONObject(k).getString("card_name");
-                           /* if(finsihSidra&&j==0) {
-                                cardLabel[z]+="BOLD";
-                                z++;
-                            }*/
                         }
-                        z=0;
-                        Cards card = new Cards(jsonArray.getJSONObject(i).getInt("card_id"),
-                                jsonArray.getJSONObject((k - 1)).getString("category_name"),
-                                jsonArray.getJSONObject((k - 1)).getInt("category_color"), cardLabel);
-                        deck.add(card);
-                    }
+                        if(z==4)
+                            z=0;
+                        cardLabel[z] = "<b>" + cardLabel[z] + "</b> ";
+                        if(i%7==0)
+                            z++;
+                            card = new Cards(jsonArray.getJSONObject(i).getInt("card_id"),
+                                    jsonArray.getJSONObject((k - 1)).getString("category_name"),
+                                    jsonArray.getJSONObject((k - 1)).getInt("category_color"), cardLabel)
+                            ;
+
+                            deck.add(card);
+                }
                     return true;
                 } else {
                     return false;

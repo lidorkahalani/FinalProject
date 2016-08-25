@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/page_background"
+    android:background="#259dcb"
     tools:context="com.example.yosef.finalproject.GameScreen">
 
     <HorizontalScrollView
@@ -24,36 +24,36 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/card1"
                     android:text="card1"
+                    android:background="@drawable/card_bac"
+                    android:textDirection="rtl"
+                    android:gravity="center"
                     />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/card2"
                     android:text="card2"
+                    android:background="@drawable/card_bac"
+                    android:textDirection="rtl"
+                    android:gravity="center"
                     />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/card3"
                     android:text="card3"
+                    android:background="@drawable/card_bac"
+                    android:textDirection="rtl"
+                    android:gravity="center"
                     />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/card4"
                     android:text="card4"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/card5"
-                    android:text="card5"
-                    />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/card6"
-                    android:text="card6"
+                    android:background="@drawable/card_bac"
+                    android:textDirection="rtl"
+                    android:gravity="center"
                     />
         </LinearLayout>
     </HorizontalScrollView>
