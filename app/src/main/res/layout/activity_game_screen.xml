@@ -3,11 +3,59 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@drawable/page_background"
+    android:background="#259dcb"
     tools:context="com.example.yosef.finalproject.GameScreen">
+
+    <HorizontalScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/horizontalScrollView"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" >
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignBottom="@+id/horizontalScrollView"
+            android:layout_centerHorizontal="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/card1"
+                    android:text="card1"
+                    android:background="@drawable/card_bac"
+                    android:textDirection="rtl"
+                    android:gravity="center"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/card2"
+                    android:text="card2"
+                    android:background="@drawable/card_bac"
+                    android:textDirection="rtl"
+                    android:gravity="center"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/card3"
+                    android:text="card3"
+                    android:background="@drawable/card_bac"
+                    android:textDirection="rtl"
+                    android:gravity="center"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/card4"
+                    android:text="card4"
+                    android:background="@drawable/card_bac"
+                    android:textDirection="rtl"
+                    android:gravity="center"
+                    />
+        </LinearLayout>
+    </HorizontalScrollView>
 
 </RelativeLayout>

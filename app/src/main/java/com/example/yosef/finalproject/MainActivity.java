@@ -40,11 +40,9 @@ import java.util.HashMap;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
-    EditText userName;
-    EditText password;
-    UsersDBHandler dbHandler;
-    String Name;
-    String passwo;
+    private EditText userName;
+    private EditText password;
+    private UsersDBHandler dbHandler;
     int score;
     private CallbackManager callBack;
     private ProfileTracker profileTracker;
@@ -61,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(this);
         String uname = myPref.getString("username", null);
-        //if the user alredy connected skeep log in screen
+        //if the user alredy connected skip to Personal screen
         if (uname != null && !uname.equals("")) {
             Intent myIntent = new Intent(this, PersonalProfile.class);
             startActivity(myIntent);
@@ -284,6 +282,7 @@ public class MainActivity extends AppCompatActivity {
             if (result) {
                 SharedPreferences.Editor editor = myPref.edit();
                 editor.putString("username", inputUserName);
+                editor.putString("password", inputPassword);
                 editor.putInt("score", score);
 
                 editor.commit();

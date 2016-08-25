@@ -26,6 +26,7 @@ import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,11 +37,12 @@ import java.util.HashMap;
 
 public class PersonalProfile extends AppCompatActivity {
 
-    UsersDBHandler dbHandler;
+    private UsersDBHandler dbHandler;
     private ProfileTracker profileTracker;
     private AccessTokenTracker accsessTokenTracker;
     private CallbackManager callBack;
     private Profile profile;
+    private User currentPlayer;
 
     LoginButton facebookButton;
     Button logOut;
@@ -107,7 +109,11 @@ public class PersonalProfile extends AppCompatActivity {
 
             }
         };
-
+        SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(PersonalProfile.this);
+        String uname = myPref.getString("username", "");
+        String password = myPref.getString("password", "");
+        int score = myPref.getInt("score", 0);
+        currentPlayer=new User(uname,password,score);
         dbHandler = new UsersDBHandler(this);
         setLeyout();
 
@@ -131,6 +137,7 @@ public class PersonalProfile extends AppCompatActivity {
         TextView t = (TextView) findViewById(R.id.WelcomUserName);
         SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(PersonalProfile.this);
         String uname = myPref.getString("username", "");
+        String password = myPref.getString("password", "");
         int score = myPref.getInt("score", 0);
         t.setText("Hello " + uname + "\n" + "Toatal Score: " + Integer.toString(score));
     }
@@ -176,6 +183,7 @@ public class PersonalProfile extends AppCompatActivity {
     public void startGame(View v) {
 
         Intent myIntent = new Intent(this, GameScreen.class);
+        myIntent.putExtra("currentPlayer", currentPlayer);
         startActivity(myIntent);
         finish();
 
