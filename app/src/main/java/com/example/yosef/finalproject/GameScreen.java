@@ -48,7 +48,9 @@ public class GameScreen extends AppCompatActivity {
         for (int i = 0; i < 1; i++) {
             ArrayList<Cards> onePlayercard = new ArrayList<>();
             for (int k = 0; k < 4; k++) {
-                int index = randomGenerator.nextInt(deck.size());
+                int index = randomGenerator.nextInt(deck.size()+i);
+                System.out.println("rand number: "+index);
+                //(k*7)
                 onePlayercard.add(deck.get(index));
             }
             playerList.get(i).setPlayerCards(onePlayercard);
@@ -67,8 +69,8 @@ public class GameScreen extends AppCompatActivity {
 
     public void insertDataToCard(Cards card, int cardNumber) {
         String cardData;
-        cardData="<center>";
-        cardData+= card.getCategoryName() +"</center>"+ "<br>";
+
+        cardData= card.getCategoryName()+ "<br>";
         cardData += card.getItemsArray()[0] + "<br>";
         cardData += card.getItemsArray()[1] + "<br>";
         cardData += card.getItemsArray()[2] + "<br>";
@@ -100,10 +102,11 @@ public class GameScreen extends AppCompatActivity {
                     int k = 0;
                     int z = 0;
                     Cards card;
+                    //create all deck card
                     for (int i = 0; i < jsonArray.length(); i++) {
                         String[] cardLabel = new String[4];
                         for (int j = 0; j < 4; k++, j++) {
-                            if (k == 28) {
+                            if (k == jsonArray.length()) {
                                 k = 0;
                             }
                             cardLabel[j] = jsonArray.getJSONObject(k).getString("card_name");
@@ -111,13 +114,13 @@ public class GameScreen extends AppCompatActivity {
                         if(z==4)
                             z=0;
                         cardLabel[z] = "<b>" + cardLabel[z] + "</b> ";
-                        if(i%7==0)
-                            z++;
+
                             card = new Cards(jsonArray.getJSONObject(i).getInt("card_id"),
                                     jsonArray.getJSONObject((k - 1)).getString("category_name"),
                                     jsonArray.getJSONObject((k - 1)).getInt("category_color"), cardLabel)
                             ;
-
+                        if(((i+1)%(jsonArray.length()/4))==0)
+                            z++;
                             deck.add(card);
                 }
                     return true;

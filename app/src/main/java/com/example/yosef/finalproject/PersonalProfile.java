@@ -246,9 +246,9 @@ public class PersonalProfile extends AppCompatActivity {
     }
 
     public void showAllRecords(View v) {
-        ArrayList<User> UsersList = dbHandler.getAllUsers();
+       // ArrayList<User> UsersList = dbHandler.getAllUsers();
         Intent myIntent = new Intent(this, AllRecords.class);
-        myIntent.putExtra("userList", UsersList);
+       // myIntent.putExtra("userList", UsersList);
         startActivity(myIntent); //app get crash her
 
     }
