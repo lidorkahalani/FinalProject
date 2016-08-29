@@ -1,6 +1,10 @@
 package com.example.yosef.finalproject;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,7 +20,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class AllRecords extends AppCompatActivity implements AdapterView.OnItemClickListener {
@@ -33,19 +42,9 @@ public class AllRecords extends AppCompatActivity implements AdapterView.OnItemC
         setContentView(R.layout.activity_allrecords);
         myListView = (ListView) findViewById(R.id.userlist);
 
-        uList = (ArrayList<User>)getIntent().getSerializableExtra("userList");
-        if(uList.isEmpty()){
-            Toast.makeText(this,"Ther is no users in DB!",Toast.LENGTH_LONG).show();
-            finish();
-        }
-        adapter = new MyClassAdapter(this, R.layout.single_user_layout, uList);
+        //uList = (ArrayList<User>)getIntent().getSerializableExtra("userList");
 
-        myListView.setAdapter(adapter);
-
-        myListView.setOnItemClickListener(this);
-
-        lv = (ListView) findViewById(R.id.userlist);
-        registerForContextMenu(lv);
+        new GetHigheRecrods().execute();
 
     }
 
@@ -103,6 +102,65 @@ public class AllRecords extends AppCompatActivity implements AdapterView.OnItemC
             //pass.setText(user.getPassword());
             score.setText(Integer.toString(user.getScore()));
             return convertView;
+
+        }
+    }
+
+    public class GetHigheRecrods extends AsyncTask<String, Void, Boolean> {
+        String get_hige_score_url = "http://mysite.lidordigital.co.il/Quertets/db/getHighRecords.php";
+
+        HashMap<String, String> parms = new HashMap<>();
+
+       // MySQLiteHelper dbHelper = new MySQLiteHelper(MainActivity.this, UserDBConstants.DBName, null, UserDBConstants.User_DB_VESRSION);
+        String inputUserName ;
+        String inputPassword ;
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+
+            JSONParser json = new JSONParser();
+            try{
+                JSONObject response = json.makeHttpRequest(get_hige_score_url, "POST", parms);
+                if (response.getInt("succsses") == 1) {
+                    JSONArray jsonArray=response.getJSONArray("HighesRecordesUsers");
+                    User user;
+                    for (int i = 0; i < jsonArray.length(); i++) {
+
+                        user = new User(jsonArray.getJSONObject(i).getString("user_name"),
+                                jsonArray.getJSONObject(i).getString("user_password"),
+                                jsonArray.getJSONObject(i).getInt("score"));
+
+                        uList.add(user);
+                    }
+                    return true;
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return false;
+            }catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+            return false;
+        }
+
+        protected void onPostExecute(Boolean result) {
+            if(result) {
+                if (uList.isEmpty()) {
+                    Toast.makeText(AllRecords.this, "Ther is no users in DB!", Toast.LENGTH_LONG).show();
+                    finish();
+                }
+                adapter = new MyClassAdapter(AllRecords.this, R.layout.single_user_layout, uList);
+
+                myListView.setAdapter(adapter);
+
+                myListView.setOnItemClickListener(AllRecords.this);
+
+                lv = (ListView) findViewById(R.id.userlist);
+                registerForContextMenu(lv);
+            }else
+                Toast.makeText(AllRecords.this,"no player or connection problem",Toast.LENGTH_LONG).show();
 
         }
     }
