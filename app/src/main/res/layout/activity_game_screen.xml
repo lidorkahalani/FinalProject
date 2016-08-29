@@ -6,56 +6,118 @@
     android:background="#259dcb"
     tools:context="com.example.yosef.finalproject.GameScreen">
 
-    <HorizontalScrollView
+    <FrameLayout
+        android:id="@+id/bottom_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/horizontalScrollView"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" >
+        android:layout_alignParentBottom="true">
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignBottom="@+id/horizontalScrollView"
-            android:layout_centerHorizontal="true">
-                <TextView
-                    android:layout_width="wrap_content"
+        <RelativeLayout
+            android:id="@+id/myPlayerBackground"
+            android:layout_width="wrap_content"
+            android:layout_height="170dp"
+            android:layout_gravity="bottom"
+            android:background="@android:color/transparent">
+
+            <Button
+                android:id="@+id/Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:text="click"/>
+
+            <HorizontalScrollView
+                android:id="@+id/horizontalScrollView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
+                android:layout_centerVertical="true">
+
+
+                <LinearLayout
+
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/card1"
-                    android:text="card1"
-                    android:background="@drawable/card_bac"
-                    android:textDirection="rtl"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
                     android:gravity="center"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/card2"
-                    android:text="card2"
-                    android:background="@drawable/card_bac"
-                    android:textDirection="rtl"
-                    android:gravity="center"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/card3"
-                    android:text="card3"
-                    android:background="@drawable/card_bac"
-                    android:textDirection="rtl"
-                    android:gravity="center"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/card4"
-                    android:text="card4"
-                    android:background="@drawable/card_bac"
-                    android:textDirection="rtl"
-                    android:gravity="center"
-                    />
-        </LinearLayout>
-    </HorizontalScrollView>
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/card1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/card_bac"
+                        android:gravity="center"
+                        android:text="card1"
+                        android:textDirection="rtl" />
+
+                    <TextView
+                        android:id="@+id/card2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/card_bac"
+                        android:gravity="center"
+                        android:text="card2"
+                        android:textDirection="rtl" />
+
+                    <TextView
+                        android:id="@+id/card3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/card_bac"
+                        android:gravity="center"
+                        android:text="card3"
+                        android:textDirection="rtl" />
+
+                    <TextView
+                        android:id="@+id/card4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/card_bac"
+                        android:gravity="center"
+                        android:text="card4"
+                        android:textDirection="rtl" />
+
+
+                </LinearLayout>
+
+            </HorizontalScrollView>
+
+
+        </RelativeLayout>
+    </FrameLayout>
+
+    <RelativeLayout
+        android:id="@+id/right_layout"
+        android:layout_width="20dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:background="@color/red"
+        android:layout_above="@+id/bottom_layout"
+        android:layout_below="@+id/top_layout">
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/top_layout"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_gravity="top"
+        android:background="@color/orange"
+        android:layout_alignParentTop="true">
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/left_layout"
+        android:layout_width="20dp"
+        android:layout_height="match_parent"
+        android:background="@color/yellow"
+        android:layout_alignParentLeft="true"
+        android:layout_above="@+id/bottom_layout"
+        android:layout_below="@+id/top_layout">
+    </RelativeLayout>
 
 </RelativeLayout>
