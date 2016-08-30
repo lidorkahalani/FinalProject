@@ -1,10 +1,13 @@
 package com.example.yosef.finalproject;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
+import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +29,15 @@ public class GameScreen extends AppCompatActivity {
     private TextView card4;
     private Random randomGenerator;
 
+    private RelativeLayout bottomLayout;
+    private RelativeLayout left_layout;
+    private RelativeLayout top_layout;
+    private RelativeLayout right_layout;
+
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,10 +51,16 @@ public class GameScreen extends AppCompatActivity {
         card2 = (TextView) findViewById(R.id.card2);
         card3 = (TextView) findViewById(R.id.card3);
         card4 = (TextView) findViewById(R.id.card4);
+        bottomLayout = (RelativeLayout) findViewById(R.id.myPlayerBackground);
+        left_layout = (RelativeLayout) findViewById(R.id.myPlayerBackground);
+        top_layout = (RelativeLayout) findViewById(R.id.myPlayerBackground);
+        right_layout = (RelativeLayout) findViewById(R.id.myPlayerBackground);
+
+
+
 
 
     }
-
     public void giveCardEachPlayer() {
         //give each player 4 card from deck and remove it from the server not in client!
         for (int i = 0; i < 1; i++) {
@@ -138,6 +156,9 @@ public class GameScreen extends AppCompatActivity {
 
         }
 
+
+
+
         protected void onPostExecute(Boolean result) {
             if (result) {
                 Toast.makeText(GameScreen.this, "the deck sucssfuly generate!!", Toast.LENGTH_SHORT).show();
@@ -146,5 +167,22 @@ public class GameScreen extends AppCompatActivity {
             } else
                 Toast.makeText(GameScreen.this, "the deck not load !", Toast.LENGTH_SHORT).show();
         }
+
+
+        public class fucosCard{
+
+
+
+
+        }
+
+        public void painCurrentPlayer(View v){
+            v.setBackgroundColor(Color.GREEN);
+        }
+
+        public void onMyTurnEnd(){
+            bottomLayout.setBackgroundColor(Color.TRANSPARENT);
+        }
+
     }
 }
