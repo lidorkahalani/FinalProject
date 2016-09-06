@@ -11,11 +11,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,6 +52,11 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     CardsAdapter cardsAdapter;
     MyClassAdapter adapter;
 
+    public static int MENU_ID = 0;
+    private static final int CARDS_CLICK_MENU = 1;
+
+    public static View selectedCard;
+    private boolean setCardBackgroundTransparent = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,10 +209,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                 Toast.makeText(GameScreen.this, "the deck not load !", Toast.LENGTH_SHORT).show();
         }
 
-        private void setCardsList(){
-            cardsAdapter = new CardsAdapter(deck);
-            myListView.setAdapter(cardsAdapter);
-        }
+
 
         public class fucosCard {
 
@@ -222,6 +228,25 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
     }
 
+    private void setCardsList(){
+        cardsAdapter = new CardsAdapter(deck);
+        myListView.setAdapter(cardsAdapter);
+        registerForContextMenu(myListView);
+        myListView.addOnItemTouchListener(
+                new RecyclerItemClickListener(GameScreen.this, myListView ,new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position) {
+                        MENU_ID  = CARDS_CLICK_MENU;
+                        openContextMenu(view);
+                        LinearLayout cardContainer = (LinearLayout)view.findViewById(R.id.card_container);
+                        cardContainer.setBackgroundColor(getResources().getColor(R.color.light_green));
+                    }
+
+                    @Override public void onLongItemClick(View view, int position) {
+
+                    }
+                })
+        );
+    }
 
     class MyClassAdapter extends ArrayAdapter<User> {
 
@@ -258,5 +283,61 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
         }
     }
+
+    @Override
+    public  void onCreateContextMenu(ContextMenu menu, View view,
+                                     ContextMenu.ContextMenuInfo menuInfo){
+        String menuItems[];
+        switch (view.getId()){
+            case R.id.listcards:
+                setCardBackgroundTransparent = true;
+                AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+                menuItems = getResources().getStringArray(R.array.card_click_menu);
+                menu.setHeaderTitle(getResources().getString(R.string.choose));
+                break;
+            default:
+                return;
+        }
+
+        for(int i=0; i<menuItems.length; i++){
+            menu.add(Menu.NONE,i,i,menuItems[i]);
+        }
+    }
+    @Override
+    public boolean onContextItemSelected(MenuItem item){
+        int menuItemIndex = item.getItemId();
+        if(MENU_ID == CARDS_CLICK_MENU){
+
+            String[] menuItems = getResources().getStringArray(R.array.card_click_menu);
+            String menuItemName = menuItems[menuItemIndex];
+            if(menuItemName.equals(menuItems[0])){//שלח קלף
+                Toast.makeText(GameScreen.this,
+                        menuItemName,
+                        Toast.LENGTH_LONG).show();
+                setCardBackgroundTransparent = false;
+
+
+
+            }else if(menuItemName.equals(menuItems[1])){//קבל קלף
+                Toast.makeText(GameScreen.this,
+                        menuItemName,
+                        Toast.LENGTH_LONG).show();
+
+            }
+
+
+
+        }
+
+        return true;
+    }
+
+    @Override
+     public void onContextMenuClosed(Menu menu){
+        if(selectedCard!=null && setCardBackgroundTransparent){
+            selectedCard.findViewById(R.id.card_container).setBackgroundColor(Color.TRANSPARENT);
+        }
+
+     }
 
 }

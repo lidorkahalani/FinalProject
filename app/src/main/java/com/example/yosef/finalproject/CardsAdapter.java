@@ -15,7 +15,6 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.MyViewHolder
 
     List<Card> cards ;
 
-
     public class MyViewHolder extends RecyclerView.ViewHolder{
         public TextView category;
         public ImageView image;
@@ -23,6 +22,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.MyViewHolder
         public TextView card2;
         public TextView card3;
         public TextView card4;
+        private boolean isClicked=false;
         public MyViewHolder(View view){
             super(view);
             category = (TextView) view.findViewById(R.id.category);
@@ -46,17 +46,19 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.MyViewHolder
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Card card = cards.get(position);
+        Card card = getItem(position);
         holder.category.setText(card.getCategoryName());
         holder.image.setImageDrawable(card.getItemPicture());
-        if(card.getCardName().equals(card.getItemsArray()[0])){
-            holder.card1.setTypeface(Typeface.DEFAULT_BOLD);
-        }else if(card.getCardName().equals(card.getItemsArray()[1])){
-            holder.card2.setTypeface(Typeface.DEFAULT_BOLD);
-        } else if(card.getCardName().equals(card.getItemsArray()[2])){
-            holder.card3.setTypeface(Typeface.DEFAULT_BOLD);
-        }else if(card.getCardName().equals(card.getItemsArray()[3])){
-            holder.card4.setTypeface(Typeface.DEFAULT_BOLD);
+        if(!holder.isClicked) {
+            if (card.getCardName().equals(card.getItemsArray()[0])) {
+                holder.card1.setTypeface(Typeface.DEFAULT_BOLD);
+            } else if (card.getCardName().equals(card.getItemsArray()[1])) {
+                holder.card2.setTypeface(Typeface.DEFAULT_BOLD);
+            } else if (card.getCardName().equals(card.getItemsArray()[2])) {
+                holder.card3.setTypeface(Typeface.DEFAULT_BOLD);
+            } else if (card.getCardName().equals(card.getItemsArray()[3])) {
+                holder.card4.setTypeface(Typeface.DEFAULT_BOLD);
+            }
         }
 
         holder.card1.setText(card.getItemsArray()[0]);
@@ -66,9 +68,18 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.MyViewHolder
 
     }
 
+    public Card getItem(int position){
+        return cards.get(position);
+    }
+
     @Override
     public int getItemCount() {
         return cards.size();
+    }
+
+    @Override
+    public int getItemViewType(int position){
+        return position;
     }
 
 

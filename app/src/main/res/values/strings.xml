@@ -27,6 +27,8 @@
     <string name="loading">Loading Componutes...</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
     <string name="OpenRoom">Open Room</string>
     <string name="roomName">Room Name</string>
     <string name="createRoom">Create Room</string>
@@ -36,5 +38,20 @@
     <string name="repassword">Re-Password</string>
     <string name="send">send card</string>
     <string name="receive">receive card</string>
+    <string name="choose">Choose</string>
+    <string-array name="card_click_menu">
+        <item>send card</item>
+        <item>receive card</item>
+    </string-array>
+
+    <string name="room_name">Room name</string>
+    <string name="open_room_dialog_title">@string/OpenRoom</string>
+    <string name="open_room_dialog_message">Enter room name</string>
+
+    <string name="please_wait">Please wait</string>
+    <string name="waiting_for_players">Waiting for other players...</string>
+
+    <string name="room_name_in_use">Room name already in use</string>
+    <string name="connection_error">Error occurred - check internet connection</string>
 
 </resources>

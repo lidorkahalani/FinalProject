@@ -19,28 +19,11 @@
             android:layout_gravity="bottom"
             android:background="@android:color/transparent">
 
-            <Button
-                android:id="@+id/Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:text="@string/send" />
-
-            <Button
-                android:id="@+id/button4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/Button"
-                android:layout_toLeftOf="@+id/Button"
-                android:text="@string/receive" />
-
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/listcards"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layoutManager="android.support.v7.widget.LinearLayoutManager">
+              >
             </android.support.v7.widget.RecyclerView>
             <!--<HorizontalScrollView-->
                 <!--android:id="@+id/horizontalScrollView"-->

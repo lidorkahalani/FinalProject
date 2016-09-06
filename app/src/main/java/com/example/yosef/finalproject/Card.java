@@ -15,6 +15,8 @@ public class Card {
     private Drawable itemPicture;
     private String [] itemsArray=new String [4];
 
+    public boolean isClicked = false;
+
     //private int point;
     private boolean customizeQuartest=false;
 
@@ -101,5 +103,13 @@ public class Card {
 
     public void setCardName(String cardName) {
         this.cardName = cardName;
+    }
+
+    public boolean isClicked() {
+        return isClicked;
+    }
+
+    public void setClicked(boolean clicked) {
+        isClicked = clicked;
     }
 }
