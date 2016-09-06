@@ -1,34 +1,43 @@
 package com.example.yosef.finalproject;
 
+import android.graphics.drawable.Drawable;
+
 import java.io.File;
 
 /**
  * Created by Yosef on 22/05/2016.
  */
-public class Cards  {
+public class Card {
     private String categoryName;
+    private String cardName;
     private int categoryColor;
     private int card_id;
-    private File itemPicture;
+    private Drawable itemPicture;
     private String [] itemsArray=new String [4];
+
     //private int point;
     private boolean customizeQuartest=false;
 
-    public Cards(String categoryName, int categoryColor, File itemPicture, String[] itemsArray) {
+    public Card(){
+
+    }
+
+    public Card(String categoryName, int categoryColor, Drawable itemPicture, String[] itemsArray) {
         this.categoryName = categoryName;
         this.categoryColor = categoryColor;
         this.itemPicture = itemPicture;
         this.itemsArray = itemsArray;
 
     }
-    public Cards(int card_id,String categoryName, int categoryColor, String[] itemsArray ) {
+    public Card(int card_id, String categoryName, int categoryColor, String[] itemsArray,String cardName ) {
         this.card_id=card_id;
         this.categoryName = categoryName;
         this.categoryColor = categoryColor;
         this.itemsArray = itemsArray;
+        this.cardName = cardName;
     }
 
-    public Cards(String categoryName, int categoryColor, File itemPicture, String[] itemsArray, boolean customize) {
+    public Card(String categoryName, int categoryColor, Drawable itemPicture, String[] itemsArray, boolean customize) {
         this.categoryName = categoryName;
         this.categoryColor = categoryColor;
         this.itemPicture = itemPicture;
@@ -62,11 +71,11 @@ public class Cards  {
         this.categoryColor = categoryColor;
     }
 
-    public File getItemPicture() {
+    public Drawable getItemPicture() {
         return itemPicture;
     }
 
-    public void setItemPicture(File itemPicture) {
+    public void setItemPicture(Drawable itemPicture) {
         this.itemPicture = itemPicture;
     }
 
@@ -84,5 +93,13 @@ public class Cards  {
 
     public void setCard_id(int card_id) {
         this.card_id=card_id;
+    }
+
+    public String getCardName() {
+        return cardName;
+    }
+
+    public void setCardName(String cardName) {
+        this.cardName = cardName;
     }
 }

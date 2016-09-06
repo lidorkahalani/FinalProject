@@ -34,7 +34,7 @@
     <string name="EnterRoomName">Enter Room Name</string>
     <string name="Back">Back</string>
     <string name="repassword">Re-Password</string>
-
-
+    <string name="send">send card</string>
+    <string name="receive">receive card</string>
 
 </resources>

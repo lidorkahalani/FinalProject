@@ -10,7 +10,7 @@ public class User implements Serializable {
     private String userName;
     private String password;
     private int score;
-    private ArrayList<Cards> playerCards=new ArrayList<>();
+    private ArrayList<Card> playerCards=new ArrayList<>();
 
 
 
@@ -53,11 +53,11 @@ public class User implements Serializable {
                 '}';
     }
 
-    public ArrayList<Cards> getPlayerCards() {
+    public ArrayList<Card> getPlayerCards() {
         return playerCards;
     }
 
-    public void setPlayerCards(ArrayList<Cards> playerCards) {
+    public void setPlayerCards(ArrayList<Card> playerCards) {
         this.playerCards = playerCards;
     }
 }

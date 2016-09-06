@@ -33,6 +33,6 @@
     <string name="EnterRoomName">הכנס את שם החדר</string>
     <string name="repassword">ודא סיסמה</string>
     <string name="Back">Back</string>
-
-
+    <string name="send">שלח קלף</string>
+    <string name="receive">קבל קלף</string>
 </resources>
