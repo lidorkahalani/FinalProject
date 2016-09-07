@@ -23,13 +23,10 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         String uname = myPref.getString("username", null);
         //if the user alredy connected skip to Personal screen
         if (uname != null && !uname.equals("")) {
-            Intent myIntent = new Intent(this, PersonalProfile.class);
+            Intent myIntent = new Intent(this, MainMenu.class);
             startActivity(myIntent);
             finish();
             return;
@@ -287,7 +284,7 @@ public class MainActivity extends AppCompatActivity {
 
                 editor.commit();
 
-                Intent myIntent = new Intent(MainActivity.this, PersonalProfile.class);
+                Intent myIntent = new Intent(MainActivity.this, MainMenu.class);
                 startActivity(myIntent);
                 finish();
 
@@ -343,7 +340,7 @@ public class MainActivity extends AppCompatActivity {
             if(result) {
                 SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
                 Toast.makeText(MainActivity.this, "User added succesfuly", Toast.LENGTH_SHORT).show();
-                Intent myIntent = new Intent(MainActivity.this, PersonalProfile.class);
+                Intent myIntent = new Intent(MainActivity.this, MainMenu.class);
                 startActivity(myIntent);
                 SharedPreferences.Editor editor = myPref.edit();
                 editor.putString("username", userName);

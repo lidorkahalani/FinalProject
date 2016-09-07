@@ -25,6 +25,8 @@ public class GlobalAppData extends Application {
     private String userName;
     private String password;
     private ArrayList<User> userList;
+    private ArrayList<Quartet> Quartets;
+
 
     @Override
     public void onCreate(){
@@ -32,7 +34,12 @@ public class GlobalAppData extends Application {
         Toast.makeText(this,"Applection Create",Toast.LENGTH_SHORT).show();
 
     }
-
+    public ArrayList<Quartet> getQuartets() {
+        return Quartets;
+    }
+    public void setQuartets(ArrayList<Quartet> quartets) {
+        Quartets = quartets;
+    }
     public String getUserName() {
         return userName;
     }

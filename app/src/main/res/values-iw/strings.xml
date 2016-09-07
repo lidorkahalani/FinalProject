@@ -7,9 +7,10 @@
     <string name="remove">הסר</string>
     <string name="newGame">התחל משחק חדש</string>
     <string name="exit">יציאה</string>
-    <string name="startGame">התחל</string>
+    <string name="startGame">התחל משחק</string>
     <string name="signUp">הירשם</string>
     <string name="signIn">היכנס</string>
+    <string name="chooseQuartets">בחר רביעיות</string>
     <string name="userName">שם משתמש</string>
     <string name="password">סיסמא</string>
     <string name="logIn">היכנס</string>
@@ -17,7 +18,7 @@
     <string name="LOCALE_ENGLISH">אנגלית</string>
     <string name="CreateUser">צור משתמש</string>
     <string name="back">חזור</string>
-    <string name="addNewCards">הוסף כרטיס</string>
+    <string name="addNewCards">יצירת סריית קלפים</string>
     <string name="logOut">צא</string>
     <string name="add">הוסף</string>
     <string name="exitWarning">אתה בטוח שברצונך לצאת?</string>
