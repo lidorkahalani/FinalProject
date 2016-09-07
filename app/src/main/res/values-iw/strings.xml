@@ -26,6 +26,8 @@
     <string name="loading">טוען...</string>
     <string name="yes">כן</string>
     <string name="no">לא</string>
+    <string name="ok">אישור</string>
+    <string name="cancel">ביטול</string>
     <string name="OpenRoom">פתח חדר</string>
     <string name="roomName">שם החדר</string>
     <string name="createRoom">צור חדר</string>
@@ -33,6 +35,21 @@
     <string name="EnterRoomName">הכנס את שם החדר</string>
     <string name="repassword">ודא סיסמה</string>
     <string name="Back">Back</string>
+    <string name="send">שלח קלף</string>
+    <string name="receive">קבל קלף</string>
+    <string name="choose">בחר</string>
+    <string-array name="card_click_menu">
+        <item>שלח קלף</item>
+        <item>קבל קלף</item>
+    </string-array>
 
+    <string name="room_name">שם החדר</string>
+    <string name="open_room_dialog_title">@string/OpenRoom</string>
+    <string name="open_room_dialog_message">הכנס שם חדר</string>
 
+    <string name="please_wait">אנא המתן</string>
+    <string name="waiting_for_players">ממתין לשחקנים נוספים...</string>
+
+    <string name="room_name_in_use">שם חדר תפוס</string>
+    <string name="connection_error">אירעה שגיאה - בדוק חיבור לאינטרנט</string>
 </resources>
