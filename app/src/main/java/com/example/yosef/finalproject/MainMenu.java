@@ -36,7 +36,7 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class PersonalProfile extends AppCompatActivity {
+public class MainMenu extends AppCompatActivity {
 
     private UsersDBHandler dbHandler;
     private ProfileTracker profileTracker;
@@ -87,7 +87,7 @@ public class PersonalProfile extends AppCompatActivity {
 
             @Override
             public void onError(FacebookException error) {
-                Toast.makeText(PersonalProfile.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(MainMenu.this, error.getMessage(), Toast.LENGTH_LONG).show();
                 error.printStackTrace();
             }
         });
@@ -100,11 +100,11 @@ public class PersonalProfile extends AppCompatActivity {
                 profile = currentProfile;
 
                 if (profile == null) {
-                    SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(PersonalProfile.this);
+                    SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(MainMenu.this);
                     SharedPreferences.Editor editor = myPref.edit();
                     editor.remove("username");
                     editor.commit();
-                    Intent myIntent = new Intent(PersonalProfile.this, MainActivity.class);
+                    Intent myIntent = new Intent(MainMenu.this, MainActivity.class);
                     startActivity(myIntent);
                     finish();
                 }
@@ -112,7 +112,7 @@ public class PersonalProfile extends AppCompatActivity {
 
             }
         };
-        SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(PersonalProfile.this);
+        SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(MainMenu.this);
         String uname = myPref.getString("username", "");
         String password = myPref.getString("password", "");
         int score = myPref.getInt("score", 0);
@@ -138,7 +138,7 @@ public class PersonalProfile extends AppCompatActivity {
             logOut.setVisibility(View.GONE);
         }
         TextView t = (TextView) findViewById(R.id.WelcomUserName);
-        SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(PersonalProfile.this);
+        SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(MainMenu.this);
         String uname = myPref.getString("username", "");
         String password = myPref.getString("password", "");
         int score = myPref.getInt("score", 0);
@@ -160,12 +160,12 @@ public class PersonalProfile extends AppCompatActivity {
 
     public void openRoom(View v) {
 
-        LayoutInflater li = LayoutInflater.from(PersonalProfile.this);
+        LayoutInflater li = LayoutInflater.from(MainMenu.this);
         View dialogView = li.inflate(R.layout.open_room_dialog_layout, null);
 
         final EditText roomNameInput = (EditText) dialogView.findViewById(R.id.room_name_input);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(PersonalProfile.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainMenu.this);
         builder.setView(dialogView);
         builder.setTitle(getResources().getString(R.string.open_room_dialog_title));
         builder.setMessage(getResources().getString(R.string.open_room_dialog_message));
@@ -196,7 +196,7 @@ public class PersonalProfile extends AppCompatActivity {
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        PersonalProfile.this.finish();
+                        MainMenu.this.finish();
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -244,7 +244,7 @@ public class PersonalProfile extends AppCompatActivity {
                                        startActivity(myIntent);
                                        finish();*/
                                 } else {
-                                    new AlertDialog.Builder(PersonalProfile.this)
+                                    new AlertDialog.Builder(MainMenu.this)
                                             .setTitle("Warning")
                                             .setMessage("Group Not Found!")
                                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -322,7 +322,7 @@ public class PersonalProfile extends AppCompatActivity {
         protected void onPostExecute(Integer result) {
             if (result==1) {//all good
                 //2. show progress dialog - waiting for 3 more players
-                pDialog = new ProgressDialog(PersonalProfile.this);
+                pDialog = new ProgressDialog(MainMenu.this);
                 pDialog.setIndeterminate(true);
                 pDialog.setCancelable(false);
                 pDialog.setMessage(getResources().getString(R.string.waiting_for_players));
@@ -346,11 +346,11 @@ public class PersonalProfile extends AppCompatActivity {
                     }
                 }, 3000);
             } else if(result==0){//room name already in use
-                Toast.makeText(PersonalProfile.this
+                Toast.makeText(MainMenu.this
                         ,getResources().getString(R.string.room_name_in_use),
                         Toast.LENGTH_LONG).show();
             } else if(result==-1){//connection problem
-                Toast.makeText(PersonalProfile.this
+                Toast.makeText(MainMenu.this
                         ,getResources().getString(R.string.connection_error),
                         Toast.LENGTH_LONG).show();
             }
@@ -393,7 +393,9 @@ public class PersonalProfile extends AppCompatActivity {
             if (result) {
                 timer.cancel();
                 timerFlag = false;
-                startActivity(new Intent(PersonalProfile.this, GameScreen.class));
+
+
+                startActivity(new Intent(MainMenu.this, GameScreen.class));
                 pDialog.dismiss();
             }
 

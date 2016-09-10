@@ -4,9 +4,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:gravity="center"
+    android:background="@drawable/card_background"
     android:orientation="vertical">
-
-
 
     <TextView
         android:id="@+id/category"
@@ -14,7 +13,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_gravity="top"
-
         android:padding="5dp"
         android:text="Medium"
 

@@ -16,6 +16,7 @@
     <string name="logIn">Log In</string>
     <string name="addNewCards">Add new cards</string>
     <string name="logOut">Log Out</string>
+    <string name="chooseQuartets">Choose Quartets</string>
     <string name="add">Add</string>
     <string name="exitWarning">Are you sure you want to exit?</string>
     <string name="showRecords">Show records</string>
