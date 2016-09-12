@@ -40,6 +40,11 @@
     <string name="send">send card</string>
     <string name="receive">receive card</string>
     <string name="choose">Choose</string>
+    <string name="string_choose_file">Choose file</string>
+    <string name="string_upload_image">Upload file</string>
+    <string name="string_view_image">View image</string>
+
+
     <string-array name="card_click_menu">
         <item>send card</item>
         <item>receive card</item>

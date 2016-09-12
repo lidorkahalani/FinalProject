@@ -153,9 +153,9 @@ public class MainMenu extends AppCompatActivity {
     }
 
     public void addCardToDB(View v) {
-        /* Intent myIntent=new Intent(this,AddCards.class);
+        Intent myIntent=new Intent(this,AddCards.class);
         startActivity(myIntent);
-        finish();*/
+        finish();
     }
 
     public void openRoom(View v) {
