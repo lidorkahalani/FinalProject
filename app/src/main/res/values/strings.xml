@@ -45,6 +45,10 @@
     <string name="string_view_image">View image</string>
     <string name="get_All_person">Get Persons</string>
     <string name="set_person">Set Persons</string>
+    <string name="user_id">user id</string>
+    <string name="user_age">user age</string>
+    <string name="addPerson_dialog_title">add new person</string>
+    <string name="addPerson_dialog_masge">insert person data</string>
 
 
     <string-array name="card_click_menu">

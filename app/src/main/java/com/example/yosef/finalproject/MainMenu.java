@@ -30,6 +30,7 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
+import com.google.gson.internal.Streams;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,8 +42,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.TreeMap;
 
 public class MainMenu extends AppCompatActivity {
 
@@ -52,7 +55,7 @@ public class MainMenu extends AppCompatActivity {
     private CallbackManager callBack;
     private Profile profile;
     private User currentPlayer;
-    private ArrayList<User> allUsers;
+    private ArrayList<User> allUsers=new ArrayList<User>();
 
     LoginButton facebookButton;
     Button logOut;
@@ -155,45 +158,58 @@ public class MainMenu extends AppCompatActivity {
     }
 
     public void getAllPerson(View v) {
+        Intent myIntent = new Intent(this, AllPerson.class);
+        startActivity(myIntent);
         //String movieTitle = movieTitleText.getText().toString();
        // new MyWebServiceTask().execute("http://localhost:8080/TestWebServicesAndJSON/rest/hello/getAllPerson");
        // new MyWebServiceTask().execute("http://localhost:8080/TestJersey/rest/hello/getAll");
-        new MyWebServiceTask().execute("http://10.0.2.2:8080/TestJersey/rest/hello/getAll");
+       // new MyWebServiceTask().execute("http://10.0.2.2:8080/TestJersey/rest/hello/getAll","");
     }
 
-    public String getUrRequest(String urlString) throws Exception {
-
-        URL url = new URL(urlString);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("GET");
-        if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
-            Log.e("TEST_Web", "Failed to connect to: " + urlString);
-            return null;
-        }
-
-        BufferedReader input = new BufferedReader(
-                new InputStreamReader(conn .getInputStream()));
-
-        String line;
-        StringBuilder response = new StringBuilder();
-        //StringBuffer res=new StringBuffer();
-        while ((line = input.readLine()) != null) {
-            response.append(line + "\n");
-        }
-
-        input.close();
-
-        conn.disconnect();
-        return response.toString();
-
-    }
 
     public void addNewPerson(View v){
-        String id="111";
-        String userName="lolo";
-        String age="100";
-        new MyWebServiceTask().execute("http://10.0.2.2:8080/TestJersey/rest/hello/CreatePerson?personName="
-                +userName+"personId="+id+"personAge="+age);
+
+
+        LayoutInflater li = LayoutInflater.from(MainMenu.this);
+        View dialogView = li.inflate(R.layout.addpersondialog, null);
+
+        final EditText u = (EditText) dialogView.findViewById(R.id.PersonName);
+        final EditText i = (EditText) dialogView.findViewById(R.id.PersonID);
+        final EditText a = (EditText) dialogView.findViewById(R.id.PersonAge);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainMenu.this);
+        builder.setView(dialogView);
+        builder.setTitle(getResources().getString(R.string.addPerson_dialog_title));
+        builder.setMessage(getResources().getString(R.string.addPerson_dialog_masge));
+        builder.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(u.getText().toString().isEmpty()||i.getText().toString().isEmpty()||a.getText().toString().isEmpty()){
+                    Toast.makeText(MainMenu.this,"ther is emty field",Toast.LENGTH_LONG).show();
+                    return;
+                }else {
+                    final String id;
+                    final String userName;
+                    final String age;
+                    userName = u.getText().toString();
+                    id = i.getText().toString();
+                    age = a.getText().toString();
+                    new SetPerson().execute("http://10.0.2.2:8080/TestJersey/rest/hello/createPerson", userName, id, age);
+                }
+
+            }
+        });
+        builder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.show();
+
+
+
 
        // new MyWebServiceTask().execute("http://localhost:8080/TestWebServicesAndJSON/rest/hello/checkUser?personName="
        //         +userName+"personId="+id+"personAge="+age);
@@ -329,9 +345,7 @@ public class MainMenu extends AppCompatActivity {
     }
 
     public void showAllRecords(View v) {
-        // ArrayList<User> UsersList = dbHandler.getAllUsers();
         Intent myIntent = new Intent(this, AllRecords.class);
-        // myIntent.putExtra("userList", UsersList);
         startActivity(myIntent); //app get crash her
 
     }
@@ -347,7 +361,7 @@ public class MainMenu extends AppCompatActivity {
         finish();
     }
 
-    class MyWebServiceTask extends AsyncTask<String, Void, String> {
+    class SetPerson extends AsyncTask<String, Void, String> {
         @Override
         protected void onPostExecute(String response) {
            // System.out.println("responOnPos: "+response);
@@ -370,32 +384,25 @@ public class MainMenu extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            HashMap<String, String> parms = new HashMap<>();
-            String response = null;
-            try {
+                LinkedHashMap<String,String> parms=new LinkedHashMap<>();
+                parms.put("personName",params[1]);
+                parms.put("personId",params[2]);
+                parms.put("personAge",params[3]);
                 JSONParser pars=new JSONParser();
-                JSONObject res=pars.makeHttpRequest(params[0],"GET",parms);
-                JSONArray jsonArray =res.getJSONArray("AllPersons");
-                for(int i=0;i<jsonArray.length();i++){
+                JSONObject jo=pars.makeHttpRequest(params[0],"GET",parms);
 
-                    JSONObject jo = jsonArray.getJSONObject(i);
-                    User u=new User(jo.getString("name"),jo.getString("id"),Integer.parseInt(jo.getString("age")));
-
-                    allUsers.add(u);
+                try {
+                    return jo.get("name").toString();
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-                response=allUsers.toString();
-                //response = getUrRequest(params[0]);
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
-            }
-            return response;
+                return "something wrong";
         }
     }
 
     public class SendRoomName extends AsyncTask<String, Void, Integer> {
         String set_rom_name_url = "setRoomName.php";
-        HashMap<String, String> parms = new HashMap<>();
+        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
         String roomName;
 
         @Override
@@ -462,7 +469,7 @@ public class MainMenu extends AppCompatActivity {
 
     public class GetRoomStatus extends AsyncTask<String, Void, Boolean> {
         String get_room_status_url = "getRoomStatus.php";
-        HashMap<String, String> parms = new HashMap<>();
+        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
 
         @Override

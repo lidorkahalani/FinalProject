@@ -22,6 +22,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.TreeMap;
 
 public class SignUp extends AppCompatActivity {
     EditText userName;
@@ -48,7 +50,7 @@ public class SignUp extends AppCompatActivity {
 
     public class signUp  extends AsyncTask<String, Void, Boolean>{
         String reg_url = "http://mysite.lidordigital.co.il/Quertets/register.php";
-        HashMap<String,String> parms=new HashMap<>();
+        LinkedHashMap<String,String> parms=new LinkedHashMap<>();
         String uName=userName.getText().toString();
         String pass=password.getText().toString();
         String repass=repassword.getText().toString();

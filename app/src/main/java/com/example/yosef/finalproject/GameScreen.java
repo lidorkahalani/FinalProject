@@ -30,8 +30,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.TreeMap;
 
 public class GameScreen extends AppCompatActivity implements AdapterView.OnItemClickListener {
     private ArrayList<Card> deck = new ArrayList<Card>();
@@ -130,7 +132,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
     public class getAllCards extends AsyncTask<String, Void, Boolean> {
         String get_all_card_url = "http://mysite.lidordigital.co.il/Quertets/db/getAllCard.php";
-        HashMap<String, String> parms = new HashMap<>();
+        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
         protected Boolean doInBackground(String... params) {

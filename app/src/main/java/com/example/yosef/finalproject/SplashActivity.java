@@ -17,6 +17,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.TreeMap;
 
 public class SplashActivity extends AppCompatActivity {
     ProgressBar circleProgresBar;
@@ -80,7 +82,7 @@ public class SplashActivity extends AppCompatActivity {
 
     public class getAllCards extends AsyncTask<String, Void, Boolean> {
         String get_all_card_url = "http://mysite.lidordigital.co.il/Quertets/db/getAllCard.php";
-        HashMap<String, String> parms = new HashMap<>();
+        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
         protected Boolean doInBackground(String... params) {

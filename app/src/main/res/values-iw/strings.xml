@@ -44,6 +44,11 @@
     <string name="string_view_image">ראה תמונה</string>
     <string name="get_All_person">הצג את כל השחקנים</string>
     <string name="set_person">הרשמת שחקן</string>
+    <string name="user_id">מזהה</string>
+    <string name="user_age">גיל</string>
+    <string name="addPerson_dialog_title">יצירת משתמש חדש</string>
+    <string name="addPerson_dialog_masge">הכנס את הפרטים הבאים</string>
+
 
     <string-array name="card_click_menu">
         <item>שלח קלף</item>

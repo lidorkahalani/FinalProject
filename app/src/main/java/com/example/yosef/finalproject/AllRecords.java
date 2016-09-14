@@ -26,7 +26,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 public class AllRecords extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
@@ -109,7 +111,7 @@ public class AllRecords extends AppCompatActivity implements AdapterView.OnItemC
     public class GetHigheRecrods extends AsyncTask<String, Void, Boolean> {
         String get_hige_score_url = "http://mysite.lidordigital.co.il/Quertets/db/getHighRecords.php";
 
-        HashMap<String, String> parms = new HashMap<>();
+        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
        // MySQLiteHelper dbHelper = new MySQLiteHelper(MainActivity.this, UserDBConstants.DBName, null, UserDBConstants.User_DB_VESRSION);
         String inputUserName ;

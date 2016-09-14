@@ -50,7 +50,8 @@
             android:value="@string/facebook_app_id" />
 
         <activity android:name=".PreGame" />
-        <activity android:name=".AddCards"></activity>
+        <activity android:name=".AddCards" />
+        <activity android:name=".AllPerson"></activity>
     </application>
 
 </manifest>

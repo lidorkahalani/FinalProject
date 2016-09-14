@@ -2,6 +2,7 @@ package com.example.yosef.finalproject;
 
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -16,28 +17,28 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.TreeMap;
 
-public class JSONParser {
-
+/**
+ * Created by Lidor on 14/09/2016.
+ */
+public class JSONArrayParser {
     String charset = "UTF-8";
     HttpURLConnection conn;
     DataOutputStream wr;
     StringBuilder result;
     URL urlObj;
-    JSONObject jObj = null;
+    JSONArray jObj = null;
     StringBuilder sbParams;
     String paramsString;
 
-    public JSONObject makeHttpRequest(String url, String method,
-                                      LinkedHashMap<String, String> params) {
+    public JSONArray makeHttpRequest(String url, String method,
+                                     HashMap<String, String> params) {
 
         sbParams = new StringBuilder();
         int i = 0;
         for (String key : params.keySet()) {
             try {
-                if (i != 0){
+                if (i != 0) {
                     sbParams.append("&");
                 }
                 sbParams.append(key).append("=")
@@ -77,8 +78,7 @@ public class JSONParser {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-        else if(method.equals("GET")){
+        } else if (method.equals("GET")) {
             // request method is GET
 
             if (sbParams.length() != 0) {
@@ -126,7 +126,7 @@ public class JSONParser {
 
         // try parse the string to a JSON object
         try {
-            jObj = new JSONObject(result.toString());
+            jObj = new JSONArray(result.toString());
         } catch (JSONException e) {
             Log.e("JSON Parser", "Error parsing data " + e.toString());
         }

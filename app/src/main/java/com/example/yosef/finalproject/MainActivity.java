@@ -34,7 +34,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.TreeMap;
 
 public class MainActivity extends AppCompatActivity {
     private EditText userName;
@@ -238,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
 
     public class logIn extends AsyncTask<String, Void, Boolean> {
         String login_url = "http://mysite.lidordigital.co.il/Quertets/login.php";
-        HashMap<String, String> parms = new HashMap<>();
+        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         MySQLiteHelper dbHelper = new MySQLiteHelper(MainActivity.this, UserDBConstants.DBName, null, UserDBConstants.User_DB_VESRSION);
         String inputUserName ;
@@ -300,7 +302,7 @@ public class MainActivity extends AppCompatActivity {
 
     public class signUp  extends AsyncTask<String, Void, Boolean>{
         String reg_url = "http://mysite.lidordigital.co.il/Quertets/register.php";
-        HashMap<String,String> parms=new HashMap<>();
+        LinkedHashMap<String,String> parms=new LinkedHashMap<>();
         String userName;
         String password;
 
