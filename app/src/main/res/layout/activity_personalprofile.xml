@@ -86,6 +86,22 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
 
+        <Button
+            android:onClick="addNewPerson"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/set_person"
+            android:id="@+id/button10"
+            android:layout_gravity="center_horizontal" />
+
+        <Button
+            android:onClick="getAllPerson"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/get_All_person"
+            android:id="@+id/button11"
+            android:layout_gravity="center_horizontal" />
+
         <com.facebook.login.widget.LoginButton
             xmlns:facebook="http://schemas.android.com/apk/res-auto"
             android:layout_width="wrap_content"
