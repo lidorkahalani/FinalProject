@@ -78,7 +78,6 @@ public class AllPerson extends AppCompatActivity implements AdapterView.OnItemCl
         @Override
         protected Boolean doInBackground(String... params) {
             HashMap<String, String> parms = new HashMap<>();
-            String response = null;
             try {
                 JSONArrayParser pars = new JSONArrayParser();
                 JSONArray res = pars.makeHttpRequest(params[0], "GET", parms);

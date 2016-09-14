@@ -57,6 +57,7 @@ public class MainMenu extends AppCompatActivity {
     private User currentPlayer;
     private ArrayList<User> allUsers=new ArrayList<User>();
 
+    boolean correctInput=false;
     LoginButton facebookButton;
     Button logOut;
     ProgressDialog pDialog;
@@ -184,17 +185,34 @@ public class MainMenu extends AppCompatActivity {
         builder.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if(u.getText().toString().isEmpty()||i.getText().toString().isEmpty()||a.getText().toString().isEmpty()){
-                    Toast.makeText(MainMenu.this,"ther is emty field",Toast.LENGTH_LONG).show();
+                if((u.getText().toString().matches("[a-zA-Z]+"))){
+                    try{
+                        Integer.parseInt(i.getText().toString());
+                        Integer.parseInt(a.getText().toString());
+                        correctInput=true;
+
+                    }catch (NumberFormatException n){
+                        Toast.makeText(MainMenu.this,"please insert number in id&age field",Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                }
+                if(correctInput) {
+                    if (u.getText().toString().isEmpty() || i.getText().toString().isEmpty() || a.getText().toString().isEmpty()) {
+                        Toast.makeText(MainMenu.this, "ther is emty field", Toast.LENGTH_LONG).show();
+                        return;
+                    } else {
+                        final String id;
+                        final String userName;
+                        final String age;
+                        userName = u.getText().toString();
+                        id = i.getText().toString();
+                        age = a.getText().toString();
+                        new SetPerson().execute("http://10.0.2.2:8080/TestJersey/rest/hello/createPerson", userName, id, age);
+                    }
+                }else{
+                    Toast.makeText(MainMenu.this,"number cannot bee user name",Toast.LENGTH_LONG).show();
                     return;
-                }else {
-                    final String id;
-                    final String userName;
-                    final String age;
-                    userName = u.getText().toString();
-                    id = i.getText().toString();
-                    age = a.getText().toString();
-                    new SetPerson().execute("http://10.0.2.2:8080/TestJersey/rest/hello/createPerson", userName, id, age);
                 }
 
             }
