@@ -43,6 +43,8 @@
     <string name="string_choose_file">Choose file</string>
     <string name="string_upload_image">Upload file</string>
     <string name="string_view_image">View image</string>
+    <string name="get_All_person">Get Persons</string>
+    <string name="set_person">Set Persons</string>
 
 
     <string-array name="card_click_menu">
