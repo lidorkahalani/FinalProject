@@ -28,10 +28,18 @@ import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.gson.Gson;
+import com.google.gson.JsonParser;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -44,6 +52,7 @@ public class MainMenu extends AppCompatActivity {
     private CallbackManager callBack;
     private Profile profile;
     private User currentPlayer;
+    private ArrayList<User> allUsers;
 
     LoginButton facebookButton;
     Button logOut;
@@ -145,6 +154,51 @@ public class MainMenu extends AppCompatActivity {
         t.setText("Hello " + uname + "\n" + "Toatal Score: " + Integer.toString(score));
     }
 
+    public void getAllPerson(View v) {
+        //String movieTitle = movieTitleText.getText().toString();
+       // new MyWebServiceTask().execute("http://localhost:8080/TestWebServicesAndJSON/rest/hello/getAllPerson");
+       // new MyWebServiceTask().execute("http://localhost:8080/TestJersey/rest/hello/getAll");
+        new MyWebServiceTask().execute("http://10.0.2.2:8080/TestJersey/rest/hello/getAll");
+    }
+
+    public String getUrRequest(String urlString) throws Exception {
+
+        URL url = new URL(urlString);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+            Log.e("TEST_Web", "Failed to connect to: " + urlString);
+            return null;
+        }
+
+        BufferedReader input = new BufferedReader(
+                new InputStreamReader(conn .getInputStream()));
+
+        String line;
+        StringBuilder response = new StringBuilder();
+        //StringBuffer res=new StringBuffer();
+        while ((line = input.readLine()) != null) {
+            response.append(line + "\n");
+        }
+
+        input.close();
+
+        conn.disconnect();
+        return response.toString();
+
+    }
+
+    public void addNewPerson(View v){
+        String id="111";
+        String userName="lolo";
+        String age="100";
+        new MyWebServiceTask().execute("http://10.0.2.2:8080/TestJersey/rest/hello/CreatePerson?personName="
+                +userName+"personId="+id+"personAge="+age);
+
+       // new MyWebServiceTask().execute("http://localhost:8080/TestWebServicesAndJSON/rest/hello/checkUser?personName="
+       //         +userName+"personId="+id+"personAge="+age);
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -188,6 +242,7 @@ public class MainMenu extends AppCompatActivity {
 
         builder.show();
     }
+
 
     public void onBackPressed() {
         // TODO Auto-generated method stub
@@ -290,6 +345,52 @@ public class MainMenu extends AppCompatActivity {
         Intent myIntent = new Intent(this, MainActivity.class);
         startActivity(myIntent);
         finish();
+    }
+
+    class MyWebServiceTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected void onPostExecute(String response) {
+           // System.out.println("responOnPos: "+response);
+            String plotString = null;
+          //  try {
+               // Gson gson=new Gson();
+               // plotString=gson.toJson(response);
+
+                //JSONObject jsonObj = new JSONObject(response);
+                //plotString = jsonObj.getString("");
+                Toast.makeText(MainMenu.this, response, Toast.LENGTH_LONG).show();
+
+
+           // } catch (JSONException e) {
+            //    e.printStackTrace();
+        //    }
+
+           //Toast.makeText(MainMenu.this,plotString,Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            HashMap<String, String> parms = new HashMap<>();
+            String response = null;
+            try {
+                JSONParser pars=new JSONParser();
+                JSONObject res=pars.makeHttpRequest(params[0],"GET",parms);
+                JSONArray jsonArray =res.getJSONArray("AllPersons");
+                for(int i=0;i<jsonArray.length();i++){
+
+                    JSONObject jo = jsonArray.getJSONObject(i);
+                    User u=new User(jo.getString("name"),jo.getString("id"),Integer.parseInt(jo.getString("age")));
+
+                    allUsers.add(u);
+                }
+                response=allUsers.toString();
+                //response = getUrRequest(params[0]);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+            return response;
+        }
     }
 
     public class SendRoomName extends AsyncTask<String, Void, Integer> {
