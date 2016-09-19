@@ -33,16 +33,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Locale;
-import java.util.TreeMap;
 
 public class MainActivity extends AppCompatActivity {
     private EditText userName;
     private EditText password;
     private UsersDBHandler dbHandler;
     int score;
+    int userId;
     private CallbackManager callBack;
     private ProfileTracker profileTracker;
     private AccessTokenTracker accsessTokenTracker;
@@ -175,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void showAllRecords(View v) {
         ArrayList<User> UsersList = dbHandler.getAllUsers();
-        Intent myIntent = new Intent(this, AllRecords.class);
+        Intent myIntent = new Intent(this, ShowMyCards.class);
         myIntent.putExtra("userList", UsersList);
         startActivity(myIntent); //app get crash her
 
@@ -261,6 +260,7 @@ public class MainActivity extends AppCompatActivity {
                        if(jsonArray.getJSONObject(0).getString("user_name").equals(inputUserName)&&
                                jsonArray.getJSONObject(0).getString("password").equals(inputPassword)){
                            score = jsonArray.getJSONObject(0).getInt("score");
+                           userId=jsonArray.getJSONObject(0).getInt("user_id");
                            return true;
                        }
                 }
@@ -283,6 +283,7 @@ public class MainActivity extends AppCompatActivity {
                 editor.putString("username", inputUserName);
                 editor.putString("password", inputPassword);
                 editor.putInt("score", score);
+                editor.putInt("user_id",userId);
 
                 editor.commit();
 

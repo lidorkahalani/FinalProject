@@ -28,24 +28,14 @@ import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.google.gson.Gson;
-import com.google.gson.JsonParser;
-import com.google.gson.internal.Streams;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.TreeMap;
 
 public class MainMenu extends AppCompatActivity {
 
@@ -129,6 +119,7 @@ public class MainMenu extends AppCompatActivity {
         String uname = myPref.getString("username", "");
         String password = myPref.getString("password", "");
         int score = myPref.getInt("score", 0);
+        int userId = myPref.getInt("user_id", 0);
         currentPlayer = new User(uname, password, score);
         dbHandler = new UsersDBHandler(this);
         setLayout();
@@ -166,7 +157,6 @@ public class MainMenu extends AppCompatActivity {
        // new MyWebServiceTask().execute("http://localhost:8080/TestJersey/rest/hello/getAll");
        // new MyWebServiceTask().execute("http://10.0.2.2:8080/TestJersey/rest/hello/getAll","");
     }
-
 
     public void addNewPerson(View v){
 
@@ -362,8 +352,8 @@ public class MainMenu extends AppCompatActivity {
 
     }
 
-    public void showAllRecords(View v) {
-        Intent myIntent = new Intent(this, AllRecords.class);
+    public void ShowMyCards(View v) {
+        Intent myIntent = new Intent(this, ShowMyCards.class);
         startActivity(myIntent); //app get crash her
 
     }

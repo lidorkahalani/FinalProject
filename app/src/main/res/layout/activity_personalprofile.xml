@@ -59,10 +59,10 @@
             android:layout_alignParentEnd="true" />
 
         <Button
-            android:onClick="showAllRecords"
+            android:onClick="ShowMyCards"
             android:layout_width="268dp"
             android:layout_height="wrap_content"
-            android:text="@string/showRecords"
+            android:text="@string/ShowMyCards"
             android:id="@+id/button6"
             android:layout_below="@+id/linearLayout"
             android:layout_centerHorizontal="true" />

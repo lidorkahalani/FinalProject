@@ -14,13 +14,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 public class AllPerson extends AppCompatActivity implements AdapterView.OnItemClickListener {
@@ -59,7 +59,7 @@ public class AllPerson extends AppCompatActivity implements AdapterView.OnItemCl
             User user = getItem(position);
             if (convertView == null) {
                 Log.e("TEST getView", "inside if with position " + position);
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.single_person_layout, parent, false);
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.single_quartets_layout, parent, false);
             }
             TextView userName = (TextView) convertView.findViewById(R.id.personNameSingle);
             TextView id = (TextView) convertView.findViewById(R.id.personidSingle);
@@ -81,8 +81,10 @@ public class AllPerson extends AppCompatActivity implements AdapterView.OnItemCl
             try {
                 JSONArrayParser pars = new JSONArrayParser();
                 JSONArray res = pars.makeHttpRequest(params[0], "GET", parms);
+                Gson gson=new Gson();
 
                 for (int i = 0; i < res.length(); i++) {
+                    User x = gson.fromJson(res.getString(i), User.class);
                     JSONObject jo = res.getJSONObject(i);
                     User u = new User(jo.getString("name"), jo.getString("id"), Integer.parseInt(jo.getString("age")));
                     allUsers.add(u);

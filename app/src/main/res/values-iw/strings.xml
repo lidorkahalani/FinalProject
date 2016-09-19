@@ -22,7 +22,7 @@
     <string name="logOut">צא</string>
     <string name="add">הוסף</string>
     <string name="exitWarning">אתה בטוח שברצונך לצאת?</string>
-    <string name="showRecords">השיאים</string>
+    <string name="ShowMyCards">הצג את הסדרות שלי</string>
     <string name="changeLang">שנה שפה</string>
     <string name="loading">טוען...</string>
     <string name="yes">כן</string>

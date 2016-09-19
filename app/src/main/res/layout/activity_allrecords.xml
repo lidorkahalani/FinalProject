@@ -3,13 +3,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AllRecords">
+    tools:context=".ShowMyCards">
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/userlist"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+    <RelativeLayout
+        android:id="@+id/myPlayerBackground"
+        android:layout_width="wrap_content"
+        android:layout_height="230dp"
+        android:layout_gravity="bottom"
+        android:background="@android:color/transparent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/listcards"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+        </android.support.v7.widget.RecyclerView>
+
+    </RelativeLayout>
 
 </RelativeLayout>

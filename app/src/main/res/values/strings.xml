@@ -19,7 +19,7 @@
     <string name="chooseQuartets">Choose Quartets</string>
     <string name="add">Add</string>
     <string name="exitWarning">Are you sure you want to exit?</string>
-    <string name="showRecords">Show records</string>
+    <string name="ShowMyCards">Show My Cards</string>
     <string name="changeLang">Change lang</string>
     <string name="LOCALE_IW">iw</string>
     <string name="LOCALE_ENGLISH">en</string>
@@ -54,6 +54,11 @@
     <string-array name="card_click_menu">
         <item>send card</item>
         <item>receive card</item>
+    </string-array>
+
+    <string-array name="my_card">
+        <item>Delete</item>
+        <item>Edit</item>
     </string-array>
 
     <string name="room_name">Room name</string>
