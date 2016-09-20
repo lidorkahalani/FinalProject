@@ -49,6 +49,11 @@
     <string name="user_age">user age</string>
     <string name="addPerson_dialog_title">add new person</string>
     <string name="addPerson_dialog_masge">insert person data</string>
+    <string name="category">Category</string>
+    <string name="item1">item1</string>
+    <string name="updateCard">Update</string>
+    <string name="update_Card_dialog_title">Update Card</string>
+    <string name="update_Card_masage">insert card data</string>
 
 
     <string-array name="card_click_menu">

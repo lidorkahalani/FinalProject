@@ -1,10 +1,12 @@
 package com.example.yosef.finalproject;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -14,15 +16,13 @@ import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,7 +33,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Random;
 
 public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
@@ -49,6 +48,7 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
     RecyclerView myListView;
     CardsAdapter cardsAdapter;
     int myId;
+    boolean correctInput;
     public static int MENU_ID = 0;
     private static final int CARDS_CLICK_MENU = 1;
 
@@ -64,7 +64,7 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
 
         SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(this);
         myId = myPref.getInt("user_id",0);
-        new GetHigheRecrods().execute(String.valueOf(myId));
+        new GetMycards().execute(String.valueOf(myId));
 
         RecyclerView.LayoutManager lm = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         myListView.setLayoutManager(lm);
@@ -80,61 +80,8 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
         User user = (User) parent.getItemAtPosition(position);
         Toast.makeText(this,user.getUserName()+" Selcted",Toast.LENGTH_SHORT).show();
     }
-/*
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        if (v.getId()==R.id.userlist) {
-            MenuInflater inflater = getMenuInflater();
-            inflater.inflate(R.menu.menu_list, menu);
-        }
-    }
 
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        switch(item.getItemId()) {
-            case R.id.delete:
-                Toast.makeText(this,"Delet",Toast.LENGTH_SHORT).show();
-                return true;
-            default:
-                return super.onContextItemSelected(item);
-        }
-    }
-
-    class MyClassAdapter extends ArrayAdapter<User> {
-
-        public MyClassAdapter(Context context, int resource, List<User> objects) {
-            super(context, resource, objects);
-        }
-
-        // the method getView is in charge of creating a single line in the list
-        // it receives the position (index) of the line to be created
-        // the method populates the view with the data from the relevant object (according to the position)
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            Log.i("TEST getView", "inside getView position " + position);
-
-            User user = getItem(position);
-            if (convertView == null) {
-                Log.e("TEST getView", "inside if with position " + position);
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.single_user_layout, parent, false);
-            }
-            TextView userName = (TextView) convertView.findViewById(R.id.userName);
-            TextView pass = (TextView) convertView.findViewById(R.id.password);
-            TextView score=(TextView) convertView.findViewById(R.id.score);
-
-
-            userName.setText(user.getUserName());
-            //pass.setText(user.getPassword());
-            score.setText(Integer.toString(user.getScore()));
-            return convertView;
-
-        }
-    }
-*/
-
-    public class GetHigheRecrods extends AsyncTask<String, Void, Boolean> {
+    public class GetMycards extends AsyncTask<String, Void, Boolean> {
         String get_my_cards = "http://mysite.lidordigital.co.il/Quertets/db/getMyCards.php";
 
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
@@ -190,7 +137,7 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
                 }
                 setCardsList();
             }else
-                Toast.makeText(ShowMyCards.this,"you didn't uploaded cards",Toast.LENGTH_LONG).show();
+                Toast.makeText(ShowMyCards.this,"you dont have any cards",Toast.LENGTH_LONG).show();
 
         }
     }
@@ -273,24 +220,80 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
     }
     @Override
     public boolean onContextItemSelected(MenuItem item){
-        int menuItemIndex = item.getItemId();
-        String delete_card = "http://mysite.lidordigital.co.il/Quertets/db/delete_card.php";
+        final int menuItemIndex = item.getItemId();
+        int cardId;
+        String delete_card = "http://mysite.lidordigital.co.il/Quertets/db/deleteSeries.php";
         if(MENU_ID == CARDS_CLICK_MENU){
-
             String[] menuItems = getResources().getStringArray(R.array.my_card);
             String menuItemName = menuItems[menuItemIndex];
-            if(menuItemName.equals(menuItems[0])){//שלח קלף
-                Toast.makeText(ShowMyCards.this,
-                        menuItemName,
-                        Toast.LENGTH_LONG).show();
+            if(menuItemName.equals(menuItems[0])){
                 setCardBackgroundTransparent = false;
-                new deletCard().execute(delete_card);
+                cardId=deck.get(menuItemIndex).getCard_id();
+                new deleteCard().execute(delete_card,String.valueOf(cardId));
+
+            }else if(menuItemName.equals(menuItems[1])){
+
+                    LayoutInflater li = LayoutInflater.from(ShowMyCards.this);
+                    final View dialogView = li.inflate(R.layout.updatecard, null);
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ShowMyCards.this);
+                    builder.setView(dialogView);
+                    builder.setTitle(getResources().getString(R.string.update_Card_dialog_title));
+                    builder.setMessage(getResources().getString(R.string.update_Card_masage));
+               final EditText category = (EditText) dialogView.findViewById(R.id.category);
+               final EditText itemText = (EditText) dialogView.findViewById(R.id.item1);
+
+                category.setText(deck.get(menuItemIndex).getCategoryName());
+                itemText.setText(deck.get(menuItemIndex).getCardName());
+                    builder.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            correctInput = true;
+                            /*if((category.getText().toString().matches("[a-zA-Z]+")))
+                            {
+                                if(category.getText().toString().length()<=11) {
+                                    correctInput = true;
+                                    Toast.makeText(ShowMyCards.this, "word to long", Toast.LENGTH_SHORT).show();
+                                }
+
+                            }*/
+                            if(correctInput) {
+                                if (category.getText().toString().isEmpty() || itemText.getText().toString().isEmpty()) {
+                                    Toast.makeText(ShowMyCards.this, "ther is empty field", Toast.LENGTH_LONG).show();
+                                    return;
+                                } else {
+
+                                    final String newCategory;
+                                    final String newItem;
+
+                                    newCategory = category.getText().toString();
+                                    newItem = itemText.getText().toString();
+                                    //age = a.getText().toString();
+                                    new UpdateCard().execute("http://mysite.lidordigital.co.il/Quertets/db/UpdateCard", newCategory, newItem);
+                                }
+                            }else{
+                                Toast.makeText(ShowMyCards.this,"number cannot bee user name",Toast.LENGTH_LONG).show();
+                                return;
+                            }
+
+                        }
+                    });
+                    builder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    builder.show();
 
 
-            }else if(menuItemName.equals(menuItems[1])){//קבל קלף
-                Toast.makeText(ShowMyCards.this,
-                        menuItemName,
-                        Toast.LENGTH_LONG).show();
+
+
+                    // new MyWebServiceTask().execute("http://localhost:8080/TestWebServicesAndJSON/rest/hello/checkUser?personName="
+                    //         +userName+"personId="+id+"personAge="+age);
+
 
             }
 
@@ -305,18 +308,20 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
     public void onContextMenuClosed(Menu menu){
         if(selectedCard!=null && setCardBackgroundTransparent){
             selectedCard.findViewById(R.id.card_container).setBackgroundColor(Color.TRANSPARENT);
+            selectedCard.findViewById(R.id.card_container).setBackgroundDrawable(getResources().getDrawable(R.drawable.card_background));
         }
 
     }
 
-    public class deletCard extends AsyncTask<String, Void, Boolean> {
+    public class deleteCard extends AsyncTask<String, Void, Boolean> {
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
         protected Boolean doInBackground(String... params) {
+            parms.put("card_id",params[1]);
             JSONParser json = new JSONParser();
             try{
-                JSONObject response = json.makeHttpRequest(params[0], "POST", parms);
+                JSONObject response = json.makeHttpRequest(params[0], "GET", parms);
 
                 if (response.getInt("succsses") == 1) {
                    return true;
@@ -330,15 +335,17 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
                 return false;
             }
 
-            return true;
+            return false;
         }
 
 
         protected void onPostExecute(Boolean result) {
             if (result) {
                Toast.makeText(ShowMyCards.this,"Delete Succsesful",Toast.LENGTH_LONG).show();
+                finish();
+                startActivity(getIntent());
             } else
-                Toast.makeText(ShowMyCards.this, "the deck not load !", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ShowMyCards.this, "Delete Failed!", Toast.LENGTH_SHORT).show();
         }
 
 
@@ -358,5 +365,85 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
         }
 
 
+    }
+
+    public class editCard extends AsyncTask<String, Void, Boolean> {
+        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            parms.put("card_id",params[1]);
+            JSONParser json = new JSONParser();
+            try{
+                JSONObject response = json.makeHttpRequest(params[0], "GET", parms);
+
+                if (response.getInt("succsses") == 1) {
+                    return true;
+                }
+
+            }catch (JSONException e) {
+                e.printStackTrace();
+                return false;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+
+            return false;
+        }
+
+
+        protected void onPostExecute(Boolean result) {
+            if (result) {
+                Toast.makeText(ShowMyCards.this,"Delete Succsesful",Toast.LENGTH_LONG).show();
+                finish();
+                startActivity(getIntent());
+            } else
+                Toast.makeText(ShowMyCards.this, "Delete Failed!", Toast.LENGTH_SHORT).show();
+        }
+
+
+
+        public class fucosCard {
+
+
+        }
+
+
+        public void painCurrentPlayer(View v) {
+            v.setBackgroundColor(Color.GREEN);
+        }
+
+        public void onMyTurnEnd() {
+            // bottomLayout.setBackgroundColor(Color.TRANSPARENT);
+        }
+
+
+    }
+
+    class UpdateCard extends AsyncTask<String, Void, String> {
+        @Override
+        protected void onPostExecute(String response) {
+            Toast.makeText(ShowMyCards.this, response, Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            LinkedHashMap<String,String> parms=new LinkedHashMap<>();
+            parms.put("category",params[1]);
+            parms.put("item",params[2]);
+            //parms.put("personAge",params[3]);
+            JSONParser pars=new JSONParser();
+            JSONObject response=pars.makeHttpRequest(params[0],"GET",parms);
+
+            try {
+               if(response.getInt("succsses")==1){
+                   return "Update succsseful!";
+               }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return "something wrong";
+        }
     }
 }

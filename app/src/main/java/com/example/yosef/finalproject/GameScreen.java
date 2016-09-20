@@ -187,14 +187,6 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                 Toast.makeText(GameScreen.this, "the deck not load !", Toast.LENGTH_SHORT).show();
         }
 
-
-
-        public class fucosCard {
-
-
-        }
-
-
         public void painCurrentPlayer(View v) {
             v.setBackgroundColor(Color.GREEN);
         }
@@ -202,7 +194,6 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         public void onMyTurnEnd() {
             bottomLayout.setBackgroundColor(Color.TRANSPARENT);
         }
-
 
     }
 
@@ -290,7 +281,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
             String menuItemName = menuItems[menuItemIndex];
             if(menuItemName.equals(menuItems[0])){//שלח קלף
                 Toast.makeText(GameScreen.this,
-                        menuItemName,
+                        menuItemName+this.deck,
                         Toast.LENGTH_LONG).show();
                 setCardBackgroundTransparent = false;
 
@@ -314,6 +305,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
      public void onContextMenuClosed(Menu menu){
         if(selectedCard!=null && setCardBackgroundTransparent){
             selectedCard.findViewById(R.id.card_container).setBackgroundColor(Color.TRANSPARENT);
+            selectedCard.findViewById(R.id.card_container).setBackgroundDrawable(getResources().getDrawable(R.drawable.card_background));
         }
 
      }
