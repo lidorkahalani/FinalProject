@@ -150,6 +150,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                         card.setCategoryName(jo.getString("category_name"));
                         card.setCategoryColor(jo.getInt("category_color"));
                         card.setCardName(jo.getString("card_name"));
+                        card.setImageName(jo.getString("image_name"));
                         String[]cardLabels = new String[4];
                         JSONArray ja = jo.getJSONArray("card_labels");
                         for(int j = 0 ; j<ja.length(); j++){

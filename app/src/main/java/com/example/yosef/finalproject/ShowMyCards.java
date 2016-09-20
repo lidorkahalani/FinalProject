@@ -48,6 +48,7 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
     RecyclerView myListView;
     CardsAdapter cardsAdapter;
     int myId;
+    Card selectedCardEditOrDelete;
     boolean correctInput;
     public static int MENU_ID = 0;
     private static final int CARDS_CLICK_MENU = 1;
@@ -61,7 +62,7 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_allrecords);
         myListView = (RecyclerView) findViewById(R.id.listcards);
-
+        registerForContextMenu(myListView);
         SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(this);
         myId = myPref.getInt("user_id",0);
         new GetMycards().execute(String.valueOf(myId));
@@ -154,6 +155,7 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
                         LinearLayout cardContainer = (LinearLayout)view.findViewById(R.id.card_container);
                         selectedCard=cardContainer;
                         cardContainer.setBackgroundColor(getResources().getColor(R.color.light_green));
+                        selectedCardEditOrDelete=((CardsAdapter)myListView.getAdapter()).getItem(position);
                     }
 
                     @Override public void onLongItemClick(View view, int position) {
@@ -202,6 +204,7 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
     @Override
     public  void onCreateContextMenu(ContextMenu menu, View view,
                                      ContextMenu.ContextMenuInfo menuInfo){
+
         String menuItems[];
         switch (view.getId()){
             case R.id.listcards:
@@ -209,6 +212,7 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
                 AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
                 menuItems = getResources().getStringArray(R.array.my_card);
                 menu.setHeaderTitle(getResources().getString(R.string.choose));
+                //selectedCardEditOrDelete=cardsAdapter.getItem(((AdapterView.AdapterContextMenuInfo)menuInfo).position);
                 break;
             default:
                 return;
@@ -221,18 +225,17 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
     @Override
     public boolean onContextItemSelected(MenuItem item){
         final int menuItemIndex = item.getItemId();
-        int cardId;
+
         String delete_card = "http://mysite.lidordigital.co.il/Quertets/db/deleteSeries.php";
         if(MENU_ID == CARDS_CLICK_MENU){
             String[] menuItems = getResources().getStringArray(R.array.my_card);
-            String menuItemName = menuItems[menuItemIndex];
+            String menuItemName = menuItems[menuItemIndex];//delete card
             if(menuItemName.equals(menuItems[0])){
                 setCardBackgroundTransparent = false;
-                cardId=deck.get(menuItemIndex).getCard_id();
-                new deleteCard().execute(delete_card,String.valueOf(cardId));
+               // cardId=deck.get(menuItemIndex).getCard_id();
+                new deleteCard().execute(delete_card,String.valueOf(selectedCardEditOrDelete.getCard_id()));
 
             }else if(menuItemName.equals(menuItems[1])){
-
                     LayoutInflater li = LayoutInflater.from(ShowMyCards.this);
                     final View dialogView = li.inflate(R.layout.updatecard, null);
 
@@ -243,8 +246,8 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
                final EditText category = (EditText) dialogView.findViewById(R.id.category);
                final EditText itemText = (EditText) dialogView.findViewById(R.id.item1);
 
-                category.setText(deck.get(menuItemIndex).getCategoryName());
-                itemText.setText(deck.get(menuItemIndex).getCardName());
+                category.setText(selectedCardEditOrDelete.getCategoryName());
+                itemText.setText(selectedCardEditOrDelete.getCardName());
                     builder.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

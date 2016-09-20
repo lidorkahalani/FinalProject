@@ -1,7 +1,9 @@
 package com.example.yosef.finalproject;
 
+import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +16,9 @@ import java.util.List;
 public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.MyViewHolder> {
 
     List<Card> cards ;
-
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    Context conext;
+    final String imageRelativePat="http://mysite.lidordigital.co.il/Quertets/images/";
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener{
         public TextView category;
         public ImageView image;
         public TextView card1;
@@ -25,12 +28,18 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.MyViewHolder
         private boolean isClicked=false;
         public MyViewHolder(View view){
             super(view);
+            view.setOnCreateContextMenuListener(this);
             category = (TextView) view.findViewById(R.id.category);
             image = (ImageView) view.findViewById(R.id.card_image);
             card1 = (TextView) view.findViewById(R.id.card_name1);
             card2= (TextView) view.findViewById(R.id.card_name2);
             card3= (TextView) view.findViewById(R.id.card_name3);
             card4= (TextView) view.findViewById(R.id.card_name4);
+        }
+
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+
         }
     }
 
@@ -40,6 +49,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.MyViewHolder
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        conext=parent.getContext();
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.singelcard, parent, false);
         return new MyViewHolder(itemView);
     }
@@ -47,6 +57,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.MyViewHolder
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Card card = getItem(position);
+        String fullPath;
         holder.category.setText(card.getCategoryName());
         holder.image.setImageDrawable(card.getItemPicture());
         if(!holder.isClicked) {
@@ -65,6 +76,10 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.MyViewHolder
         holder.card2.setText(card.getItemsArray()[1]);
         holder.card3.setText(card.getItemsArray()[2]);
         holder.card4.setText(card.getItemsArray()[3]);
+        fullPath=imageRelativePat+card.getImageName();
+        ImageLoader imageLoader=new ImageLoader(conext);
+        imageLoader.DisplayImage(fullPath,R.mipmap.ic_launcher,holder.image);
+
 
     }
 

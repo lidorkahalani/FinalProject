@@ -3,6 +3,7 @@ package com.example.yosef.finalproject;
 import android.graphics.drawable.Drawable;
 
 import java.io.File;
+import java.security.PrivateKey;
 
 /**
  * Created by Yosef on 22/05/2016.
@@ -10,6 +11,7 @@ import java.io.File;
 public class Card {
     private String categoryName;
     private String cardName;
+    private String imageName;
     private int categoryColor;
     private int card_id;
     private Drawable itemPicture;
@@ -111,5 +113,13 @@ public class Card {
 
     public void setClicked(boolean clicked) {
         isClicked = clicked;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
     }
 }
