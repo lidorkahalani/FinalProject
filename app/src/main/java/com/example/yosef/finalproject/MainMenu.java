@@ -267,7 +267,6 @@ public class MainMenu extends AppCompatActivity {
         builder.show();
     }
 
-
     public void onBackPressed() {
         // TODO Auto-generated method stub
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

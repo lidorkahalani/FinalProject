@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -16,29 +17,29 @@
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".SignUp"
-            android:theme="@style/NoTitle"/>
+            android:theme="@style/NoTitle" />
         <activity
             android:name=".SplashActivity"
-            android:theme="@style/NoTitle"/>
+            android:theme="@style/NoTitle" />
         <activity
             android:name=".MainMenu"
-            android:theme="@style/NoTitle"/>
+            android:theme="@style/NoTitle" />
         <activity
             android:name=".ShowMyCards"
-            android:theme="@style/NoTitle"/>
+            android:theme="@style/NoTitle" />
         <activity
             android:name=".GameScreen"
-            android:theme="@style/NoTitle"/>
+            android:theme="@style/NoTitle" />
         <activity
             android:name=".Room"
-            android:theme="@style/NoTitle"/>
-        <activity
-            android:name="com.facebook.FacebookActivity"/>
+            android:theme="@style/NoTitle" />
+        <activity android:name="com.facebook.FacebookActivity" />
         <activity
             android:name=".PreGame"
             android:theme="@style/NoTitle" />
@@ -47,6 +48,9 @@
             android:theme="@style/NoTitle" />
         <activity
             android:name=".AllPerson"
+            android:theme="@style/NoTitle" />
+
+        <activity android:name=".UpdateCard"
             android:theme="@style/NoTitle" />
 
         <provider

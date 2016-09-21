@@ -3,12 +3,13 @@ package com.example.yosef.finalproject;
 import android.graphics.drawable.Drawable;
 
 import java.io.File;
+import java.io.Serializable;
 import java.security.PrivateKey;
 
 /**
  * Created by Yosef on 22/05/2016.
  */
-public class Card {
+public class Card implements Serializable {
     private String categoryName;
     private String cardName;
     private String imageName;

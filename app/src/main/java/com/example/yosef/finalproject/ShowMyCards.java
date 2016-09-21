@@ -1,12 +1,13 @@
 package com.example.yosef.finalproject;
 
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -21,7 +22,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,7 +46,7 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
     ArrayList<Card>deck=new ArrayList<>();*/
 
     private ArrayList<Card> deck = new ArrayList<Card>();
-
+    private int PICK_IMAGE_REQUEST = 1;
     RecyclerView myListView;
     CardsAdapter cardsAdapter;
     int myId;
@@ -52,15 +54,31 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
     boolean correctInput;
     public static int MENU_ID = 0;
     private static final int CARDS_CLICK_MENU = 1;
+    private static final int UPDATE_CARD = 2;
 
     public static View selectedCard;
     private boolean setCardBackgroundTransparent = true;
 
 
+    private Button buttonChoose;
+
+    private Button buttonView;
+
+    private Button buttonUpload;
+
+    private ImageView imageView;
+
+    private Bitmap bitmap;
+    private boolean imageCoosen;
+
+
+    private Uri filePath;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_allrecords);
+        setContentView(R.layout.activity_show_my_card);
         myListView = (RecyclerView) findViewById(R.id.listcards);
         registerForContextMenu(myListView);
         SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -239,7 +257,9 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
                 // cardId=deck.get(menuItemIndex).getCard_id();
                 new deleteCard().execute(delete_card, String.valueOf(selectedCardEditOrDelete.getCard_id()));
 
-            } else if (menuItemName.equals(menuItems[1])) {
+            } else if (menuItemName.equals(menuItems[1])) {//Update Card
+               openUpdateCardSCreen();
+                /*
                 LayoutInflater li = LayoutInflater.from(ShowMyCards.this);
                 final View dialogView = li.inflate(R.layout.updatecard, null);
 
@@ -265,7 +285,7 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
                                 }
 
                             }*/
-                        if (correctInput) {
+                 /*       if (correctInput) {
                             if (category.getText().toString().isEmpty() || itemText.getText().toString().isEmpty()) {
                                 Toast.makeText(ShowMyCards.this, "ther is empty field", Toast.LENGTH_LONG).show();
                                 return;
@@ -273,11 +293,13 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
 
                                 final String newCategory;
                                 final String newItem;
+                                int cardId;
 
                                 newCategory = category.getText().toString();
                                 newItem = itemText.getText().toString();
+                                cardId = selectedCardEditOrDelete.getCard_id();
                                 //age = a.getText().toString();
-                                new UpdateCard().execute("http://mysite.lidordigital.co.il/Quertets/db/UpdateCard", newCategory, newItem);
+                                new UpdateCard().execute("http://mysite.lidordigital.co.il/Quertets/db/UpdateCard", newCategory, newItem, String.valueOf(cardId));
                             }
                         } else {
                             Toast.makeText(ShowMyCards.this, "number cannot bee user name", Toast.LENGTH_LONG).show();
@@ -285,8 +307,8 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
                         }
 
                     }
-                });
-                builder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                });*/
+                /*builder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -294,7 +316,7 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
                 });
 
                 builder.show();
-
+                    */
 
                 // new MyWebServiceTask().execute("http://localhost:8080/TestWebServicesAndJSON/rest/hello/checkUser?personName="
                 //         +userName+"personId="+id+"personAge="+age);
@@ -308,6 +330,22 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
         return true;
     }
 
+    public void openUpdateCardSCreen(){
+        Intent intent=new Intent(this, UpdateCard.class);
+        intent.putExtra("selectedCard",selectedCardEditOrDelete);
+        startActivityForResult(intent,UPDATE_CARD);
+        finish();
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == UPDATE_CARD && resultCode == RESULT_OK && data != null && data.getData() != null) {
+
+          //  new UpdateCard().execute("http://mysite.lidordigital.co.il/Quertets/db/UpdateCard", newCategory, newItem, String.valueOf(cardId));
+
+        }
+    }
     @Override
     public void onContextMenuClosed(Menu menu) {
         if (selectedCard != null && setCardBackgroundTransparent) {
@@ -316,6 +354,7 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
         }
 
     }
+
 
     public class deleteCard extends AsyncTask<String, Void, Boolean> {
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
@@ -433,7 +472,9 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
         protected String doInBackground(String... params) {
             LinkedHashMap<String, String> parms = new LinkedHashMap<>();
             parms.put("category", params[1]);
-            parms.put("item", params[2]);
+            parms.put("card_name", params[2]);
+            parms.put("card_id", params[3]);
+            parms.put("card_image",params[4]);
             //parms.put("personAge",params[3]);
             JSONParser pars = new JSONParser();
             JSONObject response = pars.makeHttpRequest(params[0], "GET", parms);

@@ -54,6 +54,8 @@
     <string name="updateCard">Update</string>
     <string name="update_Card_dialog_title">Update Card</string>
     <string name="update_Card_masage">insert card data</string>
+    <string name="card_name">card name</string>
+    <string name="change_image">Change image</string>
 
 
     <string-array name="card_click_menu">

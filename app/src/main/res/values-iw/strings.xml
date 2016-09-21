@@ -48,6 +48,13 @@
     <string name="user_age">גיל</string>
     <string name="addPerson_dialog_title">יצירת משתמש חדש</string>
     <string name="addPerson_dialog_masge">הכנס את הפרטים הבאים</string>
+    <string name="category">קטגוריה</string>
+    <string name="item1">פריט1</string>
+    <string name="updateCard">עדכן קלף</string>
+    <string name="update_Card_dialog_title">עדכן קלף דיאלוג</string>
+    <string name="update_Card_masage">אנא הכנס פרטים</string>
+    <string name="card_name">שם הקלף</string>
+    <string name="change_image">שנה תמונה</string>
 
 
     <string-array name="card_click_menu">
