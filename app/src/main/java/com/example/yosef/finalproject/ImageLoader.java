@@ -3,6 +3,7 @@ package com.example.yosef.finalproject;
 /**
  * Created by Lidor on 20/09/2016.
  */
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -21,6 +22,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.v7.widget.TintContextWrapper;
 import android.widget.ImageView;
 
 
@@ -140,7 +142,8 @@ public class ImageLoader {
             if (imageViewReused(photoToLoad))
                 return;
             BitmapDisplayer bd = new BitmapDisplayer(bmp, photoToLoad);
-            Activity a = (Activity) photoToLoad.imageView.getContext();
+            //Activity a = (Activity) photoToLoad.imageView.getContext();
+            Activity a = (Activity) ((TintContextWrapper) photoToLoad.imageView.getContext()).getBaseContext();
             a.runOnUiThread(bd);
         }
     }

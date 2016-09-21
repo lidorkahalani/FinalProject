@@ -143,7 +143,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
                 if (response.getInt("succsses") == 1) {
                     JSONArray jsonArray = response.getJSONArray("AllCards");
-                    for(int i = 0; i<jsonArray.length();i++){
+                    for (int i = 0; i < jsonArray.length(); i++) {
                         Card card = new Card();
                         JSONObject jo = jsonArray.getJSONObject(i);
                         card.setCard_id(jo.getInt("card_id"));
@@ -151,14 +151,14 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                         card.setCategoryColor(jo.getInt("category_color"));
                         card.setCardName(jo.getString("card_name"));
                         card.setImageName(jo.getString("image_name"));
-                        String[]cardLabels = new String[4];
+                        String[] cardLabels = new String[4];
                         JSONArray ja = jo.getJSONArray("card_labels");
-                        for(int j = 0 ; j<ja.length(); j++){
+                        for (int j = 0; j < ja.length(); j++) {
                             JSONObject jo2 = ja.getJSONObject(j);
                             cardLabels[j] = jo2.getString("card_name");
                         }
                         card.setItemsArray(cardLabels);
-                        card.setItemPicture(getResources().getDrawable(R.drawable.car));
+                        // card.setItemPicture(getResources().getDrawable(R.drawable.car));
                         deck.add(card);
 
                     }
@@ -181,9 +181,9 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         protected void onPostExecute(Boolean result) {
             if (result) {
                 setCardsList();
-                Toast.makeText(GameScreen.this, "the deck sucssfuly generate!!", Toast.LENGTH_SHORT).show();
+              /*  Toast.makeText(GameScreen.this, "the deck sucssfuly generate!!", Toast.LENGTH_SHORT).show();
                 if (playerList.size() == 1)
-                    giveCardEachPlayer();
+                    giveCardEachPlayer();*/
             } else
                 Toast.makeText(GameScreen.this, "the deck not load !", Toast.LENGTH_SHORT).show();
         }
@@ -198,20 +198,22 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
     }
 
-    private void setCardsList(){
+    private void setCardsList() {
         cardsAdapter = new CardsAdapter(deck);
         myListView.setAdapter(cardsAdapter);
         registerForContextMenu(myListView);
         myListView.addOnItemTouchListener(
-                new RecyclerItemClickListener(GameScreen.this, myListView ,new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override public void onItemClick(View view, int position) {
-                        MENU_ID  = CARDS_CLICK_MENU;
+                new RecyclerItemClickListener(GameScreen.this, myListView, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        MENU_ID = CARDS_CLICK_MENU;
                         openContextMenu(view);
-                        LinearLayout cardContainer = (LinearLayout)view.findViewById(R.id.card_container);
+                        LinearLayout cardContainer = (LinearLayout) view.findViewById(R.id.card_container);
                         cardContainer.setBackgroundColor(getResources().getColor(R.color.light_green));
                     }
 
-                    @Override public void onLongItemClick(View view, int position) {
+                    @Override
+                    public void onLongItemClick(View view, int position) {
 
                     }
                 })
@@ -255,10 +257,10 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     }
 
     @Override
-    public  void onCreateContextMenu(ContextMenu menu, View view,
-                                     ContextMenu.ContextMenuInfo menuInfo){
+    public void onCreateContextMenu(ContextMenu menu, View view,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
         String menuItems[];
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.listcards:
                 setCardBackgroundTransparent = true;
                 AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
@@ -269,32 +271,31 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                 return;
         }
 
-        for(int i=0; i<menuItems.length; i++){
-            menu.add(Menu.NONE,i,i,menuItems[i]);
+        for (int i = 0; i < menuItems.length; i++) {
+            menu.add(Menu.NONE, i, i, menuItems[i]);
         }
     }
+
     @Override
-    public boolean onContextItemSelected(MenuItem item){
+    public boolean onContextItemSelected(MenuItem item) {
         int menuItemIndex = item.getItemId();
-        if(MENU_ID == CARDS_CLICK_MENU){
+        if (MENU_ID == CARDS_CLICK_MENU) {
 
             String[] menuItems = getResources().getStringArray(R.array.card_click_menu);
             String menuItemName = menuItems[menuItemIndex];
-            if(menuItemName.equals(menuItems[0])){//שלח קלף
+            if (menuItemName.equals(menuItems[0])) {//שלח קלף
                 Toast.makeText(GameScreen.this,
-                        menuItemName+this.deck,
+                        menuItemName + this.deck,
                         Toast.LENGTH_LONG).show();
                 setCardBackgroundTransparent = false;
 
 
-
-            }else if(menuItemName.equals(menuItems[1])){//קבל קלף
+            } else if (menuItemName.equals(menuItems[1])) {//קבל קלף
                 Toast.makeText(GameScreen.this,
                         menuItemName,
                         Toast.LENGTH_LONG).show();
 
             }
-
 
 
         }
@@ -303,12 +304,12 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     }
 
     @Override
-     public void onContextMenuClosed(Menu menu){
-        if(selectedCard!=null && setCardBackgroundTransparent){
+    public void onContextMenuClosed(Menu menu) {
+        if (selectedCard != null && setCardBackgroundTransparent) {
             selectedCard.findViewById(R.id.card_container).setBackgroundColor(Color.TRANSPARENT);
             selectedCard.findViewById(R.id.card_container).setBackgroundDrawable(getResources().getDrawable(R.drawable.card_background));
         }
 
-     }
+    }
 
 }

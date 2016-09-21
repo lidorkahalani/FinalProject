@@ -18,7 +18,7 @@
     <string name="LOCALE_ENGLISH">אנגלית</string>
     <string name="CreateUser">צור משתמש</string>
     <string name="back">חזור</string>
-    <string name="addNewCards">יצירת סריית קלפים</string>
+    <string name="addNewCards">יצירת סדרת קלפים</string>
     <string name="logOut">צא</string>
     <string name="add">הוסף</string>
     <string name="exitWarning">אתה בטוח שברצונך לצאת?</string>
