@@ -35,4 +35,15 @@
         android:layout_marginBottom="30dp"
         android:layout_centerVertical="true" />
 
+    <TextView
+        android:text="No Internet Connection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:id="@+id/noInternetMAssafe"
+        android:layout_below="@+id/circleProgresBar"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/red"
+        android:visibility="invisible"/>
+
 </RelativeLayout>

@@ -1,7 +1,10 @@
 package com.example.yosef.finalproject;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,7 +26,9 @@ import java.util.TreeMap;
 public class SplashActivity extends AppCompatActivity {
     ProgressBar circleProgresBar;
     TextView Precent;
-    ArrayList <Card> deck=new ArrayList<>();
+    TextView noConnectionMassage;
+    ArrayList<Card> deck = new ArrayList<>();
+     static int counter=0;
 
 
     @Override
@@ -31,30 +36,37 @@ public class SplashActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        circleProgresBar= (ProgressBar)findViewById(R.id.circleProgresBar);
-        Precent =(TextView)findViewById(R.id.Precent);
+        circleProgresBar = (ProgressBar) findViewById(R.id.circleProgresBar);
+        Precent = (TextView) findViewById(R.id.Precent);
+        noConnectionMassage=(TextView)findViewById(R.id.noInternetMAssafe);
+
         //new getAllCards().execute();
-        MyLoaderTask openScreen=new MyLoaderTask();
+        MyLoaderTask openScreen = new MyLoaderTask();
         openScreen.execute("");
     }
 
-    class MyLoaderTask extends AsyncTask<String ,Integer,Boolean> {
+    class MyLoaderTask extends AsyncTask<String, Integer, Boolean> {
 
         //this run on UI
         @Override
         protected void onProgressUpdate(Integer... values) {
             circleProgresBar.setProgress(values[0]);
-            Precent.setText(Integer.toString(values[0])+"%");
+            Precent.setText(Integer.toString(values[0]) + "%");
 
 
         }
 
         @Override
         protected Boolean doInBackground(String... params) {
-            for(int i=0;i<11;i++) {
+            for (int i = 0; i < 11; i++) {
                 try {
-                    publishProgress(i*10);
+                    ConnectivityManager cm =
+                            (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                    NetworkInfo netInfo = cm.getActiveNetworkInfo();
                     Thread.sleep(500);
+                    publishProgress(i * 10);
+                    return netInfo != null && netInfo.isConnectedOrConnecting();
+
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -72,52 +84,58 @@ public class SplashActivity extends AppCompatActivity {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            if(result) {
-                finish();
-                Intent myIntent = new Intent(SplashActivity.this, MainActivity.class);
-                startActivity(myIntent);
-            }
-        }
-    }
-
-    public class getAllCards extends AsyncTask<String, Void, Boolean> {
-        String get_all_card_url = "http://mysite.lidordigital.co.il/Quertets/db/getAllCard.php";
-        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
-
-
-
-        @Override
-        protected Boolean doInBackground(String... params) {
-            JSONParser json = new JSONParser();
-            try {
-                JSONObject response = json.makeHttpRequest(get_all_card_url, "POST", parms);
-                if (response.getInt("succsses") == 1) {
-                    return true;
-                } else {
-                    return false;
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-                return false;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
-            }
-
-
-        }
-
-
-        protected void onPostExecute(Boolean result) {
             if (result) {
                 finish();
                 Intent myIntent = new Intent(SplashActivity.this, MainActivity.class);
                 startActivity(myIntent);
+            } else {
+                counter++;
+                if(counter==1)
+                    Toast.makeText(SplashActivity.this, "No internet Connection app try to connect", Toast.LENGTH_LONG).show();
+                noConnectionMassage.setVisibility(View.VISIBLE);
+                MyLoaderTask tryAgain = new MyLoaderTask();
+                tryAgain.execute("");
+            }
+        }
+
+        public class getAllCards extends AsyncTask<String, Void, Boolean> {
+            String get_all_card_url = "http://mysite.lidordigital.co.il/Quertets/db/getAllCard.php";
+            LinkedHashMap<String, String> parms = new LinkedHashMap<>();
+
+
+            @Override
+            protected Boolean doInBackground(String... params) {
+                JSONParser json = new JSONParser();
+                try {
+                    JSONObject response = json.makeHttpRequest(get_all_card_url, "POST", parms);
+                    if (response.getInt("succsses") == 1) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    return false;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return false;
+                }
+
+
+            }
+
+
+            protected void onPostExecute(Boolean result) {
+                if (result) {
+                    finish();
+                    Intent myIntent = new Intent(SplashActivity.this, MainActivity.class);
+                    startActivity(myIntent);
+                }
+
             }
 
         }
 
+
     }
-
-
 }

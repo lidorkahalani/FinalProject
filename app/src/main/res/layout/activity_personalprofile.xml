@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainMenu"
-    android:background="@drawable/background_menu">
+    android:background="@drawable/rsz_background_menu_resize">
 
     <TextView
         android:gravity="center"
