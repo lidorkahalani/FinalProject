@@ -1,13 +1,18 @@
 package com.example.yosef.finalproject;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -23,6 +28,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -32,6 +38,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -58,6 +65,8 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
 
     public static View selectedCard;
     private boolean setCardBackgroundTransparent = true;
+    final String imageRelativePat = "http://mysite.lidordigital.co.il/Quertets/images/";
+
 
 
     private Button buttonChoose;
@@ -258,8 +267,8 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
                 new deleteCard().execute(delete_card, String.valueOf(selectedCardEditOrDelete.getCard_id()));
 
             } else if (menuItemName.equals(menuItems[1])) {//Update Card
-               openUpdateCardSCreen();
-                /*
+
+                //openUpdateCardSCreen();//open card in screen
                 LayoutInflater li = LayoutInflater.from(ShowMyCards.this);
                 final View dialogView = li.inflate(R.layout.updatecard, null);
 
@@ -269,23 +278,38 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
                 builder.setMessage(getResources().getString(R.string.update_Card_masage));
                 final EditText category = (EditText) dialogView.findViewById(R.id.category);
                 final EditText itemText = (EditText) dialogView.findViewById(R.id.item1);
-
+                final ImageView image=(ImageView)dialogView.findViewById(R.id.updateImage);
+                image.setImageResource(R.drawable.car);
                 category.setText(selectedCardEditOrDelete.getCategoryName());
                 itemText.setText(selectedCardEditOrDelete.getCardName());
+
+                String fullPath = imageRelativePat + selectedCardEditOrDelete.getImageName();
+              /*  ImageLoader imageLoader = new ImageLoader(this);
+                imageLoader.DisplayImage(fullPath, R.mipmap.ic_launcher,(ImageView) findViewById(R.id.imageView));
+
+                filePath =Uri.parse(fullPath);
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                    image.setImageBitmap(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }*/
+
                 builder.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
                         correctInput = true;
-                            /*if((category.getText().toString().matches("[a-zA-Z]+")))
+                            if((category.getText().toString().matches("[a-zA-Z]+")))
                             {
                                 if(category.getText().toString().length()<=11) {
                                     correctInput = true;
                                     Toast.makeText(ShowMyCards.this, "word to long", Toast.LENGTH_SHORT).show();
                                 }
 
-                            }*/
-                 /*       if (correctInput) {
+                            }
+                       if (correctInput) {
                             if (category.getText().toString().isEmpty() || itemText.getText().toString().isEmpty()) {
                                 Toast.makeText(ShowMyCards.this, "ther is empty field", Toast.LENGTH_LONG).show();
                                 return;
@@ -294,11 +318,12 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
                                 final String newCategory;
                                 final String newItem;
                                 int cardId;
+                                String newImage;
 
                                 newCategory = category.getText().toString();
                                 newItem = itemText.getText().toString();
                                 cardId = selectedCardEditOrDelete.getCard_id();
-                                //age = a.getText().toString();
+                                newImage=image.getTransitionName();                               //age = a.getText().toString();
                                 new UpdateCard().execute("http://mysite.lidordigital.co.il/Quertets/db/UpdateCard", newCategory, newItem, String.valueOf(cardId));
                             }
                         } else {
@@ -307,8 +332,8 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
                         }
 
                     }
-                });*/
-                /*builder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                });
+                builder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -316,10 +341,6 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
                 });
 
                 builder.show();
-                    */
-
-                // new MyWebServiceTask().execute("http://localhost:8080/TestWebServicesAndJSON/rest/hello/checkUser?personName="
-                //         +userName+"personId="+id+"personAge="+age);
 
 
             }
@@ -330,6 +351,8 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
         return true;
     }
 
+
+
     public void openUpdateCardSCreen(){
         Intent intent=new Intent(this, UpdateCard.class);
         intent.putExtra("selectedCard",selectedCardEditOrDelete);
@@ -337,15 +360,7 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
         finish();
     }
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == UPDATE_CARD && resultCode == RESULT_OK && data != null && data.getData() != null) {
-
-          //  new UpdateCard().execute("http://mysite.lidordigital.co.il/Quertets/db/UpdateCard", newCategory, newItem, String.valueOf(cardId));
-
-        }
-    }
     @Override
     public void onContextMenuClosed(Menu menu) {
         if (selectedCard != null && setCardBackgroundTransparent) {
@@ -354,6 +369,30 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
         }
 
     }
+
+    public void uploadImage(View v){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == UPDATE_CARD && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            filePath = data.getData();
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                imageView.setImageBitmap(bitmap);
+                imageCoosen=true;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            //  new UpdateCard().execute("http://mysite.lidordigital.co.il/Quertets/db/UpdateCard", newCategory, newItem, String.valueOf(cardId));
+        }
+    }
+
 
 
     public class deleteCard extends AsyncTask<String, Void, Boolean> {

@@ -21,12 +21,16 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class AddCards extends AppCompatActivity implements View.OnClickListener {
-    public static final String UPLOAD_URL = "http://mysite.lidordigital.co.il/Quertets/upload_image.php";
+    public static final String UPLOAD_URL = "http://mysite.lidordigital.co.il/Quertets/add_image.php";
     public static final String UPLOAD_KEY = "image";
     public static final String TAG = "MY MESSAGE";
 
@@ -117,12 +121,21 @@ public class AddCards extends AppCompatActivity implements View.OnClickListener 
                 Bitmap bitmap = params[0];
                 String uploadImage = getStringImage(bitmap);
 
-                HashMap<String,String> data = new HashMap<>();
-                data.put(UPLOAD_KEY, uploadImage);
-
-                String result = rh.sendPostRequest(UPLOAD_URL,data);
-
-                return result;
+                LinkedHashMap<String,String> data = new LinkedHashMap<>();
+                //data.put("card_id",String.valueOf(37));
+                data.put("ThisImage", uploadImage);
+                JSONParser json = new JSONParser();
+                //String result = rh.sendPostRequest(UPLOAD_URL,data);
+                JSONObject response = json.makeHttpRequest(UPLOAD_URL, "POST", data);
+                try {
+                    if (response.getInt("succsses") == 1) {
+                        return "upload Succse";
+                    }else
+                         return "upload failed";
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return "Server Eror";
             }
         }
 

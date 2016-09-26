@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#259dcb"
+    android:background="@drawable/background_game"
     tools:context="com.example.yosef.finalproject.GameScreen">
     <FrameLayout
         android:id="@+id/bottom_layout"
@@ -55,5 +56,49 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/top_layout"
         android:background="@color/yellow"></RelativeLayout>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/plaers_cards_en1"
+        android:id="@+id/imageButton4"
+        android:background="@android:color/transparent"
+        android:layout_alignTop="@+id/imageButton3"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/deck_en"
+        android:id="@+id/imageButton"
+        android:elevation="0dp"
+        android:cropToPadding="false"
+        android:adjustViewBounds="false"
+        android:background="@android:color/transparent"
+        android:layout_marginBottom="25dp"
+        android:layout_alignBottom="@+id/imageButton3"
+        android:layout_centerHorizontal="true" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/plaers_cards_en2"
+        android:layout_marginTop="65dp"
+        android:id="@+id/imageButton3"
+        android:background="@android:color/transparent"
+        android:layout_below="@+id/imageButton2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/plaers_cards_en"
+        android:id="@+id/imageButton2"
+        android:background="@android:color/transparent"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
 
 </RelativeLayout>

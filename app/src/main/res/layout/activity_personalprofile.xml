@@ -4,35 +4,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainMenu"
-    android:background="#259dcb">
+    android:background="@drawable/background_menu">
 
     <TextView
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/WelcomUserName"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
         android:text="hello user"
         android:textSize="20dp"
         android:textIsSelectable="false"
         android:textColor="#000000"
-        android:visibility="visible" />
+        android:visibility="visible"
+        android:layout_above="@+id/linearLayout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="18dp" />
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
         android:gravity="center"
-        android:background="#259dcb"
-        android:id="@+id/linearLayout">
+
+        android:id="@+id/linearLayout"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true">
 
         <Button
             android:onClick="startGame"
             android:layout_width="268dp"
             android:layout_height="wrap_content"
             android:text="@string/startGame"
+            android:layout_marginTop="25dp"
             android:id="@+id/button3"
             android:layout_alignTop="@+id/button2"
             android:layout_alignParentLeft="true"
@@ -40,78 +44,84 @@
 
         <Button
             android:onClick="openRoom"
-            android:layout_width="268dp"
+            android:layout_width="185dp"
             android:layout_height="wrap_content"
-            android:text="@string/OpenRoom"
+            android:background="@drawable/open_room_he"
             android:id="@+id/button5"
+            android:layout_marginTop="15dp"
             android:layout_above="@+id/button3"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
 
         <Button
             android:onClick="addCardToDB"
-            android:layout_width="268dp"
+            android:layout_width="185dp"
             android:layout_height="wrap_content"
-            android:text="@string/addNewCards"
             android:id="@+id/button2"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/add_cards_he"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
 
         <Button
             android:onClick="ShowMyCards"
-            android:layout_width="268dp"
+            android:layout_width="185dp"
             android:layout_height="wrap_content"
-            android:text="@string/ShowMyCards"
+            android:layout_marginTop="15dp"
             android:id="@+id/button6"
+            android:background="@drawable/my_cards_he"
             android:layout_below="@+id/linearLayout"
             android:layout_centerHorizontal="true" />
 
         <Button
             android:onClick="joinToRoom"
-            android:layout_width="268dp"
+            android:layout_width="185dp"
             android:layout_height="wrap_content"
-            android:text="@string/JoinToRoom"
+           android:background="@drawable/join_room_he"
             android:id="@+id/button9"
+            android:layout_marginTop="15dp"
             android:layout_below="@+id/linearLayout"
             android:layout_centerHorizontal="true" />
 
         <Button
             android:onClick="logOut"
-            android:layout_width="268dp"
+            android:layout_width="185dp"
             android:layout_height="wrap_content"
-            android:text="@string/logOut"
+            android:background="@drawable/log_off_he"
             android:id="@+id/logOut"
+            android:layout_marginTop="15dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
+        <!--
+                <Button
+                    android:onClick="addNewPerson"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/set_person"
+                    android:id="@+id/button10"
+                    android:layout_gravity="center_horizontal" />
 
-        <Button
-            android:onClick="addNewPerson"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/set_person"
-            android:id="@+id/button10"
-            android:layout_gravity="center_horizontal" />
+                <Button
+                    android:onClick="getAllPerson"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/get_All_person"
+                    android:id="@+id/button11"
+                    android:layout_gravity="center_horizontal" />
+        -->
+                <com.facebook.login.widget.LoginButton
+                    xmlns:facebook="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/facbookLogin"
 
-        <Button
-            android:onClick="getAllPerson"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/get_All_person"
-            android:id="@+id/button11"
-            android:layout_gravity="center_horizontal" />
+                    android:layout_gravity="center_horizontal"
+                    facebook:com_facebook_confirm_logout="false"
+                    facebook:com_facebook_tooltip_mode="never_display"
+                    android:layout_marginTop="45dp" />
 
-        <com.facebook.login.widget.LoginButton
-            xmlns:facebook="http://schemas.android.com/apk/res-auto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/facbookLogin"
-            android:layout_gravity="center_horizontal"
-            facebook:com_facebook_confirm_logout="false"
-            facebook:com_facebook_tooltip_mode="never_display"
-            android:layout_marginTop="18dp" />
+            </LinearLayout>
 
-    </LinearLayout>
-
-</RelativeLayout>
+        </RelativeLayout>

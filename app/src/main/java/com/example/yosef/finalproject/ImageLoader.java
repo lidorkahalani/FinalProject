@@ -22,12 +22,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.TintContextWrapper;
 import android.widget.ImageView;
 
 
 public class ImageLoader {
 
+    private Map<AlertDialog, String> al = Collections.synchronizedMap(new WeakHashMap<AlertDialog, String>());
     MemoryCache memoryCache = new MemoryCache();
     FileCache fileCache;
     private Map<ImageView, String> imageViews = Collections.synchronizedMap(new WeakHashMap<ImageView, String>());
