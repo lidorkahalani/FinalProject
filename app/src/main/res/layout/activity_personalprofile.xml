@@ -43,34 +43,40 @@
             android:layout_alignParentStart="true" />
 
         <Button
+            android:textSize="17.5dip"
             android:onClick="openRoom"
             android:layout_width="185dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/open_room_he"
-            android:id="@+id/button5"
+            android:background="@drawable/open_room"
+            android:id="@+id/btnOpenRoomId"
+            android:text="@string/OpenRoom"
             android:layout_marginTop="15dp"
             android:layout_above="@+id/button3"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
 
         <Button
+            android:textSize="17.5dip"
             android:onClick="addCardToDB"
             android:layout_width="185dp"
             android:layout_height="wrap_content"
-            android:id="@+id/button2"
+            android:id="@+id/btnAddCardId"
             android:layout_marginTop="15dp"
-            android:background="@drawable/add_cards_he"
+            android:background="@drawable/add_new_cards_small"
+            android:text="@string/addNewCards"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
 
         <Button
+            android:textSize="17.5dip"
             android:onClick="ShowMyCards"
             android:layout_width="185dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:id="@+id/button6"
-            android:background="@drawable/my_cards_he"
+            android:id="@+id/btnShowMyCardId"
+            android:text="@string/ShowMyCards"
+            android:background="@drawable/my_cards"
             android:layout_below="@+id/linearLayout"
             android:layout_centerHorizontal="true" />
 
@@ -78,18 +84,22 @@
             android:onClick="joinToRoom"
             android:layout_width="185dp"
             android:layout_height="wrap_content"
-           android:background="@drawable/join_room_he"
-            android:id="@+id/button9"
+            android:background="@drawable/join_room"
+            android:text="@string/JoinToRoom"
+            android:textSize="17.5dip"
+            android:id="@+id/btnJoinRoomId"
             android:layout_marginTop="15dp"
             android:layout_below="@+id/linearLayout"
             android:layout_centerHorizontal="true" />
 
         <Button
+            android:textSize="17.5dip"
             android:onClick="logOut"
             android:layout_width="185dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/log_off_he"
-            android:id="@+id/logOut"
+            android:background="@drawable/log_off"
+            android:text="@string/logOut"
+            android:id="@+id/btnlogOut"
             android:layout_marginTop="15dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/rsz_background_menu_resize"
+    android:background="@drawable/backgroun"
     tools:context="com.example.yosef.finalproject.GameScreen">
     <FrameLayout
         android:id="@+id/bottom_layout"

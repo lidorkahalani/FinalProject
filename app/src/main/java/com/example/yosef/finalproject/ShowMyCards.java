@@ -164,9 +164,12 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
                     Toast.makeText(ShowMyCards.this, "you dont have any cards in DB!", Toast.LENGTH_LONG).show();
                     finish();
                 }
-                setCardsList();
-            } else
+                else
+                    setCardsList();
+            } else {
                 Toast.makeText(ShowMyCards.this, "you dont have any cards", Toast.LENGTH_LONG).show();
+                finish();
+            }
 
         }
     }

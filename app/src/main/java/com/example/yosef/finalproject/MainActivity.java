@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -14,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -46,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
     private ProfileTracker profileTracker;
     private AccessTokenTracker accsessTokenTracker;
     private Profile profile;
+    Button btn1;
+    Button btn2;
+
 
 
     @Override
@@ -53,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_main);
+
 
 
         SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -118,6 +124,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
+
+        btn1=(Button)findViewById(R.id.logInBtn);
+        btn2=(Button)findViewById(R.id.SignUpBtn);
+
+        Typeface typeface = Typeface.createFromAsset(getAssets(), "Matias_Webfont.ttf");
+        btn1.setTypeface(typeface);
+        btn2.setTypeface(typeface);
 
 
 

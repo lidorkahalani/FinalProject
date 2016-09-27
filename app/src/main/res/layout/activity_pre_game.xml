@@ -9,7 +9,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.yosef.finalproject.PreGame"
     android:weightSum="2"
-    android:background="@drawable/background_menu"
+    android:background="@drawable/rsz_background_menu_resize"
     android:orientation="vertical"
 
     >
@@ -20,8 +20,7 @@
         android:text="@string/chooseQuartets"
         android:id="@+id/textView2"
         android:textSize="20sp"
-        android:textColor="#3F51B5
-"
+        android:textColor="#3F51B5"
         android:layout_gravity="center_horizontal" />
 
     <ScrollView
@@ -29,7 +28,7 @@
         android:layout_height="0dp"
         android:layout_weight="1.7"
         android:id="@+id/scrollView"
-        android:background="@drawable/card_background">
+        android:background="@drawable/rsz_background_menu_resize">
                <ListView
                    android:layout_width="match_parent"
                    android:layout_height="match_parent"

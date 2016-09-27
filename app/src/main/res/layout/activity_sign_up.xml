@@ -78,7 +78,8 @@
 
                 <Button
                     android:layout_weight="0.3"
-                    android:background="@drawable/sing_up_he"
+                    android:background="@drawable/sing_up"
+                    android:text="@string/signUp"
                     android:onClick="addNewUserToDB"
                     android:layout_width="190dp"
                     android:layout_height="0dp"

@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
@@ -46,6 +47,12 @@ public class MainMenu extends AppCompatActivity {
     private Profile profile;
     private User currentPlayer;
     private ArrayList<User> allUsers=new ArrayList<User>();
+    private Button btn1;
+    private Button btn2;
+    private Button btn3;
+    private Button btn4;
+    private Button btn5;
+    private TextView title;
 
     boolean correctInput=false;
     LoginButton facebookButton;
@@ -95,7 +102,7 @@ public class MainMenu extends AppCompatActivity {
             }
         });
         facebookButton = (LoginButton) findViewById(R.id.facbookLogin);
-        logOut = (Button) findViewById(R.id.logOut);
+        logOut = (Button) findViewById(R.id.btnlogOut);
 
         profileTracker = new ProfileTracker() {
             @Override
@@ -115,6 +122,25 @@ public class MainMenu extends AppCompatActivity {
 
             }
         };
+
+        title=(TextView)findViewById(R.id.WelcomUserName);
+         btn1=(Button) findViewById(R.id.btnOpenRoomId);
+         btn3=(Button) findViewById(R.id.btnAddCardId);
+         btn4=(Button) findViewById(R.id.btnShowMyCardId);
+         btn2=(Button) findViewById(R.id.btnJoinRoomId);
+         btn5=(Button) findViewById(R.id.btnlogOut);
+
+        Typeface typeface = Typeface.createFromAsset(getAssets(), "Matias_Webfont.ttf");
+        btn1.setTypeface(typeface);
+        btn2.setTypeface(typeface);
+        btn3.setTypeface(typeface);
+        btn4.setTypeface(typeface);
+        btn5.setTypeface(typeface);
+        title.setTypeface(typeface);
+
+
+
+
         SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(MainMenu.this);
         String uname = myPref.getString("username", "");
         String password = myPref.getString("password", "");

@@ -1,10 +1,12 @@
 package com.example.yosef.finalproject;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -123,6 +125,28 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         else if (cardNumber == 3)
             card4.setText(Html.fromHtml(cardData));
 
+    }
+
+    public void onBackPressed() {
+        // TODO Auto-generated method stub
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("You realy want exit the game?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent myIntent = new Intent(GameScreen.this, MainMenu.class);
+                        startActivity(myIntent);
+                        //finish();
+                        finish();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     @Override

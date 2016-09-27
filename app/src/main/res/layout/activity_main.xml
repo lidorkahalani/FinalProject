@@ -55,7 +55,8 @@
 
         <Button
             android:layout_weight="0.1"
-            android:background="@drawable/enter_he"
+            android:background="@drawable/enter"
+            android:text="@string/logIn"
             android:onClick="logIn"
             android:layout_width="126dp"
             android:layout_height="0dp"
@@ -69,7 +70,8 @@
 
         <Button
             android:layout_weight="0.1"
-            android:background="@drawable/sing_up_he"
+            android:background="@drawable/sing_up"
+            android:text="@string/signUp"
             android:onClick="SignUp"
             android:layout_margin="5dp"
             android:layout_width="126dp"

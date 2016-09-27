@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
@@ -48,6 +49,7 @@ public class AddCards extends AppCompatActivity implements View.OnClickListener 
     private boolean imageCoosen;
 
 
+
     private Uri filePath;
 
     @Override
@@ -58,6 +60,10 @@ public class AddCards extends AppCompatActivity implements View.OnClickListener 
         buttonChoose = (Button) findViewById(R.id.buttonChoose);
         buttonUpload = (Button) findViewById(R.id.buttonUpload);
         buttonView = (Button) findViewById(R.id.buttonViewImage);
+        Typeface typeface = Typeface.createFromAsset(getAssets(), "Matias_Webfont.ttf");
+        buttonChoose.setTypeface(typeface);
+        buttonUpload.setTypeface(typeface);
+        buttonView.setTypeface(typeface);
 
         imageView = (ImageView) findViewById(R.id.imageView);
 

@@ -22,15 +22,16 @@
             android:theme="@style/NoTitle"/>
         <activity
             android:name=".SplashActivity"
-            android:theme="@style/NoTitle" >
+            android:theme="@style/NoTitle"/> >
+
+        <activity
+            android:name=".MainMenu"
+            android:theme="@style/NoTitle">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainMenu"
-            android:theme="@style/NoTitle"/>
         <activity
             android:name=".ShowMyCards"
             android:theme="@style/NoTitle" />

@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.yosef.finalproject.SplashActivity"
-    android:background="@drawable/background_menu">
+    android:background="@drawable/rsz_background_menu_resize"
+    >
 
     <TextView
         android:layout_width="match_parent"
