@@ -155,7 +155,8 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     }
 
     public class getAllCards extends AsyncTask<String, Void, Boolean> {
-        String get_all_card_url = "http://mysite.lidordigital.co.il/Quertets/db/getAllCard.php";
+       //String get_all_card_url = "http://mysite.lidordigital.co.il/Quertets/db/getAllCard.php";
+        String get_all_card_url = "http://10.0.2.2/Quartets/db/getAllCard.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override

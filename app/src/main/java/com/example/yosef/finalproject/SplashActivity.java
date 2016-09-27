@@ -99,44 +99,5 @@ public class SplashActivity extends AppCompatActivity {
             }
         }
 
-        public class getAllCards extends AsyncTask<String, Void, Boolean> {
-            String get_all_card_url = "http://mysite.lidordigital.co.il/Quertets/db/getAllCard.php";
-            LinkedHashMap<String, String> parms = new LinkedHashMap<>();
-
-
-            @Override
-            protected Boolean doInBackground(String... params) {
-                JSONParser json = new JSONParser();
-                try {
-                    JSONObject response = json.makeHttpRequest(get_all_card_url, "POST", parms);
-                    if (response.getInt("succsses") == 1) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    return false;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return false;
-                }
-
-
-            }
-
-
-            protected void onPostExecute(Boolean result) {
-                if (result) {
-                    finish();
-                    Intent myIntent = new Intent(SplashActivity.this, MainActivity.class);
-                    startActivity(myIntent);
-                }
-
-            }
-
-        }
-
-
     }
 }

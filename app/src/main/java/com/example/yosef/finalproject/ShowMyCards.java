@@ -65,7 +65,8 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
 
     public static View selectedCard;
     private boolean setCardBackgroundTransparent = true;
-    final String imageRelativePat = "http://mysite.lidordigital.co.il/Quertets/images/";
+   // final String imageRelativePat = "http://mysite.lidordigital.co.il/Quertets/images/";
+    final String imageRelativePat = "http://localhost/Quertets/images/";
 
 
 
@@ -110,7 +111,8 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
     }
 
     public class GetMycards extends AsyncTask<String, Void, Boolean> {
-        String get_my_cards = "http://mysite.lidordigital.co.il/Quertets/db/getMyCards.php";
+       // String get_my_cards = "http://mysite.lidordigital.co.il/Quertets/db/getMyCards.php";
+        String get_my_cards = "http://localhost/Quertets/db/getMyCards.php";
 
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
@@ -260,7 +262,8 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
     public boolean onContextItemSelected(MenuItem item) {
         final int menuItemIndex = item.getItemId();
 
-        String delete_card = "http://mysite.lidordigital.co.il/Quertets/db/deleteSeries.php";
+      //  String delete_card = "http://mysite.lidordigital.co.il/Quertets/db/deleteSeries.php";
+        String delete_card = "http://localhost/Quertets/db/deleteSeries.php";
         if (MENU_ID == CARDS_CLICK_MENU) {
             String[] menuItems = getResources().getStringArray(R.array.my_card);
             String menuItemName = menuItems[menuItemIndex];//delete card
@@ -327,7 +330,8 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
                                 newItem = itemText.getText().toString();
                                 cardId = selectedCardEditOrDelete.getCard_id();
                                 newImage=image.getTransitionName();                               //age = a.getText().toString();
-                                new UpdateCard().execute("http://mysite.lidordigital.co.il/Quertets/db/UpdateCard", newCategory, newItem, String.valueOf(cardId));
+                               // new UpdateCard().execute("http://mysite.lidordigital.co.il/Quertets/db/UpdateCard", newCategory, newItem, String.valueOf(cardId));
+                                new UpdateCard().execute("http://localhost/Quertets/db/UpdateCard", newCategory, newItem, String.valueOf(cardId));
                             }
                         } else {
                             Toast.makeText(ShowMyCards.this, "number cannot bee user name", Toast.LENGTH_LONG).show();

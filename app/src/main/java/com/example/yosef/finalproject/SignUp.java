@@ -49,7 +49,8 @@ public class SignUp extends AppCompatActivity {
     }
 
     public class signUp  extends AsyncTask<String, Void, Boolean>{
-        String reg_url = "http://mysite.lidordigital.co.il/Quertets/register.php";
+       // String reg_url = "http://mysite.lidordigital.co.il/Quertets/db/register.php";
+        String reg_url = "http://10.0.2.2/Quartets/db/register.php";
         LinkedHashMap<String,String> parms=new LinkedHashMap<>();
         String uName=userName.getText().toString();
         String pass=password.getText().toString();

@@ -17,7 +17,8 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.MyViewHolder
 
     List<Card> cards;
     Context conext;
-    final String imageRelativePat = "http://mysite.lidordigital.co.il/Quertets/images/";
+    //final String imageRelativePat = "http://mysite.lidordigital.co.il/Quertets/images/";
+    final String imageRelativePat = "http:/localhost/Quertets/images/";
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
         public TextView category;

@@ -26,7 +26,8 @@ public class UpdateCard extends AppCompatActivity {
     ImageView image;
     Button choseImage;
     Button updateCard;
-    public static final String UPLOAD_URL = "http://mysite.lidordigital.co.il/Quertets/upload_image.php";
+    //public static final String UPLOAD_URL = "http://mysite.lidordigital.co.il/Quertets/upload_image.php";
+    public static final String UPLOAD_URL = "http://localhost/Quertets/upload_image.php";
     public static final String UPLOAD_KEY = "image";
     public static final String TAG = "MY MESSAGE";
 

@@ -251,10 +251,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public class logIn extends AsyncTask<String, Void, Boolean> {
-        String login_url = "http://mysite.lidordigital.co.il/Quertets/login.php";
+      //  String login_url = "http://mysite.lidordigital.co.il/Quertets/db/login.php";
+        String login_url = "http://10.0.2.2/Quartets/db/login.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
-        MySQLiteHelper dbHelper = new MySQLiteHelper(MainActivity.this, UserDBConstants.DBName, null, UserDBConstants.User_DB_VESRSION);
+        //MySQLiteHelper dbHelper = new MySQLiteHelper(MainActivity.this, UserDBConstants.DBName, null, UserDBConstants.User_DB_VESRSION);
         String inputUserName ;
         String inputPassword ;
 
@@ -315,7 +316,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public class signUp  extends AsyncTask<String, Void, Boolean>{
-        String reg_url = "http://mysite.lidordigital.co.il/Quertets/register.php";
+    //    String reg_url = "http://mysite.lidordigital.co.il/Quertets/register.php";
+        String reg_url = "http://10.0.2.2/Quertets/register.php";
         LinkedHashMap<String,String> parms=new LinkedHashMap<>();
         String userName;
         String password;
