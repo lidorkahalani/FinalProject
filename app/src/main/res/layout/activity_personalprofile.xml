@@ -43,12 +43,13 @@
             android:layout_alignParentStart="true" />
 
         <Button
-            android:textSize="17.5dip"
+            android:textSize="18dip"
             android:onClick="openRoom"
             android:layout_width="185dp"
             android:layout_height="wrap_content"
             android:background="@drawable/open_room"
             android:id="@+id/btnOpenRoomId"
+            android:textStyle="bold"
             android:text="@string/OpenRoom"
             android:layout_marginTop="15dp"
             android:layout_above="@+id/button3"
@@ -57,6 +58,7 @@
 
         <Button
             android:textSize="17.5dip"
+            android:textStyle="bold"
             android:onClick="addCardToDB"
             android:layout_width="185dp"
             android:layout_height="wrap_content"
@@ -69,7 +71,8 @@
             android:layout_alignParentEnd="true" />
 
         <Button
-            android:textSize="17.5dip"
+            android:textSize="18dip"
+            android:textStyle="bold"
             android:onClick="ShowMyCards"
             android:layout_width="185dp"
             android:layout_height="wrap_content"
@@ -83,17 +86,19 @@
         <Button
             android:onClick="joinToRoom"
             android:layout_width="185dp"
+            android:textStyle="bold"
             android:layout_height="wrap_content"
             android:background="@drawable/join_room"
             android:text="@string/JoinToRoom"
-            android:textSize="17.5dip"
+            android:textSize="18dip"
             android:id="@+id/btnJoinRoomId"
             android:layout_marginTop="15dp"
             android:layout_below="@+id/linearLayout"
             android:layout_centerHorizontal="true" />
 
         <Button
-            android:textSize="17.5dip"
+            android:textSize="18dip"
+            android:textStyle="bold"
             android:onClick="logOut"
             android:layout_width="185dp"
             android:layout_height="wrap_content"
@@ -134,4 +139,4 @@
 
             </LinearLayout>
 
-        </RelativeLayout>
+</RelativeLayout>
