@@ -7,6 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/background_menu"
     tools:context="com.example.yosef.finalproject.Room">
 
     <EditText
@@ -21,10 +22,12 @@
 
     <Button
         android:onClick="creatRoom"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/createRoom"
         android:id="@+id/button8"
+        android:textSize="9pt"
+        android:background="#2196F3"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>

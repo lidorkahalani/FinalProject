@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.yosef.finalproject.SplashActivity"
-    android:background="#259dcb">
+    android:background="@drawable/background_menu">
 
     <TextView
         android:layout_width="match_parent"
@@ -25,6 +25,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="85dp"
         android:indeterminate="false"
+
         android:layout_centerVertical="true" />
 
     <TextView

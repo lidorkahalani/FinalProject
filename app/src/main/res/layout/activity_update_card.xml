@@ -5,6 +5,7 @@
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/background_menu"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
 
     <EditText
@@ -34,12 +35,15 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/change_image"
+        android:background="#CDDC39"
         android:id="@+id/changeImage" />
 
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/updateCard"
+        android:layout_marginTop="10dp"
+        android:background="#8BC34A"
         android:id="@+id/UpdateCard" />
 
 </LinearLayout>

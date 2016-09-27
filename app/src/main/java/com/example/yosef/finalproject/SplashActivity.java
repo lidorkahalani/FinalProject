@@ -54,6 +54,7 @@ public class SplashActivity extends AppCompatActivity {
             Precent.setText(Integer.toString(values[0]) + "%");
 
 
+
         }
 
         @Override

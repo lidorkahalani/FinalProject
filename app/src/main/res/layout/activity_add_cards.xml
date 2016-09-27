@@ -5,6 +5,7 @@
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/background_menu"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
 
 
@@ -12,12 +13,14 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/string_choose_file"
+        android:background="#FFEB3B"
         android:id="@+id/buttonChoose" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+
         android:id="@+id/imageView" />
 
 
@@ -25,6 +28,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/string_upload_image"
+        android:background="#8BC34A"
         android:id="@+id/buttonUpload" />
 
 
@@ -32,6 +36,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/string_view_image"
+        android:background="#009688"
+        android:layout_marginTop="10dp"
         android:id="@+id/buttonViewImage" />
 
 
