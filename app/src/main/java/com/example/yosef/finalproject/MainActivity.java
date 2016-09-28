@@ -29,11 +29,18 @@ import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.google.gson.Gson;
 
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Locale;
@@ -252,7 +259,8 @@ public class MainActivity extends AppCompatActivity {
 
     public class logIn extends AsyncTask<String, Void, Boolean> {
       //  String login_url = "http://mysite.lidordigital.co.il/Quertets/db/login.php";
-        String login_url = "http://10.0.2.2/Quartets/db/login.php";
+       // String login_url = "http://10.0.2.2/Quartets/db/login.php";
+        String login_url = "http://10.0.2.2:8080/Quartets_Server/Login";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         //MySQLiteHelper dbHelper = new MySQLiteHelper(MainActivity.this, UserDBConstants.DBName, null, UserDBConstants.User_DB_VESRSION);
@@ -261,14 +269,46 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(String... params) {
-            inputUserName=params[0];
-            inputPassword=params[1];
+            inputUserName = params[0];
+            inputPassword = params[1];
 
             parms.put("password", inputPassword);
             parms.put("username", inputUserName);
             JSONParser json = new JSONParser();
-          try{
-            JSONObject response = json.makeHttpRequest(login_url, "POST", parms);
+            HttpClient Client = new DefaultHttpClient();
+            Gson gson=new Gson();
+            // Create URL string
+
+            String URL =login_url+"?user_name="+params[0]+"&user_password="+params[1];
+
+            //Log.i("httpget", URL);
+
+            try
+            {
+                String SetServerString = "";
+
+                // Create Request to server and get response
+
+                HttpGet httpget = new HttpGet(URL);
+                ResponseHandler<String> responseHandler = new BasicResponseHandler();
+                SetServerString = Client.execute(httpget, responseHandler);
+
+                // Show response on activity
+            if(SetServerString!=null) {
+                User u=gson.fromJson(SetServerString,User.class);
+                userId=u.getUserID();
+                return true;
+            }
+            else
+                return false;
+
+            } catch(Exception ex) {
+                ex.printStackTrace();
+            }
+            return false;
+    }
+        /*  try{
+            JSONObject response = json.makeHttpRequest(login_url, "GET", parms);
                 if (response.getInt("succsses") == 1) {
                     JSONArray jsonArray=response.getJSONArray("User");
                        if(jsonArray.getJSONObject(0).getString("user_name").equals(inputUserName)&&
@@ -284,9 +324,10 @@ public class MainActivity extends AppCompatActivity {
             }catch (Exception e) {
               e.printStackTrace();
               return false;
-          }
-            return false;
-        }
+          }*/
+          //  return false;
+       // }
+
 
         protected void onPostExecute(Boolean result) {
             SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
