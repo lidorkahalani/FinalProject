@@ -23,7 +23,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:id="@+id/imageView"
-                    android:src="@drawable/logo_he"
+                    android:src="@drawable/logo"
                     android:adjustViewBounds="true"
                     android:layout_marginBottom="20dp" />
 
