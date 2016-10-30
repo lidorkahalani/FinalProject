@@ -82,23 +82,23 @@
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/plaers_cards_en2"
-        android:id="@+id/imageButton3"
+        app:srcCompat="@drawable/plaers_cards_en1"
+        android:id="@+id/imageButton4"
         android:background="@android:color/transparent"
-        android:layout_alignTop="@+id/imageButton"
-        android:layout_alignParentLeft="true"
+        android:layout_marginTop="28dp"
+        android:layout_below="@+id/imageButton2"
+        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/plaers_cards_en1"
-        android:id="@+id/imageButton4"
+        app:srcCompat="@drawable/plaers_cards_en2"
+        android:id="@+id/imageButton3"
         android:background="@android:color/transparent"
-        android:layout_marginTop="60dp"
-        android:layout_below="@+id/imageButton2"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignTop="@+id/imageButton"
+        android:layout_toRightOf="@+id/left_layout"
+        android:layout_toEndOf="@+id/left_layout" />
 
 
 </RelativeLayout>

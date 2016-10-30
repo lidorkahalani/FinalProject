@@ -86,8 +86,8 @@ public class AllPerson extends AppCompatActivity implements AdapterView.OnItemCl
                 for (int i = 0; i < res.length(); i++) {
                     User x = gson.fromJson(res.getString(i), User.class);
                     JSONObject jo = res.getJSONObject(i);
-                    User u = new User(jo.getString("name"), jo.getString("id"), Integer.parseInt(jo.getString("age")));
-                    allUsers.add(u);
+                    //User u = new User(jo.getString("name"), jo.getString("id"), Integer.parseInt(jo.getString("age")));
+                    //allUsers.add(u);
 
                 }
 

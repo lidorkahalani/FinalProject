@@ -13,13 +13,18 @@ public class User implements Serializable {
     private int userID;
     private ArrayList<Card> playerCards=new ArrayList<>();
 
+    public User(){
+
+    }
 
 
-    public User(String userName, String password,int score) {
+    public User(String userName, String password,int score,int userID) {
         setUserName(userName);
         setPassword(password);
         setScore(score);
+        setUserID(userID);
     }
+
 
     public int getScore() {
         return score;

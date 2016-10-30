@@ -66,7 +66,8 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
     public static View selectedCard;
     private boolean setCardBackgroundTransparent = true;
    // final String imageRelativePat = "http://mysite.lidordigital.co.il/Quertets/images/";
-    final String imageRelativePat = "http://localhost/Quertets/images/";
+    final String imageRelativePat = "http://localhost:5050/Quartets/images/";
+
 
 
 
@@ -112,7 +113,7 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
 
     public class GetMycards extends AsyncTask<String, Void, Boolean> {
        // String get_my_cards = "http://mysite.lidordigital.co.il/Quertets/db/getMyCards.php";
-        String get_my_cards = "http://localhost/Quertets/db/getMyCards.php";
+        String get_my_cards = "http://localhost:8080/Quartets/db/getMyCards.php";
 
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 

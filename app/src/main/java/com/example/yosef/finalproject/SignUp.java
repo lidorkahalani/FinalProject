@@ -1,18 +1,9 @@
 package com.example.yosef.finalproject;
 
-import android.content.ContentValues;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteConstraintException;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
+
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
-import android.support.annotation.BoolRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -25,13 +16,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.TreeMap;
 
 public class SignUp extends AppCompatActivity {
     EditText userName;
@@ -80,15 +65,16 @@ public class SignUp extends AppCompatActivity {
 
             try
             {
-                String SetServerString = "";
+                String serverResponese = "";
 
                 // Create Request to server and get response
 
                 HttpGet httpget = new HttpGet(URL);
                 ResponseHandler<String> responseHandler = new BasicResponseHandler();
-                SetServerString = Client.execute(httpget, responseHandler);
+                serverResponese = Client.execute(httpget, responseHandler);
+
                 // Show response on activity
-                if(SetServerString.equals("sucsses")) {
+                if(serverResponese!="") {
                     return true;
                 }
                 else

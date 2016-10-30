@@ -30,6 +30,9 @@ import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSyntaxException;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
@@ -39,6 +42,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONStringer;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -258,6 +262,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public class logIn extends AsyncTask<String, Void, Boolean> {
+        //212.143.78.149
       //  String login_url = "http://mysite.lidordigital.co.il/Quertets/db/login.php";
        // String login_url = "http://10.0.2.2/Quartets/db/login.php";
         String login_url = "http://10.0.2.2:8080/Quartets_Server/Login";
@@ -285,19 +290,29 @@ public class MainActivity extends AppCompatActivity {
 
             try
             {
-                String SetServerString = "";
+                String serverResponse = "";
 
                 // Create Request to server and get response
 
                 HttpGet httpget = new HttpGet(URL);
                 ResponseHandler<String> responseHandler = new BasicResponseHandler();
-                SetServerString = Client.execute(httpget, responseHandler);
+                serverResponse = Client.execute(httpget, responseHandler);
+                JSONObject res=new JSONObject(serverResponse);
 
-                // Show response on activity
-            if(SetServerString!=null) {
-                User u=gson.fromJson(SetServerString,User.class);
-                userId=u.getUserID();
-                return true;
+            if(serverResponse!=null) {
+                try {
+                    User u=new User(res.getString("userName"),res.getString("password"),res.getInt("score"),res.getInt("userId"));
+                   // User u=gson.fromJson(serverResponse,User.class);
+                    userId=u.getUserID();
+                    return true;
+                }catch (JsonSyntaxException e) {
+                    e.printStackTrace();
+                }catch (JsonParseException e){
+                    e.printStackTrace();
+                }catch (Exception ex){
+                    ex.printStackTrace();
+                }
+
             }
             else
                 return false;
@@ -358,7 +373,8 @@ public class MainActivity extends AppCompatActivity {
 
     public class signUp  extends AsyncTask<String, Void, Boolean>{
     //    String reg_url = "http://mysite.lidordigital.co.il/Quertets/register.php";
-        String reg_url = "http://10.0.2.2/Quertets/register.php";
+      //  String reg_url = "http://10.0.2.2/Quertets/register.php";
+        String reg_url = "http://10.0.2.2:8080/Quartets_Server/Register";
         LinkedHashMap<String,String> parms=new LinkedHashMap<>();
         String userName;
         String password;
@@ -376,7 +392,7 @@ public class MainActivity extends AppCompatActivity {
             parms.put("username",userName);
             JSONParser json=new JSONParser();
             try {
-                JSONObject response=json.makeHttpRequest(reg_url,"POST",parms);
+                JSONObject response=json.makeHttpRequest(reg_url,"GET",parms);
 
 
                 if(response.getInt("sucsses")==1){

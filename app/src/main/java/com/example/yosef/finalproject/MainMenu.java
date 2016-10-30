@@ -30,13 +30,26 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static org.apache.http.HttpHeaders.USER_AGENT;
 
 public class MainMenu extends AppCompatActivity {
 
@@ -146,7 +159,7 @@ public class MainMenu extends AppCompatActivity {
         String password = myPref.getString("password", "");
         int score = myPref.getInt("score", 0);
         int userId = myPref.getInt("user_id", 0);
-        currentPlayer = new User(uname, password, score);
+        currentPlayer = new User(uname, password, score,userId);
         dbHandler = new UsersDBHandler(this);
         setLayout();
 
@@ -433,30 +446,98 @@ public class MainMenu extends AppCompatActivity {
         }
     }
 
-    public class SendRoomName extends AsyncTask<String, Void, Integer> {
-        String set_rom_name_url = "setRoomName.php";
-        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
+    public class SendRoomName extends AsyncTask<String, User, Integer> {
+        LinkedHashMap parms = new LinkedHashMap<>();
         String roomName;
-
+        ObjectInputStream ois;
+        ObjectOutputStream oos;
         @Override
         protected Integer doInBackground(String... params) {
+            String cheekIfRoomNameAvilable="http://10.0.2.2:8080/Quartets_Server";
+            String set_rom_name_url = "http://10.0.2.2:8080/Quartets_Server/createNewRoom";
+
             roomName = params[0];
             parms.put("room_name", roomName);
+            parms.put("current_user",currentPlayer);
             JSONParser json = new JSONParser();
             try {
                 JSONObject response = json.makeHttpRequest(set_rom_name_url, "POST", parms);
 
-                return response.getInt("succsses");
+                return Integer.parseInt(response.toString());
 
-            } catch (JSONException e) {
-                e.printStackTrace();
-                return -1;
             } catch (Exception e) {
                 e.printStackTrace();
                 return -1;
             }
 
+          /* parms.put("room_name", params[0]);
+             JSONParser json = new JSONParser();
+                try {
+                    JSONObject response = json.makeHttpRequest(set_rom_name_url, "POST", parms);
 
+                    return Integer.parseInt(response.toString());
+                }  catch(Exception e){
+                    e.printStackTrace();
+                    return -1;
+                }*/
+
+           /* HttpClient client = new DefaultHttpClient();
+            HttpPost request = new HttpPost(set_rom_name_url);
+
+            // add request header
+            request.addHeader("User-Agent", USER_AGENT);
+
+            HttpResponse response = null;
+            try {
+                response = client.execute(request);
+                System.out.println("\nSending 'GET' request to URL : " + set_rom_name_url);
+                System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
+                BufferedReader rd = null;
+                rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+                StringBuffer result = new StringBuffer();
+                String line = "";
+                while ((line = rd.readLine()) != null) {
+                    result.append(line);
+                }
+
+                System.out.println(result.toString());
+                return Integer.parseInt(result.toString()); //return the status 1|0|-1
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return -1;
+
+          /*  try {
+
+                // create a connection to the server socket
+                Socket clientSocket = new Socket("10.0.2.2", 55555);
+
+                System.out.println("Connected to Server!");
+                System.out.println();
+                System.out.println("Waiting for server to find one more player");
+                System.out.println();
+                ois = new ObjectInputStream(clientSocket.getInputStream());
+
+                oos = new ObjectOutputStream(clientSocket.getOutputStream());
+                try {
+                    if (ois.readObject().toString().equals("Start")) {
+                        System.out.println("Connect socket sucsse");
+                        return 1;
+                    }
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+
+                } catch (ClassNotFoundException ex) {
+                    ex.printStackTrace();
+
+                }
+            }catch (IOException ex) {
+                ex.printStackTrace();
+
+            }
+            return -1;*/
+
+            //return 1;
         }
 
 
@@ -475,6 +556,7 @@ public class MainMenu extends AppCompatActivity {
                         timerFlag = false;
                     }
                 });
+
                 pDialog.show();
                 timer = new Timer();
                 timerFlag = true;
@@ -508,7 +590,7 @@ public class MainMenu extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(String... params) {
 
-            parms.put("room_name", params[0]);
+            /*parms.put("room_name", params[0]);
             JSONParser json = new JSONParser();
             try {
                 JSONObject response = json.makeHttpRequest(get_room_status_url, "POST", parms);
@@ -524,8 +606,8 @@ public class MainMenu extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
-            }
-
+            }*/
+            return true;
 
         }
 

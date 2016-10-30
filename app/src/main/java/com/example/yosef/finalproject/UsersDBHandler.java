@@ -55,8 +55,8 @@ public class UsersDBHandler {
             String userName = usersCursor.getString(0);
             String password = usersCursor.getString(1);
             int score=usersCursor.getInt(2);
-            User b = new User(userName,password,score);
-            usersList.add(b);
+            //User b = new User(userName,password,score);
+            //usersList.add(b);
         }
 
         return usersList;
