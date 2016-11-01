@@ -263,9 +263,9 @@ public class MainActivity extends AppCompatActivity {
 
     public class logIn extends AsyncTask<String, Void, Boolean> {
         //212.143.78.149
-      //  String login_url = "http://mysite.lidordigital.co.il/Quertets/db/login.php";
-       // String login_url = "http://10.0.2.2/Quartets/db/login.php";
-        String login_url = "http://10.0.2.2:8080/Quartets_Server/Login";
+        //String login_url = "http://mysite.lidordigital.co.il/Quertets/db/login.php";
+        String login_url = "http://10.0.2.2/final_project/db/login.php";
+        //String login_url = "http://10.0.2.2:8080/Quartets_Server/Login";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         //MySQLiteHelper dbHelper = new MySQLiteHelper(MainActivity.this, UserDBConstants.DBName, null, UserDBConstants.User_DB_VESRSION);
@@ -279,7 +279,29 @@ public class MainActivity extends AppCompatActivity {
 
             parms.put("password", inputPassword);
             parms.put("username", inputUserName);
-            JSONParser json = new JSONParser();
+            JSONParser json=new JSONParser();
+            parms.put("password", inputPassword);
+            parms.put("username", inputUserName);
+            try{
+                JSONObject response = json.makeHttpRequest(login_url, "POST", parms);
+                if (response.getInt("succsses") == 1) {
+                    JSONArray jsonArray=response.getJSONArray("User");
+                    if(jsonArray.getJSONObject(0).getString("user_name").equals(inputUserName)&&
+                            jsonArray.getJSONObject(0).getString("user_password").equals(inputPassword)){
+                        score = jsonArray.getJSONObject(0).getInt("score");
+                        userId=jsonArray.getJSONObject(0).getInt("user_id");
+                        return true;
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return false;
+            }catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+            return false;
+          /*  JSONParser json = new JSONParser();
             HttpClient Client = new DefaultHttpClient();
             Gson gson=new Gson();
             // Create URL string
@@ -320,7 +342,7 @@ public class MainActivity extends AppCompatActivity {
             } catch(Exception ex) {
                 ex.printStackTrace();
             }
-            return false;
+            return false;*/
     }
         /*  try{
             JSONObject response = json.makeHttpRequest(login_url, "GET", parms);
