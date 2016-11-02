@@ -16,6 +16,9 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.LinkedHashMap;
 
 public class SignUp extends AppCompatActivity {
@@ -43,8 +46,8 @@ public class SignUp extends AppCompatActivity {
 
     public class signUp  extends AsyncTask<String, Void, Boolean>{
        // String reg_url = "http://mysite.lidordigital.co.il/Quertets/db/register.php";
-        //String reg_url = "http://10.0.2.2/Quartets/db/register.php";
-        String reg_url = "http://10.0.2.2:8080/Quartets_Server/Register";
+        String reg_url = "http://10.0.2.2/final_project/db/register.php";
+       // String reg_url = "http://10.0.2.2:8080/Quartets_Server/Register";
         LinkedHashMap<String,String> parms=new LinkedHashMap<>();
         String uName=userName.getText().toString();
         String pass=password.getText().toString();
@@ -55,9 +58,28 @@ public class SignUp extends AppCompatActivity {
             if(uName.equals("")||pass.equals("")||!repass.equals(pass))
                 return false;
 
-            parms.put("user_name",uName);
-            parms.put("user_password",pass);
-            HttpClient Client = new DefaultHttpClient();
+            parms.put("username",uName);
+            parms.put("password",pass);
+
+            JSONParser json=new JSONParser();
+            try {
+                JSONObject response=json.makeHttpRequest(reg_url,"POST",parms);
+
+
+                if(response.getInt("sucsses")==1){
+
+                    return true;
+                }else{
+                    return false;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return false;
+            }catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+         /*   HttpClient Client = new DefaultHttpClient();
 
             String URL =reg_url+"?user_name="+uName+"&user_password="+pass;
 
@@ -83,26 +105,7 @@ public class SignUp extends AppCompatActivity {
             } catch(Exception ex) {
                 ex.printStackTrace();
             }
-            return false;
-
-        /*    JSONParser json=new JSONParser();
-            try {
-                JSONObject response=json.makeHttpRequest(reg_url,"GET",parms);
-
-
-                if(response.getInt("sucsses")==1){
-
-                    return true;
-                }else{
-                    return false;
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-                return false;
-            }catch (Exception e) {
-                e.printStackTrace();
-                return false;
-            }*/
+            return false;*/
 
 
         }

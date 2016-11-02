@@ -32,7 +32,8 @@ import java.util.LinkedHashMap;
 
 public class AddCards extends AppCompatActivity implements View.OnClickListener {
     //public static final String UPLOAD_URL = "http://mysite.lidordigital.co.il/Quertets/add_image.php";
-    public static final String UPLOAD_URL = "http://localhost/Quertets/db/add_image.php";
+    //public static final String UPLOAD_URL = "http://localhost/Quertets/db/add_image.php";
+    public static final String UPLOAD_URL = "http://10.0.2.2/final_project/db/add_image.php";
     public static final String UPLOAD_KEY = "image";
     public static final String TAG = "MY MESSAGE";
 

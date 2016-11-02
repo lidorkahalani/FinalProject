@@ -262,8 +262,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public class logIn extends AsyncTask<String, Void, Boolean> {
-        //212.143.78.149
-        //String login_url = "http://mysite.lidordigital.co.il/Quertets/db/login.php";
         String login_url = "http://10.0.2.2/final_project/db/login.php";
         //String login_url = "http://10.0.2.2:8080/Quartets_Server/Login";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();

@@ -7,11 +7,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -66,7 +69,8 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
     public static View selectedCard;
     private boolean setCardBackgroundTransparent = true;
    // final String imageRelativePat = "http://mysite.lidordigital.co.il/Quertets/images/";
-    final String imageRelativePat = "http://localhost:5050/Quartets/images/";
+   // final String imageRelativePat = "http://localhost:5050/Quartets/images/";
+    final String imageRelativePat = "http://10.0.2.2/final_project/images/";
 
 
 
@@ -113,7 +117,8 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
 
     public class GetMycards extends AsyncTask<String, Void, Boolean> {
        // String get_my_cards = "http://mysite.lidordigital.co.il/Quertets/db/getMyCards.php";
-        String get_my_cards = "http://localhost:8080/Quartets/db/getMyCards.php";
+       // String get_my_cards = "http://localhost:8080/Quartets/db/getMyCards.php";
+        String get_my_cards = "http://10.0.2.2/final_project/db/getMyCards.php";
 
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
@@ -264,14 +269,16 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
         final int menuItemIndex = item.getItemId();
 
       //  String delete_card = "http://mysite.lidordigital.co.il/Quertets/db/deleteSeries.php";
-        String delete_card = "http://localhost/Quertets/db/deleteSeries.php";
+        //String delete_card = "http://localhost/Quertets/db/deleteSeries.php";
+        String delete_card = "http://10.0.2.2/final_project/db/deleteSeries.php";
+        final String update_card_url="http://10.0.2.2/final_project/db/UpdateCard.php";
         if (MENU_ID == CARDS_CLICK_MENU) {
             String[] menuItems = getResources().getStringArray(R.array.my_card);
             String menuItemName = menuItems[menuItemIndex];//delete card
             if (menuItemName.equals(menuItems[0])) {
                 setCardBackgroundTransparent = false;
                 // cardId=deck.get(menuItemIndex).getCard_id();
-                new deleteCard().execute(delete_card, String.valueOf(selectedCardEditOrDelete.getCard_id()));
+                new deleteCard().execute(delete_card, String.valueOf(selectedCardEditOrDelete.getCategoryId()));
 
             } else if (menuItemName.equals(menuItems[1])) {//Update Card
 
@@ -286,21 +293,22 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
                 final EditText category = (EditText) dialogView.findViewById(R.id.category);
                 final EditText itemText = (EditText) dialogView.findViewById(R.id.item1);
                 final ImageView image=(ImageView)dialogView.findViewById(R.id.updateImage);
-                image.setImageResource(R.drawable.car);
-                category.setText(selectedCardEditOrDelete.getCategoryName());
-                itemText.setText(selectedCardEditOrDelete.getCardName());
-
-                String fullPath = imageRelativePat + selectedCardEditOrDelete.getImageName();
-              /*  ImageLoader imageLoader = new ImageLoader(this);
+                image.setImageResource(R.mipmap.ic_launcher);//constant icon need to load from the card
+              /*  String fullPath = imageRelativePat + selectedCardEditOrDelete.getImageName();
+                ImageLoader imageLoader = new ImageLoader(this);
                 imageLoader.DisplayImage(fullPath, R.mipmap.ic_launcher,(ImageView) findViewById(R.id.imageView));
 
                 filePath =Uri.parse(fullPath);
                 try {
                     bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                    image.setImageBitmap(bitmap);
+                    //image.setImageBitmap(bitmap);
+                    Drawable d = new BitmapDrawable(getResources(), bitmap);
+                    image.setImageDrawable(d);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }*/
+                category.setText(selectedCardEditOrDelete.getCategoryName());
+                itemText.setText(selectedCardEditOrDelete.getCardName());
 
                 builder.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -332,7 +340,7 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
                                 cardId = selectedCardEditOrDelete.getCard_id();
                                 newImage=image.getTransitionName();                               //age = a.getText().toString();
                                // new UpdateCard().execute("http://mysite.lidordigital.co.il/Quertets/db/UpdateCard", newCategory, newItem, String.valueOf(cardId));
-                                new UpdateCard().execute("http://localhost/Quertets/db/UpdateCard", newCategory, newItem, String.valueOf(cardId));
+                                new UpdateCard().execute(update_card_url, newCategory, newItem, String.valueOf(cardId),newImage);
                             }
                         } else {
                             Toast.makeText(ShowMyCards.this, "number cannot bee user name", Toast.LENGTH_LONG).show();
@@ -405,10 +413,9 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
 
     public class deleteCard extends AsyncTask<String, Void, Boolean> {
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
-
         @Override
         protected Boolean doInBackground(String... params) {
-            parms.put("card_id", params[1]);
+            parms.put("getCategoryId", params[1]);
             JSONParser json = new JSONParser();
             try {
                 JSONObject response = json.makeHttpRequest(params[0], "GET", parms);
@@ -431,7 +438,7 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
 
         protected void onPostExecute(Boolean result) {
             if (result) {
-                Toast.makeText(ShowMyCards.this, "Delete Succsesful", Toast.LENGTH_LONG).show();
+                Toast.makeText(ShowMyCards.this, "Delete Successfully", Toast.LENGTH_LONG).show();
                 finish();
                 startActivity(getIntent());
             } else
@@ -522,13 +529,12 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
             parms.put("card_name", params[2]);
             parms.put("card_id", params[3]);
             parms.put("card_image",params[4]);
-            //parms.put("personAge",params[3]);
             JSONParser pars = new JSONParser();
             JSONObject response = pars.makeHttpRequest(params[0], "GET", parms);
 
             try {
                 if (response.getInt("succsses") == 1) {
-                    return "Update succsseful!";
+                    return "Update Successfull!";
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

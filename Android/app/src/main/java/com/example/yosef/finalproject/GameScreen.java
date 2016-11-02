@@ -86,8 +86,8 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_screen);
-      //  new getAllCards().execute();
-        new getFromServerMycard().execute();
+       new getAllCards().execute();
+       // new getFromServerMycard().execute();
         randomGenerator = new Random();
         Intent i = getIntent();
         currentPlayer = (User) i.getSerializableExtra("currentPlayer");
@@ -176,7 +176,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     }
 
     public class getAllCards extends AsyncTask<String, Void, Boolean> {
-       String get_all_card_url = "http://10.0.2.2:8080/Quartets/db/getAllCard.php";
+       String get_all_card_url = "http://10.0.2.2/final_project/db/getAllCard.php";
        // String get_all_card_url = "http://10.0.2.2/Quartets/db/getAllCard.php";
        // String get_all_card_url = "http://10.0.2.2:8080/Quartets_Server/GetAllCrds";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
@@ -186,7 +186,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
             Gson gson=new Gson();
             JSONParser json = new JSONParser();
            try {
-                JSONObject response = json.makeHttpRequest(get_all_card_url, "POST", parms);
+                JSONObject response = json.makeHttpRequest(get_all_card_url, "GET", parms);
                 String res = gson.toJson(response);
                 if (response!=null) {
                     JSONArray jsonArray = response.getJSONArray("AllCards");
@@ -206,7 +206,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                         }
                         //cardLabels=(String[]) ja.get(0);
                         card.setItemsArray(cardLabels);
-                        // card.setItemPicture(getResources().getDrawable(R.drawable.car));
+                         //card.setItemPicture(getResources().getDrawable(R.drawable.car));
                         deck.add(card);
 
                     }
@@ -215,75 +215,6 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
             } catch(Exception ex) {
                 ex.printStackTrace();
             }
-          /* try
-            {
-                String serverResponse = "";
-
-                // Create Request to server and get response
-
-                HttpGet httpget = new HttpGet(get_all_card_url);
-                ResponseHandler<String> responseHandler = new BasicResponseHandler();
-                serverResponse = Client.execute(httpget, responseHandler);
-                JSONArray res=new JSONArray(serverResponse);
-
-                if(serverResponse!=null) {
-                    try {
-                            for(JSONArray j : res) {
-                            Card card = gson.fromJson(serverResponse, Card.class);
-                            deck.add(card);
-                        }
-                        return true;
-                    }catch (JsonSyntaxException e) {
-                        e.printStackTrace();
-                    }catch (JsonParseException e){
-                        e.printStackTrace();
-                    }catch (Exception ex){
-                        ex.printStackTrace();
-                    }
-
-                }
-                else
-                    return false;
-
-            } catch(Exception ex) {
-                ex.printStackTrace();
-            }
-          catch (Exception e) {
-                e.printStackTrace();
-                return false;
-            }*/
-
-
-           /* HttpClient client = new DefaultHttpClient();
-            HttpGet request = new HttpGet(get_all_card_url);
-
-            // add request header
-            request.addHeader("User-Agent", USER_AGENT);
-
-            HttpResponse response = null;
-            try {
-                response = client.execute(request);
-                System.out.println("\nSending 'GET' request to URL : " + get_all_card_url);
-                System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
-                BufferedReader rd = null;
-                rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-                StringBuffer result = new StringBuffer();
-                 String line = "";
-                while ((line = rd.readLine()) != null) {
-                    result.append(line);
-                }
-                JSONObject res = new JSONObject(result.toString());
-                //JSONArray res=new JSONArray(result.toString());
-                    Card card = gson.fromJson(result.toString(), Card.class);
-                    deck.add(card);
-
-                System.out.println(result.toString());
-                return true;
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }*/
             return false;
 
         }

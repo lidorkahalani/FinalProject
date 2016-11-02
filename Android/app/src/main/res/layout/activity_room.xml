@@ -10,16 +10,6 @@
     android:background="@drawable/rsz_background_menu_resize"
     tools:context="com.example.yosef.finalproject.Room">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/roomName"
-        android:id="@+id/roomName"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="116dp" />
-
     <Button
         android:onClick="creatRoom"
         android:layout_width="match_parent"
@@ -30,4 +20,14 @@
         android:background="#2196F3"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/roomName"
+        android:id="@+id/roomName"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>

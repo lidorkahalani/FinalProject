@@ -453,15 +453,17 @@ public class MainMenu extends AppCompatActivity {
         ObjectOutputStream oos;
         @Override
         protected Integer doInBackground(String... params) {
-            String cheekIfRoomNameAvilable="http://10.0.2.2:8080/Quartets_Server";
-            String set_rom_name_url = "http://10.0.2.2:8080/Quartets_Server/createNewRoom";
+            //String cheekIfRoomNameAvailable="http://10.0.2.2/final_project/db/isRoomAvailable.php";
+            String openNewRoom="http://10.0.2.2/final_project/db/isRoomAvailable.php";
+
 
             roomName = params[0];
             parms.put("room_name", roomName);
-            parms.put("current_user",currentPlayer);
+            parms.put("user_id",currentPlayer.getUserID());
+           // parms.put("current_user",currentPlayer);
             JSONParser json = new JSONParser();
             try {
-                JSONObject response = json.makeHttpRequest(set_rom_name_url, "POST", parms);
+                JSONObject response = json.makeHttpRequest(openNewRoom, "POST", parms);
 
                 return Integer.parseInt(response.toString());
 
@@ -564,7 +566,8 @@ public class MainMenu extends AppCompatActivity {
                     @Override
                     public void run() {
                         if(timerFlag){
-                            new GetRoomStatus().execute(roomName);
+                            new waitForOtherPlayer().execute();
+                            //new GetRoomStatus().execute(roomName);
                         }
                     }
                 }, 3000);
@@ -582,18 +585,18 @@ public class MainMenu extends AppCompatActivity {
 
     }
 
-    public class GetRoomStatus extends AsyncTask<String, Void, Boolean> {
-        String get_room_status_url = "getRoomStatus.php";
+    public class waitForOtherPlayer extends AsyncTask<String, Void, Boolean> {
+        String chekIfStartGame = "http://10.0.2.2/final_project/db/checkIfRoomReadyToStartPlay.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
 
         @Override
         protected Boolean doInBackground(String... params) {
 
-            /*parms.put("room_name", params[0]);
+            parms.put("room_name", params[0]);
             JSONParser json = new JSONParser();
             try {
-                JSONObject response = json.makeHttpRequest(get_room_status_url, "POST", parms);
+                JSONObject response = json.makeHttpRequest(chekIfStartGame, "POST", parms);
 
                 if (response.getInt("succsses") == 1) {
                     return true;
@@ -606,9 +609,7 @@ public class MainMenu extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
-            }*/
-            return true;
-
+            }
         }
 
 
