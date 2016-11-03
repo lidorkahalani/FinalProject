@@ -29,6 +29,7 @@ import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.gson.JsonParser;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -59,7 +60,7 @@ public class MainMenu extends AppCompatActivity {
     private CallbackManager callBack;
     private Profile profile;
     private User currentPlayer;
-    private ArrayList<User> allUsers=new ArrayList<User>();
+    private ArrayList<User> allUsers = new ArrayList<User>();
     private Button btn1;
     private Button btn2;
     private Button btn3;
@@ -67,12 +68,13 @@ public class MainMenu extends AppCompatActivity {
     private Button btn5;
     private TextView title;
 
-    boolean correctInput=false;
+    boolean correctInput = false;
     LoginButton facebookButton;
     Button logOut;
     ProgressDialog pDialog;
     Timer timer;
     boolean timerFlag = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,12 +138,12 @@ public class MainMenu extends AppCompatActivity {
             }
         };
 
-        title=(TextView)findViewById(R.id.WelcomUserName);
-         btn1=(Button) findViewById(R.id.btnOpenRoomId);
-         btn3=(Button) findViewById(R.id.btnAddCardId);
-         btn4=(Button) findViewById(R.id.btnShowMyCardId);
-         btn2=(Button) findViewById(R.id.btnJoinRoomId);
-         btn5=(Button) findViewById(R.id.btnlogOut);
+        title = (TextView) findViewById(R.id.WelcomUserName);
+        btn1 = (Button) findViewById(R.id.btnOpenRoomId);
+        btn3 = (Button) findViewById(R.id.btnAddCardId);
+        btn4 = (Button) findViewById(R.id.btnShowMyCardId);
+        btn2 = (Button) findViewById(R.id.btnJoinRoomId);
+        btn5 = (Button) findViewById(R.id.btnlogOut);
 
         Typeface typeface = Typeface.createFromAsset(getAssets(), "Matias_Webfont.ttf");
         btn1.setTypeface(typeface);
@@ -152,14 +154,12 @@ public class MainMenu extends AppCompatActivity {
         title.setTypeface(typeface);
 
 
-
-
         SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(MainMenu.this);
         String uname = myPref.getString("username", "");
         String password = myPref.getString("password", "");
         int score = myPref.getInt("score", 0);
         int userId = myPref.getInt("user_id", 0);
-        currentPlayer = new User(uname, password, score,userId);
+        currentPlayer = new User(uname, password, score, userId);
         dbHandler = new UsersDBHandler(this);
         setLayout();
 
@@ -185,81 +185,7 @@ public class MainMenu extends AppCompatActivity {
         String uname = myPref.getString("username", "");
         String password = myPref.getString("password", "");
         int score = myPref.getInt("score", 0);
-        t.setText("Hello " + uname + "\n" + "Toatal Score: " + Integer.toString(score));
-    }
-
-    public void getAllPerson(View v) {
-        Intent myIntent = new Intent(this, AllPerson.class);
-        startActivity(myIntent);
-        //String movieTitle = movieTitleText.getText().toString();
-       // new MyWebServiceTask().execute("http://localhost:8080/TestWebServicesAndJSON/rest/hello/getAllPerson");
-       // new MyWebServiceTask().execute("http://localhost:8080/TestJersey/rest/hello/getAll");
-       // new MyWebServiceTask().execute("http://10.0.2.2:8080/TestJersey/rest/hello/getAll","");
-    }
-
-    public void addNewPerson(View v){
-
-
-        LayoutInflater li = LayoutInflater.from(MainMenu.this);
-        View dialogView = li.inflate(R.layout.addpersondialog, null);
-
-        final EditText u = (EditText) dialogView.findViewById(R.id.PersonName);
-        final EditText i = (EditText) dialogView.findViewById(R.id.PersonID);
-        final EditText a = (EditText) dialogView.findViewById(R.id.PersonAge);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainMenu.this);
-        builder.setView(dialogView);
-        builder.setTitle(getResources().getString(R.string.addPerson_dialog_title));
-        builder.setMessage(getResources().getString(R.string.addPerson_dialog_masge));
-        builder.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if((u.getText().toString().matches("[a-zA-Z]+"))){
-                    try{
-                        Integer.parseInt(i.getText().toString());
-                        Integer.parseInt(a.getText().toString());
-                        correctInput=true;
-
-                    }catch (NumberFormatException n){
-                        Toast.makeText(MainMenu.this,"please insert number in id&age field",Toast.LENGTH_LONG).show();
-                        return;
-                    }
-
-                }
-                if(correctInput) {
-                    if (u.getText().toString().isEmpty() || i.getText().toString().isEmpty() || a.getText().toString().isEmpty()) {
-                        Toast.makeText(MainMenu.this, "ther is emty field", Toast.LENGTH_LONG).show();
-                        return;
-                    } else {
-                        final String id;
-                        final String userName;
-                        final String age;
-                        userName = u.getText().toString();
-                        id = i.getText().toString();
-                        age = a.getText().toString();
-                        new SetPerson().execute("http://10.0.2.2:8080/TestJersey/rest/hello/createPerson", userName, id, age);
-                    }
-                }else{
-                    Toast.makeText(MainMenu.this,"number cannot bee user name",Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-            }
-        });
-        builder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-
-        builder.show();
-
-
-
-
-       // new MyWebServiceTask().execute("http://localhost:8080/TestWebServicesAndJSON/rest/hello/checkUser?personName="
-       //         +userName+"personId="+id+"personAge="+age);
+        t.setText(getResources().getString(R.string.wellcome)+":  "+ uname + "\n" + getResources().getString(R.string.score)+":  " + Integer.toString(score));
     }
 
     @Override
@@ -270,7 +196,7 @@ public class MainMenu extends AppCompatActivity {
     }
 
     public void addCardToDB(View v) {
-        Intent myIntent=new Intent(this,AddCards.class);
+        Intent myIntent = new Intent(this, AddCards.class);
         startActivity(myIntent);
         finish();
     }
@@ -309,14 +235,14 @@ public class MainMenu extends AppCompatActivity {
     public void onBackPressed() {
         // TODO Auto-generated method stub
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Are you sure you want to Exit?")
+        builder.setMessage(getResources().getString(R.string.exitWarning))
                 .setCancelable(false)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         MainMenu.this.finish();
                     }
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }
@@ -349,7 +275,7 @@ public class MainMenu extends AppCompatActivity {
         // set dialog message
         alertDialogBuilder
                 .setCancelable(false)
-                .setPositiveButton("OK",
+                .setPositiveButton(getResources().getString(R.string.ok),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 // get user input and set it to result
@@ -362,8 +288,8 @@ public class MainMenu extends AppCompatActivity {
                                        finish();*/
                                 } else {
                                     new AlertDialog.Builder(MainMenu.this)
-                                            .setTitle("Warning")
-                                            .setMessage("Group Not Found!")
+                                            .setTitle(getResources().getString(R.string.Warning))
+                                            .setMessage(getResources().getString(R.string.Group_Not_Found))
                                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                                 public void onClick(DialogInterface dialog, int which) {
                                                     // continue with delete
@@ -375,7 +301,7 @@ public class MainMenu extends AppCompatActivity {
 
                             }
                         })
-                .setNegativeButton("Cancel",
+                .setNegativeButton(getResources().getString(R.string.cancel),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
@@ -407,60 +333,23 @@ public class MainMenu extends AppCompatActivity {
         finish();
     }
 
-    class SetPerson extends AsyncTask<String, Void, String> {
-        @Override
-        protected void onPostExecute(String response) {
-           // System.out.println("responOnPos: "+response);
-            String plotString = null;
-          //  try {
-               // Gson gson=new Gson();
-               // plotString=gson.toJson(response);
-
-                //JSONObject jsonObj = new JSONObject(response);
-                //plotString = jsonObj.getString("");
-                Toast.makeText(MainMenu.this, response, Toast.LENGTH_LONG).show();
-
-
-           // } catch (JSONException e) {
-            //    e.printStackTrace();
-        //    }
-
-           //Toast.makeText(MainMenu.this,plotString,Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-                LinkedHashMap<String,String> parms=new LinkedHashMap<>();
-                parms.put("personName",params[1]);
-                parms.put("personId",params[2]);
-                parms.put("personAge",params[3]);
-                JSONParser pars=new JSONParser();
-                JSONObject jo=pars.makeHttpRequest(params[0],"GET",parms);
-
-                try {
-                    return jo.get("name").toString();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                return "something wrong";
-        }
-    }
-
     public class SendRoomName extends AsyncTask<String, User, Integer> {
         LinkedHashMap parms = new LinkedHashMap<>();
         String roomName;
         ObjectInputStream ois;
         ObjectOutputStream oos;
+
         @Override
         protected Integer doInBackground(String... params) {
             //String cheekIfRoomNameAvailable="http://10.0.2.2/final_project/db/isRoomAvailable.php";
-            String openNewRoom="http://10.0.2.2/final_project/db/isRoomAvailable.php";
+            String openNewRoom = "http://10.0.2.2/final_project/db/isRoomAvailable.php";
+            //String openNewRoom="http://mysite.lidordigital.co.il/Quertets/db/isRoomAvailable.php";
 
 
             roomName = params[0];
             parms.put("room_name", roomName);
-            parms.put("user_id",currentPlayer.getUserID());
-           // parms.put("current_user",currentPlayer);
+            parms.put("user_id", currentPlayer.getUserID());
+            // parms.put("current_user",currentPlayer);
             JSONParser json = new JSONParser();
             try {
                 JSONObject response = json.makeHttpRequest(openNewRoom, "POST", parms);
@@ -544,7 +433,7 @@ public class MainMenu extends AppCompatActivity {
 
 
         protected void onPostExecute(Integer result) {
-            if (result==1) {//all good
+            if (result == 1) {//all good
                 //2. show progress dialog - waiting for 3 more players
                 pDialog = new ProgressDialog(MainMenu.this);
                 pDialog.setIndeterminate(true);
@@ -565,19 +454,19 @@ public class MainMenu extends AppCompatActivity {
                 timer.schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        if(timerFlag){
+                        if (timerFlag) {
                             new waitForOtherPlayer().execute();
                             //new GetRoomStatus().execute(roomName);
                         }
                     }
                 }, 3000);
-            } else if(result==0){//room name already in use
+            } else if (result == 0) {//room name already in use
                 Toast.makeText(MainMenu.this
-                        ,getResources().getString(R.string.room_name_in_use),
+                        , getResources().getString(R.string.room_name_in_use),
                         Toast.LENGTH_LONG).show();
-            } else if(result==-1){//connection problem
+            } else if (result == -1) {//connection problem
                 Toast.makeText(MainMenu.this
-                        ,getResources().getString(R.string.connection_error),
+                        , getResources().getString(R.string.connection_error),
                         Toast.LENGTH_LONG).show();
             }
 
@@ -587,6 +476,7 @@ public class MainMenu extends AppCompatActivity {
 
     public class waitForOtherPlayer extends AsyncTask<String, Void, Boolean> {
         String chekIfStartGame = "http://10.0.2.2/final_project/db/checkIfRoomReadyToStartPlay.php";
+        // String chekIfStartGame = "http://localhost/final_project/db/checkIfRoomReadyToStartPlay.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
 
@@ -618,7 +508,7 @@ public class MainMenu extends AppCompatActivity {
                 timer.cancel();
                 timerFlag = false;
 
-
+                Game newGame=new Game();
                 startActivity(new Intent(MainMenu.this, GameScreen.class));
                 pDialog.dismiss();
             }
@@ -626,6 +516,185 @@ public class MainMenu extends AppCompatActivity {
         }
 
     }
+
+    class SetPerson extends AsyncTask<String, Void, String> {
+        @Override
+        protected void onPostExecute(String response) {
+            // System.out.println("responOnPos: "+response);
+            String plotString = null;
+            //  try {
+            // Gson gson=new Gson();
+            // plotString=gson.toJson(response);
+
+            //JSONObject jsonObj = new JSONObject(response);
+            //plotString = jsonObj.getString("");
+            Toast.makeText(MainMenu.this, response, Toast.LENGTH_LONG).show();
+
+
+            // } catch (JSONException e) {
+            //    e.printStackTrace();
+            //    }
+
+            //Toast.makeText(MainMenu.this,plotString,Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            LinkedHashMap<String, String> parms = new LinkedHashMap<>();
+            parms.put("personName", params[1]);
+            parms.put("personId", params[2]);
+            parms.put("personAge", params[3]);
+            JSONParser pars = new JSONParser();
+            JSONObject jo = pars.makeHttpRequest(params[0], "GET", parms);
+
+            try {
+                return jo.get("name").toString();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return "something wrong";
+        }
+    }
+
+    public class OpenNewRoom extends AsyncTask<String, Void, Integer> {
+        LinkedHashMap parms = new LinkedHashMap<>();
+
+        @Override
+        protected Integer doInBackground(String... params) {
+            parms.put("room_name", params[1]);
+            parms.put("user_id", params[2]);
+            JSONParser json = new JSONParser();
+            try {
+                JSONObject response = json.makeHttpRequest(params[0], "POST", parms);
+                return Integer.parseInt(response.toString());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return -1;
+            }
+
+        }
+
+        protected void onPostExecute(Integer result) {
+
+
+            /*all good show progress dialog - waiting for 3 more players*/
+            if (result == 1) {//
+                pDialog = new ProgressDialog(MainMenu.this);
+                pDialog.setIndeterminate(true);
+                pDialog.setCancelable(false);
+                pDialog.setMessage(getResources().getString(R.string.waiting_for_players));
+
+                pDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        timer.cancel();
+                        timerFlag = false;
+                    }
+                });
+
+                pDialog.show();
+                timer = new Timer();
+                timerFlag = true;
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        if (timerFlag) {
+                            new waitForOtherPlayer().execute();
+                            //new GetRoomStatus().execute(roomName);
+                        }
+                    }
+                }, 3000);
+                /*room name already in use*/
+            } else if (result == 0) {
+                Toast.makeText(MainMenu.this
+                        , getResources().getString(R.string.room_name_in_use),
+                        Toast.LENGTH_LONG).show();
+                /*connection problem*/
+            } else if (result == -1) {
+                Toast.makeText(MainMenu.this
+                        , getResources().getString(R.string.connection_error),
+                        Toast.LENGTH_LONG).show();
+            }
+
+        }
+
+    }
+
+    public void getAllPerson(View v) {
+        Intent myIntent = new Intent(this, AllPerson.class);
+        startActivity(myIntent);
+        //String movieTitle = movieTitleText.getText().toString();
+        // new MyWebServiceTask().execute("http://localhost:8080/TestWebServicesAndJSON/rest/hello/getAllPerson");
+        // new MyWebServiceTask().execute("http://localhost:8080/TestJersey/rest/hello/getAll");
+        // new MyWebServiceTask().execute("http://10.0.2.2:8080/TestJersey/rest/hello/getAll","");
+    }
+
+    public void addNewPerson(View v) {
+
+
+        LayoutInflater li = LayoutInflater.from(MainMenu.this);
+        View dialogView = li.inflate(R.layout.addpersondialog, null);
+
+        final EditText u = (EditText) dialogView.findViewById(R.id.PersonName);
+        final EditText i = (EditText) dialogView.findViewById(R.id.PersonID);
+        final EditText a = (EditText) dialogView.findViewById(R.id.PersonAge);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainMenu.this);
+        builder.setView(dialogView);
+        builder.setTitle(getResources().getString(R.string.addPerson_dialog_title));
+        builder.setMessage(getResources().getString(R.string.addPerson_dialog_masge));
+        builder.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if ((u.getText().toString().matches("[a-zA-Z]+"))) {
+                    try {
+                        Integer.parseInt(i.getText().toString());
+                        Integer.parseInt(a.getText().toString());
+                        correctInput = true;
+
+                    } catch (NumberFormatException n) {
+                        Toast.makeText(MainMenu.this, "please insert number in id&age field", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                }
+                if (correctInput) {
+                    if (u.getText().toString().isEmpty() || i.getText().toString().isEmpty() || a.getText().toString().isEmpty()) {
+                        Toast.makeText(MainMenu.this, "ther is emty field", Toast.LENGTH_LONG).show();
+                        return;
+                    } else {
+                        final String id;
+                        final String userName;
+                        final String age;
+                        userName = u.getText().toString();
+                        id = i.getText().toString();
+                        age = a.getText().toString();
+                        new SetPerson().execute("http://10.0.2.2:8080/TestJersey/rest/hello/createPerson", userName, id, age);
+                    }
+                } else {
+                    Toast.makeText(MainMenu.this, "number cannot bee user name", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+            }
+        });
+        builder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.show();
+
+
+        // new MyWebServiceTask().execute("http://localhost:8080/TestWebServicesAndJSON/rest/hello/checkUser?personName="
+        //         +userName+"personId="+id+"personAge="+age);
+    }
+
+
+
 
 
 }

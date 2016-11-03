@@ -7,14 +7,21 @@ $game_id=getGameId($roomName);
 $allRoomPlayer=array();
 $allRoomPlayer=getAllPlayerInCurrentRoom($game_id);
 
+
+
 if(countPlayerInRoom($game_id)==4){// minnig start the game
 	while($counter<4){
-		randomeShareCardsForEachPlayer($allRoomPlayer[$counter],$game_id);
-		$counter++;
+		//randomeShareCardsForEachPlayer($allRoomPlayer[$counter],$game_id);
+		if(share4CardEahcPlayer($allRoomPlayer[$counter]['user_id'],$game_id))
+			$counter++;
+		else
+			echo json_encode(0);
 	}
+	echo json_encode(1);
 }else
 	echo json_encode(0);
 
+ 
 function getGameId($roomName){
 	require('connection.php');
 	$sth = $con->prepare("SELECT game_id FROM game where game_name='$roomName' AND is_active=1");
@@ -51,7 +58,7 @@ function getAllPlayerInCurrentRoom($game_id){
 	require('connection.php');
 	$sth = $con->prepare("SELECT user_id FROM game_users where game_id='$game_id'");
 	$sth->execute();
-	$result = $sth->fetch(PDO::FETCH_ASSOC);
+	$result = $sth->fetchAll();
 	if($result){
 		return $result;
 	}else{
@@ -88,4 +95,49 @@ function getunUsedCard($game_id){
 		return null;
 	}
 }
-?
+function getAllUnusedCardsId(){
+	require('connection.php'); 
+	$result = $con->query("SELECT COUNT(*) FROM games_cards WHERE user_id=0")->fetchColumn();	
+	return $result;
+}
+function share4CardEahcPlayer($user_id,$game_id){
+	  include('connection.php');
+		$cnt=0;
+		  while($cnt<4){
+			   $randCard=checkIfCardAvailable();
+			    if($randCard!=0){
+					/* $sql = "UPDATE games_cards SET user_id = '$user_id' WHERE game_id = '$game_id' AND card_id=$randCard";
+					// Prepare statement
+					$stmt = $con->prepare($sql);
+					// execute the query
+					$stmt->execute();
+					// echo a message to say the UPDATE succeeded
+					if($stmt->rowCount()>0){
+						$cnt++;*/
+					$res = $con->exec("UPDATE games_cards SET user_id = '$user_id' WHERE game_id = '$game_id' AND card_id=$randCard");
+					if($res==1 ){//total card right but not all player get 4 cards
+					   $cnt++;
+					}else 
+					   return false;
+				}else 
+					 continue;
+		  }
+	 return true;
+}
+function checkIfCardAvailable(){
+			include('connection.php');
+			$randCard=rand(1, 32);
+			$sth = $con->prepare("SELECT user_id FROM games_cards where card_id='$randCard'");
+			$sth->execute();
+			$result = $sth->fetchAll();
+			if($result){
+				return $randCard;
+			}else{
+				return 0;
+			}
+	  
+		
+		
+	 
+}
+?>

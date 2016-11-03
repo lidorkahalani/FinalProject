@@ -50,13 +50,33 @@
     <string name="addPerson_dialog_title">add new person</string>
     <string name="addPerson_dialog_masge">insert person data</string>
     <string name="category">Category</string>
-    <string name="item1">item1</string>
     <string name="updateCard">Update</string>
     <string name="update_Card_dialog_title">Update Card</string>
     <string name="update_Card_masage">insert card data</string>
     <string name="card_name">card name</string>
     <string name="change_image">Change image</string>
-
+    <string name="Are_you_sure_delet_series">Are you sure you want to delete all series?</string>
+    <string name="word_to_long">word to long</string>
+    <string name="empty_field">there is empty field</string>
+    <string name="number_cannot_be_uName">number cannot bee user name</string>
+    <string name="delete_succsessfull">Delete Successfully</string>
+    <string name="delete_failed">Delete Failed!</string>
+    <string name="update_succesess">Update Successfully </string>
+    <string name="update_failed">Update Failed</string>
+    <string name="Select_Picture">Select Picture</string>
+    <string name="dont_have_cards">you didnt upload any cards</string>
+    <string name="Warning">Warning</string>
+    <string name="Group_Not_Found">Group Not Found</string>
+    <string name="back_Main_Menu">Go back to Main Menu?</string>
+    <string name="score">Score</string>
+    <string name="upload_image_success">Upload image success</string>
+    <string name="upload_image_failed">Upload image failed</string>
+    <string name="please_choose_image">Image not choosen</string>
+    <string name="card1">card1</string>
+    <string name="card2">card2</string>
+    <string name="card3">card2</string>
+    <string name="card4">card4</string>
+    <string name="add_new_card">Add new card</string>
 
     <string-array name="card_click_menu">
         <item>send card</item>

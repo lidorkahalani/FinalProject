@@ -24,6 +24,8 @@
         android:id="@+id/imageView" />
 
 
+
+
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -32,13 +34,75 @@
         android:id="@+id/buttonUpload" />
 
 
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/string_view_image"
-        android:background="#009688"
-        android:layout_marginTop="10dp"
-        android:id="@+id/buttonViewImage" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/newCategory"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="@android:color/holo_blue_bright"
+            android:hint="@string/category"
+            android:inputType="text"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:background="@color/azure" />
+
+        <EditText
+            android:id="@+id/card1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="@android:color/darker_gray"
+            android:hint="@string/card1"
+            android:inputType="text"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:background="@drawable/edit_text" />
+
+        <EditText
+            android:id="@+id/card2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="@android:color/darker_gray"
+            android:hint="@string/card2"
+            android:inputType="text"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:background="@drawable/edit_text" />
+
+        <EditText
+            android:id="@+id/card3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="@android:color/darker_gray"
+            android:hint="@string/card3"
+            android:inputType="text"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:background="@drawable/edit_text"/>
+
+        <EditText
+            android:id="@+id/card4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="@android:color/darker_gray"
+            android:hint="@string/card4"
+            android:inputType="text"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:background="@drawable/edit_text"
+        />
+
+        <Button
+            android:onClick="addThisCard"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_new_card"
+            android:background="@color/azure"
+            android:id="@+id/buttonUploadSeries" />
+    </LinearLayout>
 
 
 </LinearLayout>

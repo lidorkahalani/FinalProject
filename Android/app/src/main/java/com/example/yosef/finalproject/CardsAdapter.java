@@ -17,10 +17,9 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.MyViewHolder
 
     List<Card> cards;
     Context conext;
-    //final String imageRelativePat = "http://mysite.lidordigital.co.il/Quertets/images/";
-    //final String imageRelativePat = "http:/localhost/Quertets/images/";
-    //final String imageRelativePat = "http:/localhost:8080/Quartets/images/";
+
     final String imageRelativePat = "http://10.0.2.2/final_project/images/";
+    //final String imageRelativePat = "http://mysite.lidordigital.co.il/Quertets/images/";
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
         public TextView category;
@@ -64,7 +63,8 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.MyViewHolder
         Card card = getItem(position);
         String fullPath;
         holder.category.setText(card.getCategoryName());
-        holder.image.setImageDrawable(card.getItemPicture());
+        //holder.image.setImageDrawable(card.getItemPicture());
+       // holder.image.setImageURI(card.getImageName()););
         if (!holder.isClicked) {
             if (card.getCardName().equals(card.getItemsArray()[0])) {
                 holder.card1.setTypeface(Typeface.DEFAULT_BOLD);

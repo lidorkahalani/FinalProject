@@ -113,6 +113,7 @@ public class ImageLoader {
             // o2.inSampleSize=scale;
             return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
         } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
         return null;
     }
@@ -144,8 +145,8 @@ public class ImageLoader {
             if (imageViewReused(photoToLoad))
                 return;
             BitmapDisplayer bd = new BitmapDisplayer(bmp, photoToLoad);
-            //Activity a = (Activity) photoToLoad.imageView.getContext();
-            Activity a = (Activity) ((TintContextWrapper) photoToLoad.imageView.getContext()).getBaseContext();
+            Activity a = (Activity) photoToLoad.imageView.getContext();
+            //Activity a = (Activity) ((TintContextWrapper) photoToLoad.imageView.getContext()).getBaseContext();
             a.runOnUiThread(bd);
         }
     }

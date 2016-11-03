@@ -173,16 +173,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onBackPressed() {
-        // TODO Auto-generated method stub
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Are you sure you want to Exit")
+        builder.setMessage(getResources().getString(R.string.exitWarning))
                 .setCancelable(false)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         MainActivity.this.finish();
                     }
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }
@@ -263,7 +262,7 @@ public class MainActivity extends AppCompatActivity {
 
     public class logIn extends AsyncTask<String, Void, Boolean> {
         String login_url = "http://10.0.2.2/final_project/db/login.php";
-        //String login_url = "http://10.0.2.2:8080/Quartets_Server/Login";
+        //String login_url = "http://mysite.lidordigital.co.il/Quertets/db/login.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         //MySQLiteHelper dbHelper = new MySQLiteHelper(MainActivity.this, UserDBConstants.DBName, null, UserDBConstants.User_DB_VESRSION);
@@ -277,93 +276,29 @@ public class MainActivity extends AppCompatActivity {
 
             parms.put("password", inputPassword);
             parms.put("username", inputUserName);
-            JSONParser json=new JSONParser();
+            JSONParser json = new JSONParser();
             parms.put("password", inputPassword);
             parms.put("username", inputUserName);
-            try{
+            try {
                 JSONObject response = json.makeHttpRequest(login_url, "POST", parms);
                 if (response.getInt("succsses") == 1) {
-                    JSONArray jsonArray=response.getJSONArray("User");
-                    if(jsonArray.getJSONObject(0).getString("user_name").equals(inputUserName)&&
-                            jsonArray.getJSONObject(0).getString("user_password").equals(inputPassword)){
+                    JSONArray jsonArray = response.getJSONArray("User");
+                    if (jsonArray.getJSONObject(0).getString("user_name").equals(inputUserName) &&
+                            jsonArray.getJSONObject(0).getString("user_password").equals(inputPassword)) {
                         score = jsonArray.getJSONObject(0).getInt("score");
-                        userId=jsonArray.getJSONObject(0).getInt("user_id");
+                        userId = jsonArray.getJSONObject(0).getInt("user_id");
                         return true;
                     }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
                 return false;
-            }catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 return false;
             }
             return false;
-          /*  JSONParser json = new JSONParser();
-            HttpClient Client = new DefaultHttpClient();
-            Gson gson=new Gson();
-            // Create URL string
-
-            String URL =login_url+"?user_name="+params[0]+"&user_password="+params[1];
-
-            //Log.i("httpget", URL);
-
-            try
-            {
-                String serverResponse = "";
-
-                // Create Request to server and get response
-
-                HttpGet httpget = new HttpGet(URL);
-                ResponseHandler<String> responseHandler = new BasicResponseHandler();
-                serverResponse = Client.execute(httpget, responseHandler);
-                JSONObject res=new JSONObject(serverResponse);
-
-            if(serverResponse!=null) {
-                try {
-                    User u=new User(res.getString("userName"),res.getString("password"),res.getInt("score"),res.getInt("userId"));
-                   // User u=gson.fromJson(serverResponse,User.class);
-                    userId=u.getUserID();
-                    return true;
-                }catch (JsonSyntaxException e) {
-                    e.printStackTrace();
-                }catch (JsonParseException e){
-                    e.printStackTrace();
-                }catch (Exception ex){
-                    ex.printStackTrace();
-                }
-
-            }
-            else
-                return false;
-
-            } catch(Exception ex) {
-                ex.printStackTrace();
-            }
-            return false;*/
-    }
-        /*  try{
-            JSONObject response = json.makeHttpRequest(login_url, "GET", parms);
-                if (response.getInt("succsses") == 1) {
-                    JSONArray jsonArray=response.getJSONArray("User");
-                       if(jsonArray.getJSONObject(0).getString("user_name").equals(inputUserName)&&
-                               jsonArray.getJSONObject(0).getString("password").equals(inputPassword)){
-                           score = jsonArray.getJSONObject(0).getInt("score");
-                           userId=jsonArray.getJSONObject(0).getInt("user_id");
-                           return true;
-                       }
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-                return false;
-            }catch (Exception e) {
-              e.printStackTrace();
-              return false;
-          }*/
-          //  return false;
-       // }
-
-
+        }
         protected void onPostExecute(Boolean result) {
             SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
             Boolean faceBookLogIN=myPref.getBoolean("loginWhitFacebook",false);
@@ -392,9 +327,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public class signUp  extends AsyncTask<String, Void, Boolean>{
-    //    String reg_url = "http://mysite.lidordigital.co.il/Quertets/register.php";
-      //  String reg_url = "http://10.0.2.2/Quertets/register.php";
-        String reg_url = "http://10.0.2.2:8080/Quartets_Server/Register";
+        //String reg_url = "http://mysite.lidordigital.co.il/Quertets/db/register.php";
+        String reg_url = "http://10.0.2.2/final_project/db/register.php";
         LinkedHashMap<String,String> parms=new LinkedHashMap<>();
         String userName;
         String password;

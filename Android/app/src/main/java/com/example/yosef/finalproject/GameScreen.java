@@ -1,11 +1,16 @@
 package com.example.yosef.finalproject;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -61,10 +66,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     private ArrayList<Card> deck = new ArrayList<Card>();
     private ArrayList<User> playerList = new ArrayList<>();
     private User currentPlayer;
-    private TextView card1;
-    private TextView card2;
-    private TextView card3;
-    private TextView card4;
+
     private Random randomGenerator;
 
     private RelativeLayout bottomLayout;
@@ -74,7 +76,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
     RecyclerView myListView;
     CardsAdapter cardsAdapter;
-    MyClassAdapter adapter;
+   // MyClassAdapter adapter;
 
     public static int MENU_ID = 0;
     private static final int CARDS_CLICK_MENU = 1;
@@ -82,11 +84,16 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     public static View selectedCard;
     private boolean setCardBackgroundTransparent = true;
 
+    String get4Cards = "http://10.0.2.2/final_project/db/share4CardEahcPlayer.php";
+    // String get4Cards = "http://localhost/final_project/db/share4CardEahcPlayer.php";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_screen);
-       new getAllCards().execute();
+
+        //new startPlay().execute(get4Cards,gameId);
+        new getAllCards().execute();
        // new getFromServerMycard().execute();
         randomGenerator = new Random();
         Intent i = getIntent();
@@ -129,25 +136,6 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
     }
 
-    public void insertDataToCard(Card card, int cardNumber) {
-        String cardData;
-
-        cardData = card.getCategoryName() + "<br>";
-        cardData += card.getItemsArray()[0] + "<br>";
-        cardData += card.getItemsArray()[1] + "<br>";
-        cardData += card.getItemsArray()[2] + "<br>";
-        cardData += card.getItemsArray()[3] + "<br>";
-        if (cardNumber == 0)
-            card1.setText(Html.fromHtml(cardData));
-        else if (cardNumber == 1)
-            card2.setText(Html.fromHtml(cardData));
-        else if (cardNumber == 2)
-            card3.setText(Html.fromHtml(cardData));
-        else if (cardNumber == 3)
-            card4.setText(Html.fromHtml(cardData));
-
-    }
-
     public void onBackPressed() {
         // TODO Auto-generated method stub
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -175,20 +163,61 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
     }
 
-    public class getAllCards extends AsyncTask<String, Void, Boolean> {
-       String get_all_card_url = "http://10.0.2.2/final_project/db/getAllCard.php";
-       // String get_all_card_url = "http://10.0.2.2/Quartets/db/getAllCard.php";
-       // String get_all_card_url = "http://10.0.2.2:8080/Quartets_Server/GetAllCrds";
+
+
+    public class startPlay extends AsyncTask<String, Void, Boolean> {
+
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
         protected Boolean doInBackground(String... params) {
-            Gson gson=new Gson();
+            parms.put("user_id",params[0]);
+            parms.put("game_id",params[1]);
+
+            JSONParser json = new JSONParser();
+            try {
+                JSONObject response = json.makeHttpRequest(get4Cards, "POST", parms);
+
+                return true;
+            } catch(Exception ex) {
+                ex.printStackTrace();
+            }
+            return false;
+
+        }
+
+
+        protected void onPostExecute(Boolean result) {
+            if (result) {
+                setCardsList();
+            } else
+                Toast.makeText(GameScreen.this, "the deck not load !", Toast.LENGTH_SHORT).show();
+        }
+
+
+
+        public void painCurrentPlayer(View v) {
+            v.setBackgroundColor(Color.GREEN);
+        }
+
+        public void onMyTurnEnd() {
+            bottomLayout.setBackgroundColor(Color.TRANSPARENT);
+        }
+
+    }
+
+
+    public class getAllCards extends AsyncTask<String, Void, Boolean> {
+       String get_all_card_url = "http://10.0.2.2/final_project/db/getAllCard.php";
+      // String get_all_card_url = "http://mysite.lidordigital.co.il/Quertets/db/getAllCard.php";
+        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
+
+        @Override
+        protected Boolean doInBackground(String... params) {
             JSONParser json = new JSONParser();
            try {
                 JSONObject response = json.makeHttpRequest(get_all_card_url, "GET", parms);
-                String res = gson.toJson(response);
-                if (response!=null) {
+                if (response.getInt("succsses")==1) {
                     JSONArray jsonArray = response.getJSONArray("AllCards");
                     for (int i = 0; i < jsonArray.length(); i++) {
                         Card card = new Card();
@@ -204,11 +233,9 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                             JSONObject jo2 = ja.getJSONObject(j);
                             cardLabels[j] = jo2.getString("card_name");
                         }
-                        //cardLabels=(String[]) ja.get(0);
                         card.setItemsArray(cardLabels);
                          //card.setItemPicture(getResources().getDrawable(R.drawable.car));
                         deck.add(card);
-
                     }
                     return true;
                 }
@@ -223,142 +250,21 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         protected void onPostExecute(Boolean result) {
             if (result) {
                 setCardsList();
-              /*  Toast.makeText(GameScreen.this, "the deck sucssfuly generate!!", Toast.LENGTH_SHORT).show();
-                if (playerList.size() == 1)
-                    giveCardEachPlayer();*/
             } else
                 Toast.makeText(GameScreen.this, "the deck not load !", Toast.LENGTH_SHORT).show();
-        }
-
-        public void painCurrentPlayer(View v) {
-            v.setBackgroundColor(Color.GREEN);
-        }
-
-        public void onMyTurnEnd() {
-            bottomLayout.setBackgroundColor(Color.TRANSPARENT);
         }
 
     }
 
 
-    public class getFromServerMycard extends AsyncTask<String, Void, Boolean> {
-       // String get_all_card_url = "http://10.0.2.2:8080/Quartets/db/getAllCard.php";
-        // String get_all_card_url = "http://10.0.2.2/Quartets/db/getAllCard.php";
-        String get_all_card_url = "http://10.0.2.2:8080/Quartets_Server/GetAllCrds";
-        HttpClient Client = new DefaultHttpClient();
-        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
-
-        @Override
-        protected Boolean doInBackground(String... params) {
-            Gson gson=new Gson();
-            JSONParser json = new JSONParser();
-
-           try
-            {
-                String serverResponse = "";
-
-                // Create Request to server and get response
-
-                HttpGet httpget = new HttpGet(get_all_card_url);
-                ResponseHandler<String> responseHandler = new BasicResponseHandler();
-                serverResponse = Client.execute(httpget, responseHandler);
-             //   JSONObject jO=new JSONObject(serverResponse);
-                //JSONArray  res=jO.getJSONArray("AllCards");
-                JSONArray  res=new JSONArray(serverResponse);
-
-                if(serverResponse!=null) {
-                    try {
-                            for(int i=0;i<res.length();i++) {
-
-                                JSONObject jo = res.getJSONObject(i);
-                            //Card card = gson.fromJson(String.valueOf(res.getJSONObject(i)), Card.class);
-                                Card tempCard = new Card();
-                                tempCard.setCard_id(jo.getInt("card_id"));
-                                tempCard.setCategoryName(jo.getString("category_name"));
-                                tempCard.setCategoryColor(jo.getInt("category_color"));
-                                tempCard.setCard_id(jo.getInt("category_id"));
-                                tempCard.setCardName(jo.getString("card_name"));
-                                tempCard.setImageName(jo.getString("image_name"));
-                                String[] cardLabels = new String[4];
-                                JSONArray ja = jo.getJSONArray("card_labels");
-                                for (int j = 0; j < ja.length(); j++) {
-                                    JSONObject jo2 = ja.getJSONObject(j);
-                                    cardLabels[j] = jo2.getString("card_name");
-                                }
-                                //cardLabels=(String[]) ja.get(0);
-                                tempCard.setItemsArray(cardLabels);
-                            deck.add(tempCard);
-                        }
-                        return true;
-                    }catch (JsonSyntaxException e) {
-                        e.printStackTrace();
-                    }catch (JsonParseException e){
-                        e.printStackTrace();
-                    }catch (Exception ex){
-                        ex.printStackTrace();
-                    }
-
-                }
-                else
-                    return false;
-
-            } catch(Exception ex) {
-                ex.printStackTrace();
-            }
-            return false;
-
-           /* HttpClient client = new DefaultHttpClient();
-            HttpGet request = new HttpGet(get_all_card_url);
-
-            // add request header
-            request.addHeader("User-Agent", USER_AGENT);
-
-            HttpResponse response = null;
-            try {
-                response = client.execute(request);
-                System.out.println("\nSending 'GET' request to URL : " + get_all_card_url);
-                System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
-                BufferedReader rd = null;
-                rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-                StringBuffer result = new StringBuffer();
-                 String line = "";
-                while ((line = rd.readLine()) != null) {
-                    result.append(line);
-                }
-                JSONObject res = new JSONObject(result.toString());
-                //JSONArray res=new JSONArray(result.toString());
-                    Card card = gson.fromJson(result.toString(), Card.class);
-                    deck.add(card);
-
-                System.out.println(result.toString());
-                return true;
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }*/
-        }
-
-
-        protected void onPostExecute(Boolean result) {
-            if (result) {
-                setCardsList();
-              /*  Toast.makeText(GameScreen.this, "the deck sucssfuly generate!!", Toast.LENGTH_SHORT).show();
-                if (playerList.size() == 1)
-                    giveCardEachPlayer();*/
-            } else
-                Toast.makeText(GameScreen.this, "the deck not load !", Toast.LENGTH_SHORT).show();
-        }
-
-        public void painCurrentPlayer(View v) {
-            v.setBackgroundColor(Color.GREEN);
-        }
-
-        public void onMyTurnEnd() {
-            bottomLayout.setBackgroundColor(Color.TRANSPARENT);
-        }
-
+    public void painCurrentPlayer(View v) {
+        v.setBackgroundColor(Color.GREEN);
     }
+
+    public void onMyTurnEnd() {
+        bottomLayout.setBackgroundColor(Color.TRANSPARENT);
+    }
+
 
 
     private void setCardsList() {
@@ -381,42 +287,6 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                     }
                 })
         );
-    }
-
-    class MyClassAdapter extends ArrayAdapter<User> {
-
-        public MyClassAdapter(Context context, int resource, List<User> objects) {
-            super(context, resource, objects);
-        }
-
-        // the method getView is in charge of creating a single line in the list
-        // it receives the position (index) of the line to be created
-        // the method populates the view with the data from the relevant object (according to the position)
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            Log.i("TEST getView", "inside getView position " + position);
-
-            User user = getItem(position);
-            if (convertView == null) {
-                Log.e("TEST getView", "inside if with position " + position);
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.singelcard, parent, false);
-            }
-            TextView catgory = (TextView) convertView.findViewById(R.id.category);
-            TextView name1 = (TextView) convertView.findViewById(R.id.card_name1);
-            TextView name2 = (TextView) convertView.findViewById(R.id.card_name2);
-            TextView name3 = (TextView) convertView.findViewById(R.id.card_name3);
-            TextView name4 = (TextView) convertView.findViewById(R.id.card_name4);
-
-
-            catgory.setText(deck.get(0).getCategoryName());
-            name1.setText(deck.get(0).getItemsArray()[0]);
-            name2.setText(deck.get(0).getItemsArray()[1]);
-            name3.setText(deck.get(0).getItemsArray()[2]);
-            name4.setText(deck.get(0).getItemsArray()[3]);
-
-            return convertView;
-
-        }
     }
 
     @Override

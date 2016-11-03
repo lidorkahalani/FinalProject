@@ -55,6 +55,26 @@
     <string name="update_Card_masage">אנא הכנס פרטים</string>
     <string name="card_name">שם הקלף</string>
     <string name="change_image">שנה תמונה</string>
+    <string name="Are_you_sure_delet_series">האם אתה בטוח שברצונך למחוק את כל הסידרה</string>
+    <string name="word_to_long">השם הנבחר ארוך מדי</string>
+    <string name="empty_field">ישנם שדות ריקים</string>
+    <string name="number_cannot_be_uName">מספר אינו יכול להיות שם המשתמש</string>
+    <string name="delete_succsessfull">המחיקה בוצעה בהצלחה</string>
+    <string name="delete_failed">המחיקה נכשלה</string>
+    <string name="update_succesess">עידכון בוצע בהצלחה</string>
+    <string name="update_failed">עידכון נכשל</string>
+    <string name="Select_Picture">בחר תמונה</string>
+    <string name="dont_have_cards">לא העלית קלפים</string>
+    <string name="Warning">אזהרב</string>
+    <string name="Group_Not_Found">קבוצה לא קיימת</string>
+    <string name="back_Main_Menu">חזור למסך הקודם</string>
+    <string name="score">ניקוד</string>
+    <string name="card1">קלף 1</string>
+    <string name="card2">קלף 2</string>
+    <string name="card3">קלף 3</string>
+    <string name="card4">קלף 4</string>
+    <string name="add_new_card">הוסף קלף חדש</string>
+
 
 
     <string-array name="card_click_menu">

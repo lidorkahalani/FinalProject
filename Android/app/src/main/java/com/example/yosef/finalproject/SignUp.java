@@ -47,7 +47,7 @@ public class SignUp extends AppCompatActivity {
     public class signUp  extends AsyncTask<String, Void, Boolean>{
        // String reg_url = "http://mysite.lidordigital.co.il/Quertets/db/register.php";
         String reg_url = "http://10.0.2.2/final_project/db/register.php";
-       // String reg_url = "http://10.0.2.2:8080/Quartets_Server/Register";
+
         LinkedHashMap<String,String> parms=new LinkedHashMap<>();
         String uName=userName.getText().toString();
         String pass=password.getText().toString();
@@ -79,35 +79,6 @@ public class SignUp extends AppCompatActivity {
                 e.printStackTrace();
                 return false;
             }
-         /*   HttpClient Client = new DefaultHttpClient();
-
-            String URL =reg_url+"?user_name="+uName+"&user_password="+pass;
-
-            //Log.i("httpget", URL);
-
-            try
-            {
-                String serverResponese = "";
-
-                // Create Request to server and get response
-
-                HttpGet httpget = new HttpGet(URL);
-                ResponseHandler<String> responseHandler = new BasicResponseHandler();
-                serverResponese = Client.execute(httpget, responseHandler);
-
-                // Show response on activity
-                if(serverResponese!="") {
-                    return true;
-                }
-                else
-                    return false;
-
-            } catch(Exception ex) {
-                ex.printStackTrace();
-            }
-            return false;*/
-
-
         }
         protected void onPostExecute(Boolean result) {
             if(result) {
