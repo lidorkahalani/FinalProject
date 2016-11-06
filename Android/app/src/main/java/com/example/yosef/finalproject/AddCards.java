@@ -30,6 +30,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,7 +39,10 @@ import java.util.LinkedHashMap;
 
 public class AddCards extends AppCompatActivity implements View.OnClickListener {
     //public static final String UPLOAD_URL = "http://mysite.lidordigital.co.il/Quertets/db/add_image.php";
-    public static final String UPLOAD_URL = "http://10.0.2.2/final_project/db/add_image.php";
+    //public static final String UPLOAD_URL = "http://10.0.2.2/final_project/db/add_image.php";
+
+    //public static final String UPLOAD_URL = "http://mysite.lidordigital.co.il/Quertets/db/AddCard.php";
+    public static final String UPLOAD_URL = "http://10.0.2.2/final_project/db/AddCard.php";
 
     public static final String UPLOAD_KEY = "image";
     public static final String TAG = "MY MESSAGE";
@@ -45,8 +50,8 @@ public class AddCards extends AppCompatActivity implements View.OnClickListener 
     private int PICK_IMAGE_REQUEST = 1;
 
     private Button buttonChoose;
+    private Button buttonUploadSeries;
 
-    private Button buttonView;
 
     private Button buttonUpload;
 
@@ -56,6 +61,7 @@ public class AddCards extends AppCompatActivity implements View.OnClickListener 
     private EditText card2;
     private EditText card3;
     private EditText card4;
+    private Boolean upload_image_status;
 
     static private ArrayList<Card>newSeries=new ArrayList<>();
 
@@ -73,7 +79,7 @@ public class AddCards extends AppCompatActivity implements View.OnClickListener 
 
         buttonChoose = (Button) findViewById(R.id.buttonChoose);
         buttonUpload = (Button) findViewById(R.id.buttonUpload);
-        buttonView = (Button) findViewById(R.id.buttonViewImage);
+        buttonUploadSeries=(Button) findViewById(R.id.buttonUploadSeries);
         category=(EditText)findViewById(R.id.category);
         card1=(EditText)findViewById(R.id.card1);
         card2=(EditText)findViewById(R.id.card2);
@@ -82,7 +88,7 @@ public class AddCards extends AppCompatActivity implements View.OnClickListener 
         Typeface typeface = Typeface.createFromAsset(getAssets(), "Matias_Webfont.ttf");
         buttonChoose.setTypeface(typeface);
         buttonUpload.setTypeface(typeface);
-        buttonView.setTypeface(typeface);
+
 
         imageView = (ImageView) findViewById(R.id.imageView);
 
@@ -122,6 +128,31 @@ public class AddCards extends AppCompatActivity implements View.OnClickListener 
         return encodedImage;
     }
 
+    private int getMaxCategoryId() {
+        final int[] maxId = {0};
+        class getMaxCategoryId extends AsyncTask<String, Void, Integer> {
+            String getMaxCategoryId_url="http://localhost/final_project/db/getMaxCategoryId.php";
+            LinkedHashMap<String, String> parms = new LinkedHashMap<>();
+            @Override
+            protected Integer doInBackground(String... params) {
+                JSONParser json = new JSONParser();
+                try {
+                    JSONObject response = json.makeHttpRequest(getMaxCategoryId_url, "GET", parms);
+                    return Integer.parseInt(response.toString());
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                return 0;
+            }
+
+            protected void onPostExecute(Integer s) {
+                if(s!=0)
+                    maxId[0] =s;
+            }
+        }
+        return maxId[0];
+    }
+
     private void uploadImage(){
         class UploadImage extends AsyncTask<Bitmap,Void,Boolean>{
 
@@ -140,24 +171,28 @@ public class AddCards extends AppCompatActivity implements View.OnClickListener 
             protected void onPostExecute(Boolean s) {
                 super.onPostExecute(s);
                 loading.dismiss();
-                if(s)
+                if(s) {
+                    upload_image_status = true;
                     Toast.makeText(AddCards.this,
                             getResources().getString(R.string.upload_image_success),
                             Toast.LENGTH_LONG).show();
-                else
+                }else{
+                    upload_image_status = false;
                     Toast.makeText(AddCards.this,
                             getResources().getString(R.string.upload_image_failed),
                             Toast.LENGTH_LONG).show();
-
+                }
             }
 
             @Override
             protected Boolean doInBackground(Bitmap... params) {
                 Bitmap bitmap = params[0];
-                String uploadImage = getStringImage(bitmap);
 
-                LinkedHashMap<String,String> data = new LinkedHashMap<>();
-                //data.put("card_id",String.valueOf(37));
+                String uploadImage = getStringImage(bitmap);
+                int category_id=getMaxCategoryId();
+                LinkedHashMap data = new LinkedHashMap<>();
+                data.put("card_name", uploadImage);
+                data.put("category_id", category_id);
                 data.put("ThisImage", uploadImage);
                 JSONParser json = new JSONParser();
                 //String result = rh.sendPostRequest(UPLOAD_URL,data);
@@ -206,17 +241,23 @@ public class AddCards extends AppCompatActivity implements View.OnClickListener 
             showFileChooser();
         }
         if(v == buttonUpload){
-            if(imageCoosen)
+            if(imageCoosen) {
                 uploadImage();
+            }
             else
                 Toast.makeText(AddCards.this,
                         getResources().getString(R.string.please_choose_image),
                         Toast.LENGTH_SHORT).show();
+        }if (v==buttonUploadSeries){
+            uploadImage();
+            if(upload_image_status)
+                addThisCardToLocalArray();
+            sendSeries();
         }
 
     }
 
-    public void addThisCard(View v){
+    public void addThisCardToLocalArray(){
         if(newSeries.size()<4) {
             int defuletColor = 111;
             String cardsList[] = new String[4];
@@ -233,10 +274,12 @@ public class AddCards extends AppCompatActivity implements View.OnClickListener 
             //refrashe screen
            // StartActivity(getIntent());
 
+        }else {
+            Toast.makeText(this, getResources().getString(R.string.series_full), Toast.LENGTH_LONG).show();
         }
     }
 
-    public void sendSerie(View v){
+    public void sendSeries(){
         if(newSeries.size()==4){
             new sendSeriesToServer().execute();
         }

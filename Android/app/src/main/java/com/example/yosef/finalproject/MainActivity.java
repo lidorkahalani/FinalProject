@@ -126,7 +126,6 @@ public class MainActivity extends AppCompatActivity {
                     editor.commit();
 
                     Log.v("Facebook user name", profile.getFirstName());
-                    Toast.makeText(MainActivity.this, "Welcom! " + profile.getName(), Toast.LENGTH_LONG).show();
                 }else{
                     SharedPreferences myPref= PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
                     SharedPreferences.Editor editor=myPref.edit();
@@ -152,7 +151,6 @@ public class MainActivity extends AppCompatActivity {
         password = (EditText) findViewById(R.id.password);
 
     }
-
 
     @Override
     public void onDestroy(){
@@ -193,14 +191,6 @@ public class MainActivity extends AppCompatActivity {
     public void SignUp(View v) {
         Intent myIntent = new Intent(this, SignUp.class);
         startActivity(myIntent);
-    }
-
-    public void showAllRecords(View v) {
-        ArrayList<User> UsersList = dbHandler.getAllUsers();
-        Intent myIntent = new Intent(this, ShowMyCards.class);
-        myIntent.putExtra("userList", UsersList);
-        startActivity(myIntent); //app get crash her
-
     }
 
     @Override
@@ -260,6 +250,15 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Hebrew", Toast.LENGTH_SHORT).show();*/
     }
 
+    public void showAllRecords(View v) {
+        ArrayList<User> UsersList = dbHandler.getAllUsers();
+        Intent myIntent = new Intent(this, ShowMyCards.class);
+        myIntent.putExtra("userList", UsersList);
+        startActivity(myIntent); //app get crash her
+
+    }
+
+
     public class logIn extends AsyncTask<String, Void, Boolean> {
         String login_url = "http://10.0.2.2/final_project/db/login.php";
         //String login_url = "http://mysite.lidordigital.co.il/Quertets/db/login.php";
@@ -274,8 +273,8 @@ public class MainActivity extends AppCompatActivity {
             inputUserName = params[0];
             inputPassword = params[1];
 
-            parms.put("password", inputPassword);
-            parms.put("username", inputUserName);
+            //parms.put("password", inputPassword);
+          //  parms.put("username", inputUserName);
             JSONParser json = new JSONParser();
             parms.put("password", inputPassword);
             parms.put("username", inputUserName);

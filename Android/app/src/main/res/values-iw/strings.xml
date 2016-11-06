@@ -74,6 +74,8 @@
     <string name="card3">קלף 3</string>
     <string name="card4">קלף 4</string>
     <string name="add_new_card">הוסף קלף חדש</string>
+    <string name="series_full">סידרה מלאה</string>
+    <string name="card_not_load">טעינת הקלפים נכשלה</string>
 
 
 

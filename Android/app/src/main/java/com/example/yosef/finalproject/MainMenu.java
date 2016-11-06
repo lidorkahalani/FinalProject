@@ -68,12 +68,14 @@ public class MainMenu extends AppCompatActivity {
     private Button btn5;
     private TextView title;
 
+    String roomName;
     boolean correctInput = false;
     LoginButton facebookButton;
     Button logOut;
     ProgressDialog pDialog;
     Timer timer;
     boolean timerFlag = false;
+    Game newGame = new Game();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,7 +187,7 @@ public class MainMenu extends AppCompatActivity {
         String uname = myPref.getString("username", "");
         String password = myPref.getString("password", "");
         int score = myPref.getInt("score", 0);
-        t.setText(getResources().getString(R.string.wellcome)+":  "+ uname + "\n" + getResources().getString(R.string.score)+":  " + Integer.toString(score));
+        t.setText(getResources().getString(R.string.wellcome) + ":  " + uname + "\n" + getResources().getString(R.string.score) + ":  " + Integer.toString(score));
     }
 
     @Override
@@ -216,8 +218,10 @@ public class MainMenu extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Log.i("Room name:", roomNameInput.getText().toString());
+                roomName=roomNameInput.getText().toString();
                 //1. send the room name to server
-                new SendRoomName().execute(roomNameInput.getText().toString());
+                //new SendRoomName().execute(roomNameInput.getText().toString());
+                new openNewRoom().execute(roomName);
 
 
             }
@@ -251,15 +255,6 @@ public class MainMenu extends AppCompatActivity {
         alert.show();
     }
 
-    public void startGame(View v) {
-
-        Intent myIntent = new Intent(this, GameScreen.class);
-        myIntent.putExtra("currentPlayer", currentPlayer);
-        startActivity(myIntent);
-        finish();
-
-    }
-
     public void joinToRoom(View v) {
         LayoutInflater li = LayoutInflater.from(this);
         View promptsView = li.inflate(R.layout.prompts, null);
@@ -280,16 +275,19 @@ public class MainMenu extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int id) {
                                 // get user input and set it to result
                                 // edit text
-                                String roomName = userInput.getText().toString();
-                                //now we need to cheek if the romm exist in dataBase
-                                if (roomName.isEmpty()) {//== DatabaseUtils.col["groupName"]){
-                                    /* Intent myIntent=new Intent(this,watingRoom.class);
+                                roomName = userInput.getText().toString();
+                                if (roomName != null) {
+                                    new joinToRoom().execute(roomName);
+
+                                    //now we need to cheek if the romm exist in dataBase
+                                    //and open new screen thats shows all players already connected
+                                   /*  Intent myIntent=new Intent(this,watingRoom.class);
                                        startActivity(myIntent);
                                        finish();*/
                                 } else {
                                     new AlertDialog.Builder(MainMenu.this)
                                             .setTitle(getResources().getString(R.string.Warning))
-                                            .setMessage(getResources().getString(R.string.Group_Not_Found))
+                                            .setMessage(getResources().getString(R.string.empty_field))
                                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                                 public void onClick(DialogInterface dialog, int which) {
                                                     // continue with delete
@@ -298,6 +296,7 @@ public class MainMenu extends AppCompatActivity {
                                             .setIcon(android.R.drawable.ic_dialog_alert)
                                             .show();
                                 }
+
 
                             }
                         })
@@ -333,7 +332,7 @@ public class MainMenu extends AppCompatActivity {
         finish();
     }
 
-    public class SendRoomName extends AsyncTask<String, User, Integer> {
+    public class openNewRoom extends AsyncTask<String, User, Integer> {
         LinkedHashMap parms = new LinkedHashMap<>();
         String roomName;
         ObjectInputStream ois;
@@ -341,94 +340,29 @@ public class MainMenu extends AppCompatActivity {
 
         @Override
         protected Integer doInBackground(String... params) {
-            //String cheekIfRoomNameAvailable="http://10.0.2.2/final_project/db/isRoomAvailable.php";
-            String openNewRoom = "http://10.0.2.2/final_project/db/isRoomAvailable.php";
-            //String openNewRoom="http://mysite.lidordigital.co.il/Quertets/db/isRoomAvailable.php";
+            String openNewRoom = "http://10.0.2.2/final_project/db/openNewRoom.php";
+            //String openNewRoom="http://mysite.lidordigital.co.il/Quertets/db/openNewRoom.php";
 
 
-            roomName = params[0];
-            parms.put("room_name", roomName);
+            parms.put("room_name", params[0]);
             parms.put("user_id", currentPlayer.getUserID());
             // parms.put("current_user",currentPlayer);
             JSONParser json = new JSONParser();
             try {
                 JSONObject response = json.makeHttpRequest(openNewRoom, "POST", parms);
 
-                return Integer.parseInt(response.toString());
+                if (response.getInt("successes") == 1) {
+                    newGame.setGame_name(roomName);
+                    newGame.setGame_id(response.getInt("game_id"));
+                    return 1;
+                } else
+                    return 0;
 
             } catch (Exception e) {
                 e.printStackTrace();
                 return -1;
             }
 
-          /* parms.put("room_name", params[0]);
-             JSONParser json = new JSONParser();
-                try {
-                    JSONObject response = json.makeHttpRequest(set_rom_name_url, "POST", parms);
-
-                    return Integer.parseInt(response.toString());
-                }  catch(Exception e){
-                    e.printStackTrace();
-                    return -1;
-                }*/
-
-           /* HttpClient client = new DefaultHttpClient();
-            HttpPost request = new HttpPost(set_rom_name_url);
-
-            // add request header
-            request.addHeader("User-Agent", USER_AGENT);
-
-            HttpResponse response = null;
-            try {
-                response = client.execute(request);
-                System.out.println("\nSending 'GET' request to URL : " + set_rom_name_url);
-                System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
-                BufferedReader rd = null;
-                rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-                StringBuffer result = new StringBuffer();
-                String line = "";
-                while ((line = rd.readLine()) != null) {
-                    result.append(line);
-                }
-
-                System.out.println(result.toString());
-                return Integer.parseInt(result.toString()); //return the status 1|0|-1
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return -1;
-
-          /*  try {
-
-                // create a connection to the server socket
-                Socket clientSocket = new Socket("10.0.2.2", 55555);
-
-                System.out.println("Connected to Server!");
-                System.out.println();
-                System.out.println("Waiting for server to find one more player");
-                System.out.println();
-                ois = new ObjectInputStream(clientSocket.getInputStream());
-
-                oos = new ObjectOutputStream(clientSocket.getOutputStream());
-                try {
-                    if (ois.readObject().toString().equals("Start")) {
-                        System.out.println("Connect socket sucsse");
-                        return 1;
-                    }
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-
-                } catch (ClassNotFoundException ex) {
-                    ex.printStackTrace();
-
-                }
-            }catch (IOException ex) {
-                ex.printStackTrace();
-
-            }
-            return -1;*/
-
-            //return 1;
         }
 
 
@@ -455,7 +389,7 @@ public class MainMenu extends AppCompatActivity {
                     @Override
                     public void run() {
                         if (timerFlag) {
-                            new waitForOtherPlayer().execute();
+                            new waitForOtherPlayer().execute(roomName);
                             //new GetRoomStatus().execute(roomName);
                         }
                     }
@@ -474,8 +408,80 @@ public class MainMenu extends AppCompatActivity {
 
     }
 
+    public class joinToRoom extends AsyncTask<String, Void, Boolean> {
+        String joinToRoom = "http://10.0.2.2/final_project/db/joinToRoom.php";
+        // String joinToRoom = "http://localhost/final_project/db/joinToRoom.php";
+        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
+
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            parms.put("room_name", params[0]);
+            parms.put("user_id", String.valueOf(currentPlayer.getUserID()));
+            JSONParser json = new JSONParser();
+            try {
+                JSONObject response = json.makeHttpRequest(joinToRoom, "POST", parms);
+                if (response.getInt("succsses") == 1) {
+                    newGame.setGame_name(params[0]);
+                    newGame.setGame_id(response.getInt("game_id"));
+                    return true;
+                } else {
+                    return false;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+
+        protected void onPostExecute(Boolean result) {
+            if (result) {
+                //Toast.makeText(MainMenu.this, getResources().getString(R.string.you_join_to_room) + " " + roomName, Toast.LENGTH_LONG).show();
+                pDialog = new ProgressDialog(MainMenu.this);
+                pDialog.setIndeterminate(true);
+                pDialog.setCancelable(false);
+                pDialog.setMessage(getResources().getString(R.string.waiting_for_players));
+
+                pDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        timer.cancel();
+                        timerFlag = false;
+                    }
+                });
+
+                pDialog.show();
+                timer = new Timer();
+                timerFlag = true;
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        if (timerFlag) {
+                            new waitForOtherPlayer().execute(roomName);
+                            //new GetRoomStatus().execute(roomName);
+                        }
+                    }
+                }, 3000);
+            } else {
+                new AlertDialog.Builder(MainMenu.this)
+                        .setTitle(getResources().getString(R.string.Warning))
+                        .setMessage(getResources().getString(R.string.Group_Not_Found))
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // continue with delete
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            }
+
+            //Toast.makeText(MainMenu.this, getResources().getString(R.string.you_didnt_join_to_room) + " " + roomName, Toast.LENGTH_LONG).show();
+        }
+    }
+
     public class waitForOtherPlayer extends AsyncTask<String, Void, Boolean> {
-        String chekIfStartGame = "http://10.0.2.2/final_project/db/checkIfRoomReadyToStartPlay.php";
+        String checkIfRoomFull = "http://10.0.2.2/final_project/db/checkIfRoomFull.php";
         // String chekIfStartGame = "http://localhost/final_project/db/checkIfRoomReadyToStartPlay.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
@@ -486,16 +492,13 @@ public class MainMenu extends AppCompatActivity {
             parms.put("room_name", params[0]);
             JSONParser json = new JSONParser();
             try {
-                JSONObject response = json.makeHttpRequest(chekIfStartGame, "POST", parms);
+                JSONObject response = json.makeHttpRequest(checkIfRoomFull, "POST", parms);
 
-                if (response.getInt("succsses") == 1) {
+                if (response.getInt("succsses")== 1) {
                     return true;
                 } else {
                     return false;
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
-                return false;
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
@@ -507,9 +510,11 @@ public class MainMenu extends AppCompatActivity {
             if (result) {
                 timer.cancel();
                 timerFlag = false;
-
-                Game newGame=new Game();
-                startActivity(new Intent(MainMenu.this, GameScreen.class));
+                Intent i = new Intent(getApplicationContext(), GameScreen.class);
+                i.putExtra("Game", newGame);
+                i.putExtra("currentPlayer", currentPlayer);
+                startActivity(i);
+                finish();
                 pDialog.dismiss();
             }
 
@@ -517,45 +522,16 @@ public class MainMenu extends AppCompatActivity {
 
     }
 
-    class SetPerson extends AsyncTask<String, Void, String> {
-        @Override
-        protected void onPostExecute(String response) {
-            // System.out.println("responOnPos: "+response);
-            String plotString = null;
-            //  try {
-            // Gson gson=new Gson();
-            // plotString=gson.toJson(response);
+    public void startGame(View v) {
 
-            //JSONObject jsonObj = new JSONObject(response);
-            //plotString = jsonObj.getString("");
-            Toast.makeText(MainMenu.this, response, Toast.LENGTH_LONG).show();
+        Intent myIntent = new Intent(this, GameScreen.class);
+        myIntent.putExtra("currentPlayer", currentPlayer);
+        startActivity(myIntent);
+        finish();
 
-
-            // } catch (JSONException e) {
-            //    e.printStackTrace();
-            //    }
-
-            //Toast.makeText(MainMenu.this,plotString,Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            LinkedHashMap<String, String> parms = new LinkedHashMap<>();
-            parms.put("personName", params[1]);
-            parms.put("personId", params[2]);
-            parms.put("personAge", params[3]);
-            JSONParser pars = new JSONParser();
-            JSONObject jo = pars.makeHttpRequest(params[0], "GET", parms);
-
-            try {
-                return jo.get("name").toString();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return "something wrong";
-        }
     }
-
+}
+/*
     public class OpenNewRoom extends AsyncTask<String, Void, Integer> {
         LinkedHashMap parms = new LinkedHashMap<>();
 
@@ -579,58 +555,15 @@ public class MainMenu extends AppCompatActivity {
 
 
             /*all good show progress dialog - waiting for 3 more players*/
-            if (result == 1) {//
-                pDialog = new ProgressDialog(MainMenu.this);
-                pDialog.setIndeterminate(true);
-                pDialog.setCancelable(false);
-                pDialog.setMessage(getResources().getString(R.string.waiting_for_players));
-
-                pDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        timer.cancel();
-                        timerFlag = false;
-                    }
-                });
-
-                pDialog.show();
-                timer = new Timer();
-                timerFlag = true;
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        if (timerFlag) {
-                            new waitForOtherPlayer().execute();
-                            //new GetRoomStatus().execute(roomName);
-                        }
-                    }
-                }, 3000);
-                /*room name already in use*/
-            } else if (result == 0) {
-                Toast.makeText(MainMenu.this
-                        , getResources().getString(R.string.room_name_in_use),
-                        Toast.LENGTH_LONG).show();
-                /*connection problem*/
-            } else if (result == -1) {
-                Toast.makeText(MainMenu.this
-                        , getResources().getString(R.string.connection_error),
-                        Toast.LENGTH_LONG).show();
-            }
-
-        }
-
-    }
-
-    public void getAllPerson(View v) {
-        Intent myIntent = new Intent(this, AllPerson.class);
-        startActivity(myIntent);
+    //public void getAllPerson(View v) {
+        //Intent myIntent = new Intent(this, AllPerson.class);
+       // startActivity(myIntent);
         //String movieTitle = movieTitleText.getText().toString();
         // new MyWebServiceTask().execute("http://localhost:8080/TestWebServicesAndJSON/rest/hello/getAllPerson");
         // new MyWebServiceTask().execute("http://localhost:8080/TestJersey/rest/hello/getAll");
         // new MyWebServiceTask().execute("http://10.0.2.2:8080/TestJersey/rest/hello/getAll","");
-    }
 
-    public void addNewPerson(View v) {
+   /* public void addNewPerson(View v) {
 
 
         LayoutInflater li = LayoutInflater.from(MainMenu.this);
@@ -691,10 +624,9 @@ public class MainMenu extends AppCompatActivity {
 
         // new MyWebServiceTask().execute("http://localhost:8080/TestWebServicesAndJSON/rest/hello/checkUser?personName="
         //         +userName+"personId="+id+"personAge="+age);
-    }
+    }*/
 
 
 
 
 
-}

@@ -3,7 +3,7 @@ require_once('connection.php');
 $roomName=$_POST['room_name']; //game_name=room_name
 $user_id=$_POST['user_id'];
 $game_id=getGameId($roomName);
-
+$response=array();
 //if room exist
 if($game_id){
 	if(countPlayerInRoom($game_id)<4){
@@ -18,17 +18,17 @@ if($game_id){
 			}*/	
 		  $insert=$con->exec("INSERT INTO game_users (game_id,user_id) VALUES('$game_id','$user_id')");
 		  if($insert !== FALSE){
-			  //after player join to room wee need check if room has 4 players
-			  echo json_encode(1);
+			  $response["game_id"]=$game_id;
+			  $response["succsses"]=1;
 		  }else{
-			  echo json_encode(0);
+			   $response["succsses"]=0;
 		  }
 	}else{
-		echo json_encode(0);
+		 $response["succsses"]=0;
 	}
 }else
-	echo json_encode(0);
-
+	 $response["succsses"]=0;
+echo json_encode($response);
 function getGameId($roomName){
 	require('connection.php');
 	$sth = $con->prepare("SELECT game_id FROM game where game_name='$roomName' AND is_active=1");
@@ -43,7 +43,7 @@ function getGameId($roomName){
 }
 function countPlayerInRoom($game_id){
 	require('connection.php'); 
-	$result = $con->query("SELECT COUNT(*) FROM game_users WHERE game_id=game_id")->fetchColumn();	
+	$result = $con->query("SELECT COUNT(*) FROM game_users WHERE game_id='$game_id'")->fetchColumn();	
 	return $result;
 }
 ?>

@@ -77,6 +77,11 @@
     <string name="card3">card2</string>
     <string name="card4">card4</string>
     <string name="add_new_card">Add new card</string>
+    <string name="series_full">Series full</string>
+    <string name="card_not_load">The cards not load</string>
+    <string name="you_join_to_room">You join to room</string>
+    <string name="you_didnt_join_to_room">join to room failed</string>
+    <string name="refresh">Refresh</string>
 
     <string-array name="card_click_menu">
         <item>send card</item>
