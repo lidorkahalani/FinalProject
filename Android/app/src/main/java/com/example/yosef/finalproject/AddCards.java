@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.EdgeEffect;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -41,8 +42,7 @@ public class AddCards extends AppCompatActivity implements View.OnClickListener 
     //public static final String UPLOAD_URL = "http://mysite.lidordigital.co.il/Quertets/db/add_image.php";
     //public static final String UPLOAD_URL = "http://10.0.2.2/final_project/db/add_image.php";
 
-    //public static final String UPLOAD_URL = "http://mysite.lidordigital.co.il/Quertets/db/AddCard.php";
-    public static final String UPLOAD_URL = "http://10.0.2.2/final_project/db/AddCard.php";
+
 
     public static final String UPLOAD_KEY = "image";
     public static final String TAG = "MY MESSAGE";
@@ -51,6 +51,7 @@ public class AddCards extends AppCompatActivity implements View.OnClickListener 
 
     private Button buttonChoose;
     private Button buttonUploadSeries;
+    private User currentPlayer;
 
 
     private Button buttonUpload;
@@ -62,11 +63,15 @@ public class AddCards extends AppCompatActivity implements View.OnClickListener 
     private EditText card3;
     private EditText card4;
     private Boolean upload_image_status;
+    private String cardName;
+    TextView categoryName;
 
     static private ArrayList<Card>newSeries=new ArrayList<>();
 
     private Bitmap bitmap;
+    private File imageFile;
     private boolean imageCoosen;
+    private static int category_id;
 
 
 
@@ -79,20 +84,20 @@ public class AddCards extends AppCompatActivity implements View.OnClickListener 
 
         buttonChoose = (Button) findViewById(R.id.buttonChoose);
         buttonUpload = (Button) findViewById(R.id.buttonUpload);
-        buttonUploadSeries=(Button) findViewById(R.id.buttonUploadSeries);
+        //buttonUploadSeries=(Button) findViewById(R.id.buttonUploadSeries);
         category=(EditText)findViewById(R.id.category);
         card1=(EditText)findViewById(R.id.card1);
-        card2=(EditText)findViewById(R.id.card2);
-        card3=(EditText)findViewById(R.id.card3);
-        card4=(EditText)findViewById(R.id.card4);
+        categoryName=(TextView)findViewById(R.id.categoryName);
         Typeface typeface = Typeface.createFromAsset(getAssets(), "Matias_Webfont.ttf");
         buttonChoose.setTypeface(typeface);
         buttonUpload.setTypeface(typeface);
+        currentPlayer=(User)getIntent().getSerializableExtra("currenUsrt");
 
+        getMaxCategoryId();
 
         imageView = (ImageView) findViewById(R.id.imageView);
 
-
+        categoryName.setText(getIntent().getStringExtra("categoryName"));
         buttonChoose.setOnClickListener(this);
         buttonUpload.setOnClickListener(this);
     }
@@ -110,6 +115,7 @@ public class AddCards extends AppCompatActivity implements View.OnClickListener 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
 
             filePath = data.getData();
+            imageFile=new File(filePath.getPath());
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
                 imageView.setImageBitmap(bitmap);
@@ -128,17 +134,18 @@ public class AddCards extends AppCompatActivity implements View.OnClickListener 
         return encodedImage;
     }
 
-    private int getMaxCategoryId() {
+    private void getMaxCategoryId() {
         final int[] maxId = {0};
-        class getMaxCategoryId extends AsyncTask<String, Void, Integer> {
-            String getMaxCategoryId_url="http://localhost/final_project/db/getMaxCategoryId.php";
+        class GetMaxCategoryId extends AsyncTask<String, Void, Integer> {
+            String getMaxCategoryId_url="http://10.0.2.2/final_project/db/getMaxCategoryId.php";
             LinkedHashMap<String, String> parms = new LinkedHashMap<>();
             @Override
             protected Integer doInBackground(String... params) {
                 JSONParser json = new JSONParser();
                 try {
                     JSONObject response = json.makeHttpRequest(getMaxCategoryId_url, "GET", parms);
-                    return Integer.parseInt(response.toString());
+                    if(response.getInt("succsses")==1)
+                    return response.getInt("max_category_id");
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -147,15 +154,18 @@ public class AddCards extends AppCompatActivity implements View.OnClickListener 
 
             protected void onPostExecute(Integer s) {
                 if(s!=0)
-                    maxId[0] =s;
+                    category_id =s;
             }
         }
-        return maxId[0];
+        GetMaxCategoryId g= new GetMaxCategoryId();
+        g.execute();
+
     }
 
     private void uploadImage(){
         class UploadImage extends AsyncTask<Bitmap,Void,Boolean>{
-
+            //public static final String UPLOAD_URL = "http://mysite.lidordigital.co.il/Quertets/db/AddCard.php";
+            public static final String UPLOAD_URL = "http://10.0.2.2/final_project/db/AddCard.php";
             ProgressDialog loading;
             RequestHandler rh = new RequestHandler();
 
@@ -189,11 +199,12 @@ public class AddCards extends AppCompatActivity implements View.OnClickListener 
                 Bitmap bitmap = params[0];
 
                 String uploadImage = getStringImage(bitmap);
-                int category_id=getMaxCategoryId();
-                LinkedHashMap data = new LinkedHashMap<>();
-                data.put("card_name", uploadImage);
-                data.put("category_id", category_id);
-                data.put("ThisImage", uploadImage);
+                LinkedHashMap<String,String> data = new LinkedHashMap<>();
+                data.put("card_name",cardName);
+                data.put("category_id",String.valueOf( category_id));
+                data.put("user_id",String.valueOf(currentPlayer.getUserID()));
+                //cant send image as FIle
+                //data.put("uploaded_file", imageFile);
                 JSONParser json = new JSONParser();
                 //String result = rh.sendPostRequest(UPLOAD_URL,data);
                 JSONObject response = json.makeHttpRequest(UPLOAD_URL, "POST", data);
@@ -242,7 +253,11 @@ public class AddCards extends AppCompatActivity implements View.OnClickListener 
         }
         if(v == buttonUpload){
             if(imageCoosen) {
+                cardName=card1.getText().toString();
                 uploadImage();
+                if(upload_image_status){
+                    addThisCardToLocalArray();
+                }
             }
             else
                 Toast.makeText(AddCards.this,
@@ -284,8 +299,6 @@ public class AddCards extends AppCompatActivity implements View.OnClickListener 
             new sendSeriesToServer().execute();
         }
     }
-
-
 
     public class sendSeriesToServer extends AsyncTask<String, Void, Boolean> {
         String upload_series = "http://10.0.2.2/final_project/db/upload_series.php";

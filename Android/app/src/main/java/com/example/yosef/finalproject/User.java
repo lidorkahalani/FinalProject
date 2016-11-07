@@ -25,6 +25,13 @@ public class User implements Serializable {
         setUserID(userID);
     }
 
+    public User(String userName, String password,int userID) {
+        setUserName(userName);
+        setPassword(password);
+        setUserID(userID);
+    }
+
+
 
     public int getScore() {
         return score;

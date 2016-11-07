@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
                         MainActivity.this.finish();
                     }
                 })
-                .setNegativeButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
+                .setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }

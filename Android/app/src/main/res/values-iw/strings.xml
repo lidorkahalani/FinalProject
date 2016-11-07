@@ -65,7 +65,7 @@
     <string name="update_failed">עידכון נכשל</string>
     <string name="Select_Picture">בחר תמונה</string>
     <string name="dont_have_cards">לא העלית קלפים</string>
-    <string name="Warning">אזהרב</string>
+    <string name="Warning">אזהרה</string>
     <string name="Group_Not_Found">קבוצה לא קיימת</string>
     <string name="back_Main_Menu">חזור למסך הקודם</string>
     <string name="score">ניקוד</string>
@@ -73,9 +73,13 @@
     <string name="card2">קלף 2</string>
     <string name="card3">קלף 3</string>
     <string name="card4">קלף 4</string>
-    <string name="add_new_card">הוסף קלף חדש</string>
+    <string name="add_new_card">צור קלף</string>
     <string name="series_full">סידרה מלאה</string>
     <string name="card_not_load">טעינת הקלפים נכשלה</string>
+    <string name="you_join_to_room">הצטרפת לחדר</string>
+    <string name="you_didnt_join_to_room">הצטרפות נכשלה</string>
+    <string name="refresh">רענן</string>
+    <string name="enter_categry_name">הכנס קטגוריה חדשה</string>
 
 
 

@@ -1,7 +1,8 @@
 <?php
 	require_once('connection.php'); 
-	$roomName=$_POST['room_name']; //game_name=room_name
-	$game_id=getGameId($roomName);
+	//$roomName=$_POST['room_name']; //game_name=room_name
+	//$game_id=getGameId($roomName);
+	$game_id=$_POST['game_id'];
 	$response=array();
 	$result = $con->query("SELECT COUNT(*) FROM game_users WHERE game_id='$game_id'")->fetchColumn();
 	if($result==4)
