@@ -97,4 +97,8 @@
 
     <string name="room_name_in_use">שם חדר תפוס</string>
     <string name="connection_error">אירעה שגיאה - בדוק חיבור לאינטרנט</string>
+    <string name="upload_image_failed">העלאת תמונה נכשלה</string>
+    <string name="please_choose_image">אנא בחר תמונה</string>
+    <string name="room_empty">חדר ריק</string>
+    <string name="upload_image_success">העלאת תמונה הצליחה</string>
 </resources>

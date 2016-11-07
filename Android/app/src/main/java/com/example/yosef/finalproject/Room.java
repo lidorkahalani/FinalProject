@@ -44,7 +44,8 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
     ProgressDialog pDialog;
     Timer timer;
     boolean timerFlag = false;
-    private  EditText roomName;
+   // private  EditText roomName;
+    private TextView roomName;
     private  User curentUser;
     private Game game;
     boolean isNewRoom;
@@ -53,16 +54,15 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room);
         personList=(ListView)findViewById(R.id.PlayerList);
-        roomName=(EditText)findViewById(R.id.roomName);
+        roomName=(TextView)findViewById(R.id.roomName);
         game=(Game)getIntent().getSerializableExtra("Game");
         curentUser =(User) getIntent().getSerializableExtra("currentPlayer");
         isNewRoom=getIntent().getExtras().getBoolean("isNewRoom");
+        roomName.setText(getResources().getString(R.string.wellcome)+" To: "+game.getGame_name()+" Room");
         if(isNewRoom)
             new openNewRoom().execute(game.getGame_name());
         else {
             new joinToRoom().execute(game.getGame_name());
-            //getGameId(game.getGame_name());
-
         }
     }
 

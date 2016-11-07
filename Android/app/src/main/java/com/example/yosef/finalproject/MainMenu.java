@@ -1,12 +1,15 @@
 package com.example.yosef.finalproject;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
-import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,28 +32,9 @@ import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.google.gson.JsonParser;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.Timer;
-import java.util.TimerTask;
-
-import static org.apache.http.HttpHeaders.USER_AGENT;
 
 public class MainMenu extends AppCompatActivity {
 
@@ -69,13 +53,11 @@ public class MainMenu extends AppCompatActivity {
     private TextView title;
 
     String roomName;
-    boolean correctInput = false;
     LoginButton facebookButton;
     Button logOut;
-    ProgressDialog pDialog;
-    Timer timer;
-    boolean timerFlag = false;
     Game newGame = new Game();
+    final int MY_PERMISSIONS_REQUEST_WRITE_STORAGE =1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,7 +137,6 @@ public class MainMenu extends AppCompatActivity {
         btn5.setTypeface(typeface);
         title.setTypeface(typeface);
 
-
         SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(MainMenu.this);
         String uname = myPref.getString("username", "");
         String password = myPref.getString("password", "");
@@ -164,7 +145,45 @@ public class MainMenu extends AppCompatActivity {
         currentPlayer = new User(uname, password, score, userId);
         dbHandler = new UsersDBHandler(this);
         setLayout();
+        checkPermission();
 
+    }
+
+    public void checkPermission(){
+
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    MY_PERMISSIONS_REQUEST_WRITE_STORAGE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_WRITE_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
     }
 
     @Override
@@ -260,9 +279,7 @@ public class MainMenu extends AppCompatActivity {
     }
 
     public void openRoom(View v) {
-
-
-       LayoutInflater li = LayoutInflater.from(MainMenu.this);
+      LayoutInflater li = LayoutInflater.from(MainMenu.this);
         View dialogView = li.inflate(R.layout.open_room_dialog_layout, null);
 
         final EditText roomNameInput = (EditText) dialogView.findViewById(R.id.room_name_input);
@@ -394,5 +411,14 @@ public class MainMenu extends AppCompatActivity {
         startActivity(myIntent);
         finish();
     }
+
+    public void startGame(View v){
+
+        //checkPermission();
+
+        Intent intent=new Intent(MainMenu.this,GameScreen.class);
+        startActivity(intent);
+    }
+
 
 }
