@@ -5,7 +5,7 @@
 	$game_id=$_POST['game_id'];
 	$response=array();
 	$result = $con->query("SELECT COUNT(*) FROM game_users WHERE game_id='$game_id'")->fetchColumn();
-	if($result==4)
+	if($result==2)
 		$response["succsses"]=1;
 	else
 		$response["succsses"]=0;

@@ -344,8 +344,8 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
     }
 
     public class setTurnOrder extends AsyncTask<String, Void, Boolean> {
-        String setTurnOrder = "http://10.0.2.2/final_project/db/setTurnOrder.php";
-        // String setTurnOrder = "http://mysite.lidordigital.co.il/Quertets/db/setTurnOrder.php";
+        String setTurnOrder = "http://10.0.2.2/final_project/db/moveToNextPlayer.php";
+        // String setTurnOrder = "http://mysite.lidordigital.co.il/Quertets/db/moveToNextPlayer.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
@@ -355,7 +355,7 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
             try {
                 JSONObject response = json.makeHttpRequest(setTurnOrder, "POST", parms);
 
-                if (response.getInt("succsses")== 1) {
+                if (response.getInt("successes")== 1) {
                     return true;
                 } else {
                     return false;

@@ -1,4 +1,5 @@
 <?php
+include('connection.php');
 $con=mysqli_connect("localhost","root","","quartetsdb");
 $response=array();
 if (mysqli_connect_errno($con))
@@ -29,18 +30,15 @@ if(mysqli_num_rows($result) >0 )
  $response["succsses"]=0;
  echo json_encode($response);  
  }
-function isMyTurn($user_id,$game_id){
+function isMyTurn($game_id){
 	require('connection.php');
-$response=array();
-	$sth = $con->prepare("SELECT my_turn FROM game_users where game_id='$game_id' AND user_id='$user_id'");
+	$sth = $con->prepare("SELECT my_turn_user_id FROM game where game_id='$game_id'");
 			$sth->execute();
 			$result = $sth->fetch(PDO::FETCH_ASSOC);
-			if($result['my_turn']!=0){
-				return 1;
-			}else{
+			if($result['my_turn_user_id']!=0)
+				return $result['my_turn_user_id'];
+			else
 				return 0;
-
-			}
 }
 function getAllMyCard($cardId){
 	$con=mysqli_connect("localhost","root","","quartetsdb");
