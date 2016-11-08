@@ -417,6 +417,7 @@ public class MainMenu extends AppCompatActivity {
         //checkPermission();
 
         Intent intent=new Intent(MainMenu.this,GameScreen.class);
+        intent.putExtra("debug",true);
         startActivity(intent);
     }
 

@@ -316,24 +316,44 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
        // String checkIfRoomFull = "http://mysite.lidordigital.co.il/Quertets/db/checkIfRoomFull.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
-        /*@Override
-        protected void onPreExecute() {
-            adapter = new MyClassAdapter(Room.this, R.layout.single_user_in_room_list,allUsers);
-
-            personList.setAdapter(adapter);
-
-            personList.setOnItemClickListener(Room.this);
-
-            lv = (ListView) findViewById(R.id.PlayerList);
-            registerForContextMenu(lv);
-        }*/
-
         @Override
         protected Boolean doInBackground(String... params) {
             parms.put("game_id", params[0]);
             JSONParser json = new JSONParser();
             try {
                 JSONObject response = json.makeHttpRequest(checkIfRoomFull, "POST", parms);
+
+                if (response.getInt("succsses")== 1) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        protected void onPostExecute(Boolean result) {
+            if (result) {
+                new setTurnOrder().execute();
+            }else
+                new GetAllConnectedPlayers().execute();
+
+        }
+
+    }
+
+    public class setTurnOrder extends AsyncTask<String, Void, Boolean> {
+        String setTurnOrder = "http://10.0.2.2/final_project/db/setTurnOrder.php";
+        // String setTurnOrder = "http://mysite.lidordigital.co.il/Quertets/db/setTurnOrder.php";
+        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            parms.put("game_id", String.valueOf(game.getGame_id()));
+            JSONParser json = new JSONParser();
+            try {
+                JSONObject response = json.makeHttpRequest(setTurnOrder, "POST", parms);
 
                 if (response.getInt("succsses")== 1) {
                     return true;
@@ -356,7 +376,7 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                 finish();
                 pDialog.dismiss();
             }else
-                new GetAllConnectedPlayers().execute();
+                Toast.makeText(Room.this,"There is problem no order set",Toast.LENGTH_LONG).show();
 
         }
 

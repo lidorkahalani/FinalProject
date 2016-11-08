@@ -84,6 +84,7 @@
     <string name="refresh">Refresh</string>
     <string name="enter_categry_name">Enter new category</string>
     <string name="room_empty">There is no user in room</string>
+    <string name="card_load">card load successfully</string>
 
     <string-array name="card_click_menu">
         <item>send card</item>
