@@ -345,6 +345,7 @@ public class MainMenu extends AppCompatActivity {
                                     intent.putExtra("currentPlayer",currentPlayer);
                                     intent.putExtra("isNewRoom",false);
                                     startActivity(intent);
+                                    finish();
                                 } else {
                                     new AlertDialog.Builder(MainMenu.this)
                                             .setTitle(getResources().getString(R.string.Warning))

@@ -30,13 +30,13 @@ if(mysqli_num_rows($result) >0 )
  $response["succsses"]=0;
  echo json_encode($response);  
  }
-function isMyTurn($game_id){
-	require('connection.php');
+function isMyTurn($user_id,$game_id){
+	include('connection.php');
 	$sth = $con->prepare("SELECT my_turn_user_id FROM game where game_id='$game_id'");
 			$sth->execute();
 			$result = $sth->fetch(PDO::FETCH_ASSOC);
-			if($result['my_turn_user_id']!=0)
-				return $result['my_turn_user_id'];
+			if($result['my_turn_user_id']==$user_id)
+				return 1;
 			else
 				return 0;
 }
