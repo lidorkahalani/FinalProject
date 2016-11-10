@@ -3,12 +3,14 @@ include('connection.php');
 $response=array();
 $user_id=$_POST['user_id'];
 $game_id=$_POST['game_id'];
-		$cnt=0;
-		while($cnt<1){
+		$cnt=0;			
+		
+if(!checkIfDeckEnd($game_id)){
+	while($cnt<1){
 			   $randCard=checkIfCardAvailable();
 			    if($randCard!=0){
 					$res = $con->exec("UPDATE games_cards SET user_id = '$user_id' WHERE game_id = '$game_id' AND card_id=$randCard");
-					if($res==1 ){
+					if($res!==false ){
 						$sql_query = "select * from cards where card_id='$randCard'";  
 						$conn=mysqli_connect("localhost","root","","quartetsdb");
 						$result = mysqli_query($conn,$sql_query);  
@@ -39,12 +41,29 @@ $game_id=$_POST['game_id'];
 								echo json_encode($response);
 								break;
 						}
-					}else 
+					}else {
 						$response["succsses"]=0;
+						break;
+					}
 				}else 
 					 continue;
 		}
-
+	
+}else{
+	$response["succsses"]=-1;
+	echo json_encode($response);
+}
+		
+function checkIfDeckEnd($game_id){
+   require('connection.php');
+	$sth = $con->prepare("SELECT * FROM games_cards where user_id=0 AND game_id='$game_id'");
+			$sth->execute();
+			$result = $sth->fetch(PDO::FETCH_ASSOC);
+			if($result)
+			  return false;
+			else
+			  return true;
+}
 function checkIfCardAvailable(){
 			include('connection.php');
 			$randCard=rand(1, 32);

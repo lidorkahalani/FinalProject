@@ -26,6 +26,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class GameScreen extends AppCompatActivity implements AdapterView.OnItemClickListener {
@@ -42,18 +44,20 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     private RelativeLayout activePlayer;
 
 
-    RecyclerView myListView;
-    CardsAdapter cardsAdapter;
+    private RecyclerView myListView;
+    private CardsAdapter cardsAdapter;
 
     public static int MENU_ID = 0;
     private static final int CARDS_CLICK_MENU = 1;
 
     public static View selectedCard;
-    View cardView;
+    private View cardView;
     private boolean setCardBackgroundTransparent = true;
-    Game newGame;
-    Boolean debugStatus;
-    Boolean isMyTurnStatus;
+    private Game newGame;
+    private Boolean debugStatus;
+    private Boolean deckIsOver=false;
+    private Boolean isMyTurnStatus;
+    private Timer timer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +88,19 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
 
     }
+
+   /* @Override
+    public void onResume() {
+        super.onResume();
+        timer = new Timer();
+        // This timer task will be executed every 1 sec.
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+               new refresh().execute();
+            }
+        }, 0, 1000);
+    }*/
 
     public void onBackPressed() {
         // TODO Auto-generated method stub
@@ -205,7 +222,6 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
     }
 
-    /*no delete!!*/
     public class startPlay extends AsyncTask<String, Void, Boolean> {
         String get4Cards = "http://10.0.2.2/final_project/db/giveMe4Cards.php";
         // String get4Cards = "http://mysite.lidordigital.co.il/Quertets/giveMe4Cards.php";
@@ -220,6 +236,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
             try {
                 JSONObject response = json.makeHttpRequest(get4Cards, "POST", parms);
                 if (response.getInt("succsses") == 1) {
+                    deck.clear();
                     JSONArray jsonArray = response.getJSONArray("AllCards");
                     for (int i = 0; i < jsonArray.length(); i++) {
                         Card card = new Card();
@@ -320,9 +337,10 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                         card.setItemsArray(cardLabels);
                         deck.add(card);
                     }
-                    return true;
-                } else
-                    return false;
+                } else{// if(response.getInt("succsses") ==-1){
+                    deckIsOver=true;
+                }
+                return true;
             } catch (Exception ex) {
                 ex.printStackTrace();
                 return false;
@@ -332,7 +350,11 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         protected void onPostExecute(Boolean result) {
             if (result) {
                 setCardsList();
-                new moveToNextPlayer().execute();
+                if(!deckIsOver)
+                 new moveToNextPlayer().execute();
+                else
+                    Toast.makeText(GameScreen.this,"deck end game over!", Toast.LENGTH_SHORT).show();
+                    //goCheckWhoWin
                 //new checkQuartets().execute();
                 //new isTheGameOver().execute();
             } else
@@ -407,14 +429,16 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
         protected void onPostExecute(Boolean result) {
             if (result) {
+
                 if(isMyTurnStatus)
                     activePlayer.setBackgroundColor(Color.GREEN);
                 else
                     activePlayer.setBackgroundColor(Color.TRANSPARENT);
+                new refresh().execute();
                 //Toast.makeText(GameScreen.this, "is my turn!", Toast.LENGTH_LONG).show();
                 //painCurrentPlayer();
             } else
-                Toast.makeText(GameScreen.this, "wait to your turn", Toast.LENGTH_LONG).show();
+                Toast.makeText(GameScreen.this, "there was problem check if is my turn", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -598,8 +622,6 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                 Toast.makeText(GameScreen.this, "wait to your turn", Toast.LENGTH_LONG).show();
         }
     }
-
-
 
     public class tryTakeOneCardFromDeck extends AsyncTask<String, Void, Boolean> {
         String takeOneCardFromDeck = "http://10.0.2.2/final_project/db/takeOneCardFromDeck.php";

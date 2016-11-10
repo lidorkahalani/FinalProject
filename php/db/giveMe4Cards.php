@@ -8,14 +8,13 @@ $response["AllCards"]=array();
 		while($cnt<4){
 			   $randCard=checkIfCardAvailable();
 			    if($randCard!=0){
-					$res = $con->exec("UPDATE games_cards SET user_id = '$user_id' WHERE game_id = '$game_id' AND card_id=$randCard");
-					if($res==1 ){
+					$res = $con->exec("UPDATE games_cards SET user_id = '$user_id' WHERE game_id = '$game_id' AND card_id='$randCard'");
+					if($res!==false ){
 						$sql_query = "select * from cards where card_id='$randCard'";  
 						$conn=mysqli_connect("localhost","root","","quartetsdb");
 						$result = mysqli_query($conn,$sql_query);  
 						mysqli_set_charset($conn,"utf8");
-						if(mysqli_num_rows($result) >0 )  
-						{
+						if(mysqli_num_rows($result) >0 ){
 							$card=array();
 							while($row=mysqli_fetch_array($result)){
 								$card["card_id"]=$row["card_id"];
@@ -29,25 +28,22 @@ $response["AllCards"]=array();
 								array_push($response["AllCards"],$card);
 							}
 						   $cnt++;
-						   if($cnt==4){
+						   if($cnt==4)
 								$response["succsses"]=1;
-								echo json_encode($response);
-								break;
-						   }
-						}else {
+						}else
 								$response["succsses"]=0;
-								echo json_encode($response);
-								break;
-						}
-					}else 
+					}else{ 
 						$response["succsses"]=0;
+						break;
+					}
 				}else 
 					 continue;
 		}
+		echo json_encode($response);
 
 function checkIfCardAvailable(){
 			include('connection.php');
-			$randCard=rand(1, 32);
+			$randCard=rand(1, 32);//need to be set acording to all cards sum
 			$sth = $con->prepare("SELECT user_id FROM games_cards where card_id='$randCard'");
 			$sth->execute();
 			$result = $sth->fetchAll();
