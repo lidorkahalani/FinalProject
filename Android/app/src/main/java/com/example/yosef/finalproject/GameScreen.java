@@ -223,8 +223,8 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     }
 
     public class startPlay extends AsyncTask<String, Void, Boolean> {
-        String get4Cards = "http://10.0.2.2/final_project/db/giveMe4Cards.php";
-        // String get4Cards = "http://mysite.lidordigital.co.il/Quertets/giveMe4Cards.php";
+       // String get4Cards = "http://10.0.2.2/final_project/db/giveMe4Cards.php";
+         String get4Cards = "http://mysite.lidordigital.co.il/Quertets/db/giveMe4Cards.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
@@ -277,8 +277,8 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     }
 
     public class sendSelectedCard extends AsyncTask<String,Void,Boolean>{
-        String sendSelctedCard="http://10.0.2.2/final_project/db/sendSelctedCard.php";
-        //String sendSelctedCard="http://mysite.lidordigital.co.il/Quertets/db/sendSelctedCard.php";
+       // String sendSelctedCard="http://10.0.2.2/final_project/db/sendSelctedCard.php";
+        String sendSelctedCard="http://mysite.lidordigital.co.il/Quertets/db/sendSelctedCard.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
         @Override
         protected Boolean doInBackground(String... params) {
@@ -305,8 +305,8 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     }
 
     public class takeOneCardFromDeck extends AsyncTask<String, Void, Boolean> {
-        String takeOneCardFromDeck = "http://10.0.2.2/final_project/db/takeOneCardFromDeck.php";
-        //String takeOneCardFromDeck = "http://mysite.lidordigital.co.il/Quertets/db/takeOneCardFromDeck.php";
+       // String takeOneCardFromDeck = "http://10.0.2.2/final_project/db/takeOneCardFromDeck.php";
+        String takeOneCardFromDeck = "http://mysite.lidordigital.co.il/Quertets/db/takeOneCardFromDeck.php";
 
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
@@ -364,8 +364,8 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     }
 
     public class moveToNextPlayer extends AsyncTask<String, Void, Boolean> {
-        String setTurnOrder = "http://10.0.2.2/final_project/db/moveToNextPlayer.php";
-        // String setTurnOrder = "http://mysite.lidordigital.co.il/Quertets/db/moveToNextPlayer.php";
+        //String setTurnOrder = "http://10.0.2.2/final_project/db/moveToNextPlayer.php";
+         String setTurnOrder = "http://mysite.lidordigital.co.il/Quertets/db/moveToNextPlayer.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
@@ -401,8 +401,8 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     }
 
     public class isMyTurn extends AsyncTask<String, Void, Boolean> {
-        String isMyTurn = "http://10.0.2.2/final_project/db/isMyTurn.php";
-        //String isMyTurn = "http://mysite.lidordigital.co.il/Quertets/db/isMyTurn.php";
+        //String isMyTurn = "http://10.0.2.2/final_project/db/isMyTurn.php";
+        String isMyTurn = "http://mysite.lidordigital.co.il/Quertets/db/isMyTurn.php";
 
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
@@ -444,8 +444,8 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
     public class refresh extends AsyncTask<String, Void, Boolean> {
         /*need to add check if all player stil in the game*/
-        String refresh_all = "http://10.0.2.2/final_project/db/refresh_all.php";
-        // String refresh_all = "http://mysite.lidordigital.co.il/Quertets/db/refresh_all.php";
+        //String refresh_all = "http://10.0.2.2/final_project/db/refresh_all.php";
+         String refresh_all = "http://mysite.lidordigital.co.il/Quertets/db/refresh_all.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
@@ -507,8 +507,8 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     }
 
     public class getAllCards extends AsyncTask<String, Void, Boolean> {
-        String get_all_card_url = "http://10.0.2.2/final_project/db/getAllCard.php";
-        // String get_all_card_url = "http://mysite.lidordigital.co.il/Quertets/db/getAllCard.php";
+        //String get_all_card_url = "http://10.0.2.2/final_project/db/getAllCard.php";
+         String get_all_card_url = "http://mysite.lidordigital.co.il/Quertets/db/getAllCard.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
@@ -554,8 +554,8 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     }
 
     public class checkQuartets extends AsyncTask<String, Void, Boolean> {
-        String checkQuarets = "http://10.0.2.2/final_project/db/checkQuarets.php";
-        //String isMyTurn = "http://mysite.lidordigital.co.il/Quertets/db/checkQuarets.php";
+       // String checkQuarets = "http://10.0.2.2/final_project/db/checkQuarets.php";
+        String checkQuarets = "http://mysite.lidordigital.co.il/Quertets/db/checkQuarets.php";
 
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
@@ -589,8 +589,8 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     }
 
     public class isTheGameOver extends AsyncTask<String, Void, Boolean> {
-        String isTheGameOver = "http://10.0.2.2/final_project/db/isTheGameOver.php";
-        //String isTheGameOver = "http://mysite.lidordigital.co.il/Quertets/db/isTheGameOver.php";
+        //String isTheGameOver = "http://10.0.2.2/final_project/db/isTheGameOver.php";
+        String isTheGameOver = "http://mysite.lidordigital.co.il/Quertets/db/isTheGameOver.php";
 
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
@@ -624,8 +624,8 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     }
 
     public class tryTakeOneCardFromDeck extends AsyncTask<String, Void, Boolean> {
-        String takeOneCardFromDeck = "http://10.0.2.2/final_project/db/takeOneCardFromDeck.php";
-        //String takeOneCardFromDeck = "http://mysite.lidordigital.co.il/Quertets/db/takeOneCardFromDeck.php";
+      //  String takeOneCardFromDeck = "http://10.0.2.2/final_project/db/takeOneCardFromDeck.php";
+        String takeOneCardFromDeck = "http://mysite.lidordigital.co.il/Quertets/db/takeOneCardFromDeck.php";
 
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 

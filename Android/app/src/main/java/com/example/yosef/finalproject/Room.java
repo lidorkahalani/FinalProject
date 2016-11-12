@@ -98,8 +98,8 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
     }
 
     public class joinToRoom extends AsyncTask<String, Void, Boolean> {
-        String joinToRoom = "http://10.0.2.2/final_project/db/joinToRoom.php";
-        // String joinToRoom = "http://mysite.lidordigital.co.il/Quertets/db/joinToRoom.php";
+       // String joinToRoom = "http://10.0.2.2/final_project/db/joinToRoom.php";
+         String joinToRoom = "http://mysite.lidordigital.co.il/Quertets/db/joinToRoom.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
         @Override
         protected Boolean doInBackground(String... params) {
@@ -164,8 +164,8 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
     }
 
     public class openNewRoom extends AsyncTask<String, User, Integer> {
-        String openNewRoom = "http://10.0.2.2/final_project/db/openNewRoom.php";
-        //String openNewRoom="http://mysite.lidordigital.co.il/Quertets/db/openNewRoom.php";
+       // String openNewRoom = "http://10.0.2.2/final_project/db/openNewRoom.php";
+        String openNewRoom="http://mysite.lidordigital.co.il/Quertets/db/openNewRoom.php";
         LinkedHashMap parms = new LinkedHashMap<>();
         String roomName;
         @Override
@@ -235,8 +235,8 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
     }
 
     public class GetAllConnectedPlayers extends AsyncTask<String, Void, Boolean> {
-        String getPlayerLIst="http://10.0.2.2/final_project/db/getListNameOfThePLayerInRoom.php";
-        //String getPlayerLIst="http://mysite.lidordigital.co.il/Quertets/db/getListNameOfThePLayerInRoom.php";
+        //String getPlayerLIst="http://10.0.2.2/final_project/db/getListNameOfThePLayerInRoom.php";
+        String getPlayerLIst="http://mysite.lidordigital.co.il/Quertets/db/getListNameOfThePLayerInRoom.php";
         @Override
         protected Boolean doInBackground(String... params) {
             LinkedHashMap<String, String> parms = new LinkedHashMap<>();
@@ -312,8 +312,8 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
     }
 
     public class checkIfRoomFull extends AsyncTask<String, Void, Boolean> {
-        String checkIfRoomFull = "http://10.0.2.2/final_project/db/checkIfRoomFull.php";
-       // String checkIfRoomFull = "http://mysite.lidordigital.co.il/Quertets/db/checkIfRoomFull.php";
+        //String checkIfRoomFull = "http://10.0.2.2/final_project/db/checkIfRoomFull.php";
+        String checkIfRoomFull = "http://mysite.lidordigital.co.il/Quertets/db/checkIfRoomFull.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
@@ -344,8 +344,8 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
     }
 
     public class setTurnOrder extends AsyncTask<String, Void, Boolean> {
-        String setTurnOrder = "http://10.0.2.2/final_project/db/moveToNextPlayer.php";
-        // String setTurnOrder = "http://mysite.lidordigital.co.il/Quertets/db/moveToNextPlayer.php";
+       // String setTurnOrder = "http://10.0.2.2/final_project/db/moveToNextPlayer.php";
+         String setTurnOrder = "http://mysite.lidordigital.co.il/Quertets/db/moveToNextPlayer.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override

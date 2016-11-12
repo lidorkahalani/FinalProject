@@ -114,8 +114,8 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
     }
 
     public class GetMyCards extends AsyncTask<String, Void, Boolean> {
-        String get_my_cards = "http://10.0.2.2/final_project/db/getMyCards.php";
-        // String get_my_cards = "http://mysite.lidordigital.co.il/Quertets/db/getMyCards.php";
+        //String get_my_cards = "http://10.0.2.2/final_project/db/getMyCards.php";
+         String get_my_cards = "http://mysite.lidordigital.co.il/Quertets/db/getMyCards.php";
 
 
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();

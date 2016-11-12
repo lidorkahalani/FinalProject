@@ -397,9 +397,10 @@ public class MainMenu extends AppCompatActivity {
     }
 
     public void ShowMyCards(View v) {
-        Intent myIntent = new Intent(this, ShowMyCards.class);
-        startActivity(myIntent); //app get crash her
-
+       /* Intent myIntent = new Intent(this, ShowMyCards.class);
+        startActivity(myIntent); */
+         Intent myIntent = new Intent(this,ShowMySerie.class);
+        startActivity(myIntent);
     }
 
     public void logOut(View v) {

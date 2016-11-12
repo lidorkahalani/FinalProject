@@ -137,7 +137,8 @@ public class AddCards extends AppCompatActivity implements View.OnClickListener 
     private void getMaxCategoryId() {
         final int[] maxId = {0};
         class GetMaxCategoryId extends AsyncTask<String, Void, Integer> {
-            String getMaxCategoryId_url="http://10.0.2.2/final_project/db/getMaxCategoryId.php";
+          //  String getMaxCategoryId_url="http://10.0.2.2/final_project/db/getMaxCategoryId.php";
+            String getMaxCategoryId_url="http://mysite.lidordigital.co.il/Quertets/db/getMaxCategoryId.php";
             LinkedHashMap<String, String> parms = new LinkedHashMap<>();
             @Override
             protected Integer doInBackground(String... params) {
@@ -301,8 +302,8 @@ public class AddCards extends AppCompatActivity implements View.OnClickListener 
     }
 
     public class sendSeriesToServer extends AsyncTask<String, Void, Boolean> {
-        String upload_series = "http://10.0.2.2/final_project/db/upload_series.php";
-        // String get_all_card_url = "http://mysite.lidordigital.co.il/Quertets/db/upload_series.php";
+       // String upload_series = "http://10.0.2.2/final_project/db/upload_series.php";
+         String upload_series = "http://mysite.lidordigital.co.il/Quertets/db/upload_series.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override

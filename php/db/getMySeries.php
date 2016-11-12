@@ -14,14 +14,10 @@ if(mysqli_num_rows($result) >0 )
 	$response["myCards"]=array();
 	$card=array();
 	while($row=mysqli_fetch_array($result)){
-		$card["card_id"]=$row["card_id"];
 		$card["card_name"]=$row["card_name"];
 		$card["image_name"]=$row["card_img"];
 		$card["category_id"]=$row["category_id"];
 		$card["category_name"]=getCategoryName($card["category_id"]);
-		$card["category_color"]=getCategorColor($card["category_id"]);
-		$card["card_labels"]=array();
-		$card["card_labels"]=getAllItems($card["category_id"]);
 		array_push($response["myCards"],$card);
 	}
 

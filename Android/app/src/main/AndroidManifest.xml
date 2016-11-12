@@ -6,7 +6,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -15,58 +16,56 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/NoTitle"
-            android:windowSoftInputMode="adjustResize"
-            android:screenOrientation="portrait">
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".SignUp"
+            android:screenOrientation="portrait"
             android:theme="@style/NoTitle"
-            android:windowSoftInputMode="adjustResize"
-            android:screenOrientation="portrait"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".SplashActivity"
-            android:theme="@style/NoTitle"/>
-
+            android:theme="@style/NoTitle" />
         <activity
             android:name=".MainMenu"
-            android:theme="@style/NoTitle"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitle" />
         <activity
             android:name=".ShowMyCards"
-            android:theme="@style/NoTitle"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitle" />
         <activity
             android:name=".GameScreen"
-            android:theme="@style/NoTitle"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitle" />
         <activity
             android:name=".Room"
-            android:theme="@style/NoTitle"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitle" />
         <activity android:name="com.facebook.FacebookActivity" />
         <activity
             android:name=".PreGame"
-            android:theme="@style/NoTitle"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitle" />
         <activity
             android:name=".AddCards"
-            android:theme="@style/NoTitle"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitle" />
         <activity
             android:name=".AllPerson"
-            android:theme="@style/NoTitle"
-            android:screenOrientation="portrait"/>
-
-        <activity android:name=".UpdateCard"
-            android:theme="@style/NoTitle"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitle" />
+        <activity
+            android:name=".UpdateCard"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitle" />
 
         <provider
             android:name="com.facebook.FacebookContentProvider"
@@ -77,7 +76,7 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-
+        <activity android:name=".ShowMySerie"></activity>
     </application>
 
 </manifest>
