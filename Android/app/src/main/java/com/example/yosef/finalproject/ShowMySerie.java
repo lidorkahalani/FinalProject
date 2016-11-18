@@ -3,6 +3,7 @@ package com.example.yosef.finalproject;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
@@ -34,6 +35,7 @@ public class ShowMySerie extends AppCompatActivity implements AdapterView.OnItem
 
     private ListView category_list;
     final String imageRelativePat = "http://10.0.2.2/final_project/images/";
+
     ListView lv;
     MyClassAdapter adapter;
     ArrayList<Card> allMyCard =new ArrayList<Card>();
@@ -59,6 +61,7 @@ public class ShowMySerie extends AppCompatActivity implements AdapterView.OnItem
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+    Toast.makeText(ShowMySerie.this,categorys.get(position).getCategory_name()+" was clicked ",Toast.LENGTH_SHORT).show();
     }
 
     /*class MyClassAdapter extends ArrayAdapter<Card> {
@@ -96,8 +99,8 @@ public class ShowMySerie extends AppCompatActivity implements AdapterView.OnItem
     }*/
 
     public class GetMySeries extends AsyncTask<String, Void, Boolean> {
-        //String GetMySeries = "http://10.0.2.2/final_project/db/getMySeries.php";
-        String GetMySeries = "http://mysite.lidordigital.co.il/Quertets/db/getMySeries.php";
+        String GetMySeries = "http://10.0.2.2/final_project/db/getMySeries.php";
+        //String GetMySeries = "http://mysite.lidordigital.co.il/Quertets/db/getMySeries.php";
 
 
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
@@ -106,22 +109,30 @@ public class ShowMySerie extends AppCompatActivity implements AdapterView.OnItem
         protected Boolean doInBackground(String... params) {
             parms.put("user_id", params[0]);
             JSONParser json = new JSONParser();
+            Category temp_categorys=new Category();;
             try {
                 JSONObject response = json.makeHttpRequest(GetMySeries, "GET", parms);
                 if (response.getInt("succsses") == 1) {
                     JSONArray jsonArray = response.getJSONArray("myCards");
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        Card card = new Card();
-                        Category temp_categorys=new Category();
+                    for (int i = 0; i < jsonArray.length(); i+=4) {
+                     //   Card card = new Card();
+                        if(i%4==0)
+                             temp_categorys=new Category();
 
                         JSONObject jo = jsonArray.getJSONObject(i);
+                        temp_categorys.setCategory_id(jo.getInt("category_id"));
                         temp_categorys.setCategory_name(jo.getString("category_name"));
+
                         temp_categorys.setCard_name1(jo.getString("card_name"));
+                        temp_categorys.setCard_name2(jsonArray.getJSONObject(i+1).getString("card_name"));
+                        temp_categorys.setCard_name3(jsonArray.getJSONObject(i+2).getString("card_name"));
+                        temp_categorys.setCard_name4(jsonArray.getJSONObject(i+3).getString("card_name"));
                         temp_categorys.setImage1(jo.getString("image_name"));
+                        temp_categorys.setImage2(jsonArray.getJSONObject(i+1).getString("image_name"));
+                        temp_categorys.setImage3(jsonArray.getJSONObject(i+2).getString("image_name"));
+                        temp_categorys.setImage4(jsonArray.getJSONObject(i+3).getString("image_name"));
                         categorys.add(temp_categorys);
                     }
-
-                    return true;
                 }
 
             } catch (JSONException e) {
@@ -131,12 +142,13 @@ public class ShowMySerie extends AppCompatActivity implements AdapterView.OnItem
                 e.printStackTrace();
                 return false;
             }
-            return false;
+            return true;
+
         }
 
         protected void onPostExecute(Boolean result) {
             if (result) {
-                if (allMyCard.isEmpty()) {
+                if (categorys.isEmpty()) {//allMyCard.isEmpty()) {
                     Toast.makeText(ShowMySerie.this, getResources().getString(R.string.dont_have_cards), Toast.LENGTH_LONG).show();
                     finish();
                 } else {
@@ -170,8 +182,10 @@ public class ShowMySerie extends AppCompatActivity implements AdapterView.OnItem
         // the method populates the view with the data from the relevant object (according to the position)
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-
+            Bitmap bitmap;
             String fullPath;
+            File imgFile;
+            Uri uri;
             Log.i("TEST getView", "inside getView position " + position);
 
             Category category = getItem(position);
@@ -186,18 +200,30 @@ public class ShowMySerie extends AppCompatActivity implements AdapterView.OnItem
             ImageView image3=(ImageView)convertView.findViewById(R.id.pic3);
             ImageView image4=(ImageView)convertView.findViewById(R.id.pic4);
 
+           /* imgFile = new File((imageRelativePat + category.getImage1()));
+            uri = Uri.fromFile(imgFile);
+            image1.setImageURI(uri);
+
+            imgFile = new File((imageRelativePat + category.getImage2()));
+            uri = Uri.fromFile(imgFile);
+            image2.setImageURI(uri);
+
+            imgFile = new File((imageRelativePat + category.getImage3()));
+            uri = Uri.fromFile(imgFile);
+            image3.setImageURI(uri);
+
+            imgFile = new File((imageRelativePat + category.getImage4()));
+            uri = Uri.fromFile(imgFile);
+            image4.setImageURI(uri);*/
 
            // fullPath = imageRelativePat + category.getImage1();
             ImageLoader imageLoader = new ImageLoader(getContext());
-            imageLoader.DisplayImage(imageRelativePat + category.getImage1(), R.mipmap.ic_launcher, image1);
+            imageLoader.DisplayImage((imageRelativePat + category.getImage1()), R.mipmap.ic_launcher, image1);
 
-             imageLoader = new ImageLoader(getContext());
             imageLoader.DisplayImage(imageRelativePat + category.getImage2(), R.mipmap.ic_launcher, image2);
 
-             imageLoader = new ImageLoader(getContext());
             imageLoader.DisplayImage(imageRelativePat + category.getImage3(), R.mipmap.ic_launcher, image3);
 
-             imageLoader = new ImageLoader(getContext());
             imageLoader.DisplayImage(imageRelativePat + category.getImage4(), R.mipmap.ic_launcher, image4);
 
             categoryName.setText(category.getCategory_name());

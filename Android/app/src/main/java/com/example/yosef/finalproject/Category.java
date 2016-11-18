@@ -9,6 +9,8 @@ import android.media.Image;
 public class Category {
     private String category_name;
     private int category_id;
+    private String [] cardsName=new String[4];
+    private String [] cardsImage=new String[4];
     private String card_name1;
     private String card_name2;
     private String card_name3;
@@ -19,12 +21,29 @@ public class Category {
     private String image4;
 
 
+
     public String getCategory_name() {
         return category_name;
     }
 
     public void setCategory_name(String category_name) {
         this.category_name = category_name;
+    }
+
+    public String[] getCardsName() {
+        return cardsName;
+    }
+
+    public void setCardsName(String[] cardsName) {
+        this.cardsName = cardsName;
+    }
+
+    public String[] getCardsImage() {
+        return cardsImage;
+    }
+
+    public void setCardsImage(String[] cardsImage) {
+        this.cardsImage = cardsImage;
     }
 
     public int getCategory_id() {

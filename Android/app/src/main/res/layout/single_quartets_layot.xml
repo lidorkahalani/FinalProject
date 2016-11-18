@@ -23,7 +23,6 @@
             android:id="@+id/pic4"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:background="@drawable/deck_en"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
@@ -32,7 +31,6 @@
             android:id="@+id/pic2"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:background="@drawable/deck_en"
             android:layout_alignParentTop="true"
             android:layout_toLeftOf="@+id/pic3"
             android:layout_toStartOf="@+id/pic3" />
@@ -41,7 +39,6 @@
             android:id="@+id/pic1"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:background="@drawable/deck_en"
             android:layout_alignParentTop="true"
             android:layout_toLeftOf="@+id/pic2"
             android:layout_toStartOf="@+id/pic2" />
@@ -50,7 +47,6 @@
             android:id="@+id/pic3"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:background="@drawable/deck_en"
             android:layout_alignParentTop="true"
             android:layout_toLeftOf="@+id/pic4"
             android:layout_toStartOf="@+id/pic4" />
