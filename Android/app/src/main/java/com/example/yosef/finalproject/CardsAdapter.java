@@ -33,7 +33,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.MyViewHolder
         public MyViewHolder(View view) {
             super(view);
             view.setOnCreateContextMenuListener(this);
-            category = (TextView) view.findViewById(R.id.category);
+            category = (TextView) view.findViewById(R.id.series);
             image = (ImageView) view.findViewById(R.id.card_image);
             card1 = (TextView) view.findViewById(R.id.card_name1);
             card2 = (TextView) view.findViewById(R.id.card_name2);

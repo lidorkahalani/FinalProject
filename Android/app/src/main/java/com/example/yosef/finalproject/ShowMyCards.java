@@ -114,8 +114,8 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
     }
 
     public class GetMyCards extends AsyncTask<String, Void, Boolean> {
-        //String get_my_cards = "http://10.0.2.2/final_project/db/getMyCards.php";
-         String get_my_cards = "http://mysite.lidordigital.co.il/Quertets/db/getMyCards.php";
+        String get_my_cards = "http://10.0.2.2/final_project/db/getMyCards.php";
+        // String get_my_cards = "http://mysite.lidordigital.co.il/Quertets/db/getMyCards.php";
 
 
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
@@ -262,7 +262,7 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
                 builder.setView(dialogView);
                 builder.setTitle(getResources().getString(R.string.update_Card_dialog_title));
                 builder.setMessage(getResources().getString(R.string.update_Card_masage));
-                final EditText category = (EditText) dialogView.findViewById(R.id.category);
+                final EditText category = (EditText) dialogView.findViewById(R.id.series);
                 final EditText itemText = (EditText) dialogView.findViewById(R.id.item1);
                 final ImageView image = (ImageView) dialogView.findViewById(R.id.updateImage);
                 String fullPath = imageRelativePat + selectedCardEditOrDelete.getImageName();
@@ -465,7 +465,7 @@ public class ShowMyCards extends AppCompatActivity implements AdapterView.OnItem
                 Log.e("TEST getView", "inside if with position " + position);
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.singelcard, parent, false);
             }
-            TextView catgory = (TextView) convertView.findViewById(R.id.category);
+            TextView catgory = (TextView) convertView.findViewById(R.id.series);
             TextView name1 = (TextView) convertView.findViewById(R.id.card_name1);
             TextView name2 = (TextView) convertView.findViewById(R.id.card_name2);
             TextView name3 = (TextView) convertView.findViewById(R.id.card_name3);

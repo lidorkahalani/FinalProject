@@ -27,7 +27,7 @@ public class UpdateCard extends AppCompatActivity {
     Button choseImage;
     Button updateCard;
     //public static final String UPLOAD_URL = "http://mysite.lidordigital.co.il/Quertets/upload_image.php";
-    public static final String UPLOAD_URL = "http://localhost/Quertets/upload_image.php";
+    public static final String UPLOAD_URL = "http://10.0.2.2/Quertets/upload_image.php";
     public static final String UPLOAD_KEY = "image";
     public static final String TAG = "MY MESSAGE";
 
@@ -53,7 +53,7 @@ public class UpdateCard extends AppCompatActivity {
         setContentView(R.layout.activity_update_card);
         Intent i = getIntent();
         card =i.getParcelableExtra("selectedCard");
-        category=(EditText)findViewById(R.id.category);
+        category=(EditText)findViewById(R.id.series);
         card_name=(EditText)findViewById(R.id.cardName);
         image=(ImageView) findViewById(R.id.card_image);
         choseImage=(Button) findViewById(R.id.changeImage);;

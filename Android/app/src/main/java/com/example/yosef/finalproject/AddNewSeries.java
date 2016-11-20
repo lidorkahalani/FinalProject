@@ -1,13 +1,11 @@
 package com.example.yosef.finalproject;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
@@ -15,30 +13,23 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EdgeEffect;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-public class AddCards extends AppCompatActivity implements View.OnClickListener {
+public class AddNewSeries extends AppCompatActivity implements View.OnClickListener {
     //public static final String UPLOAD_URL = "http://mysite.lidordigital.co.il/Quertets/db/add_image.php";
     //public static final String UPLOAD_URL = "http://10.0.2.2/final_project/db/add_image.php";
 
@@ -49,14 +40,28 @@ public class AddCards extends AppCompatActivity implements View.OnClickListener 
 
     private int PICK_IMAGE_REQUEST = 1;
 
-    private Button buttonChoose;
+    //private Button buttonChoose;
     private Button buttonUploadSeries;
     private User currentPlayer;
 
 
     private Button buttonUpload;
 
-    private ImageView imageView;
+    private ImageView imageViewCard1;
+    private ImageView imageViewCard2;
+    private ImageView imageViewCard3;
+    private ImageView imageViewCard4;
+
+    Button buttonChooseCard1;
+    Button buttonChooseCard2;
+    Button buttonChooseCard3;
+    Button buttonChooseCard4;
+
+    Boolean isbuttonChooseCard1;
+    Boolean isbuttonChooseCard2;
+    Boolean isbuttonChooseCard3;
+    Boolean isbuttonChooseCard4;
+
     private EditText category;
     private EditText card1;
     private EditText card2;
@@ -65,6 +70,7 @@ public class AddCards extends AppCompatActivity implements View.OnClickListener 
     private Boolean upload_image_status;
     private String cardName;
     TextView categoryName;
+    private int picCnt=0;
 
     static private ArrayList<Card>newSeries=new ArrayList<>();
 
@@ -80,25 +86,42 @@ public class AddCards extends AppCompatActivity implements View.OnClickListener 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_cards);
+        setContentView(R.layout.activity_add_new_series);
 
-        buttonChoose = (Button) findViewById(R.id.buttonChoose);
+        buttonChooseCard1 = (Button) findViewById(R.id.buttonChooseCard1);
+        buttonChooseCard2 = (Button) findViewById(R.id.buttonChooseCard2);
+        buttonChooseCard3 = (Button) findViewById(R.id.buttonChooseCard3);
+        buttonChooseCard4 = (Button) findViewById(R.id.buttonChooseCard4);
+
         buttonUpload = (Button) findViewById(R.id.buttonUpload);
         //buttonUploadSeries=(Button) findViewById(R.id.buttonUploadSeries);
-        category=(EditText)findViewById(R.id.category);
+        category=(EditText)findViewById(R.id.series);
         card1=(EditText)findViewById(R.id.card1);
+        card2=(EditText)findViewById(R.id.card2);
+        card3=(EditText)findViewById(R.id.card3);
+        card4=(EditText)findViewById(R.id.card4);
+
         categoryName=(TextView)findViewById(R.id.categoryName);
         Typeface typeface = Typeface.createFromAsset(getAssets(), "Matias_Webfont.ttf");
-        buttonChoose.setTypeface(typeface);
+        buttonChooseCard1.setTypeface(typeface);
+        buttonChooseCard2.setTypeface(typeface);
+        buttonChooseCard3.setTypeface(typeface);
+        buttonChooseCard4.setTypeface(typeface);
         buttonUpload.setTypeface(typeface);
         currentPlayer=(User)getIntent().getSerializableExtra("currenUsrt");
 
         getMaxCategoryId();
 
-        imageView = (ImageView) findViewById(R.id.imageView);
+        imageViewCard1 = (ImageView) findViewById(R.id.imageViewCard1);
+        imageViewCard2 = (ImageView) findViewById(R.id.imageViewCard2);
+        imageViewCard3 = (ImageView) findViewById(R.id.imageViewCard3);
+        imageViewCard4 = (ImageView) findViewById(R.id.imageViewCard4);
 
         categoryName.setText(getIntent().getStringExtra("categoryName"));
-        buttonChoose.setOnClickListener(this);
+        buttonChooseCard1.setOnClickListener(this);
+        buttonChooseCard2.setOnClickListener(this);
+        buttonChooseCard3.setOnClickListener(this);
+        buttonChooseCard4.setOnClickListener(this);
         buttonUpload.setOnClickListener(this);
     }
     private void showFileChooser() {
@@ -118,7 +141,23 @@ public class AddCards extends AppCompatActivity implements View.OnClickListener 
             imageFile=new File(filePath.getPath());
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                imageView.setImageBitmap(bitmap);
+                if(isbuttonChooseCard1) {
+                    imageViewCard1.setImageBitmap(bitmap);
+                    isbuttonChooseCard1=false;
+                }
+                else if(isbuttonChooseCard2) {
+                    imageViewCard2.setImageBitmap(bitmap);
+                    isbuttonChooseCard2=false;
+                }
+                else if(isbuttonChooseCard3) {
+                    imageViewCard3.setImageBitmap(bitmap);
+                    isbuttonChooseCard3=false;
+                }
+                else if(isbuttonChooseCard4) {
+                    imageViewCard4.setImageBitmap(bitmap);
+                    isbuttonChooseCard4=false;
+                }
+
                 imageCoosen=true;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -137,8 +176,8 @@ public class AddCards extends AppCompatActivity implements View.OnClickListener 
     private void getMaxCategoryId() {
         final int[] maxId = {0};
         class GetMaxCategoryId extends AsyncTask<String, Void, Integer> {
-          //  String getMaxCategoryId_url="http://10.0.2.2/final_project/db/getMaxCategoryId.php";
-            String getMaxCategoryId_url="http://mysite.lidordigital.co.il/Quertets/db/getMaxCategoryId.php";
+            String getMaxCategoryId_url="http://10.0.2.2/final_project/db/getMaxCategoryId.php";
+           // String getMaxCategoryId_url="http://mysite.lidordigital.co.il/Quertets/db/getMaxCategoryId.php";
             LinkedHashMap<String, String> parms = new LinkedHashMap<>();
             @Override
             protected Integer doInBackground(String... params) {
@@ -173,7 +212,7 @@ public class AddCards extends AppCompatActivity implements View.OnClickListener 
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                loading = ProgressDialog.show(AddCards.this,
+                loading = ProgressDialog.show(AddNewSeries.this,
                         getResources().getString(R.string.string_upload_image),
                         getResources().getString(R.string.please_wait),true,true);
             }
@@ -184,12 +223,12 @@ public class AddCards extends AppCompatActivity implements View.OnClickListener 
                 loading.dismiss();
                 if(s) {
                     upload_image_status = true;
-                    Toast.makeText(AddCards.this,
+                    Toast.makeText(AddNewSeries.this,
                             getResources().getString(R.string.upload_image_success),
                             Toast.LENGTH_LONG).show();
                 }else{
                     upload_image_status = false;
-                    Toast.makeText(AddCards.this,
+                    Toast.makeText(AddNewSeries.this,
                             getResources().getString(R.string.upload_image_failed),
                             Toast.LENGTH_LONG).show();
                 }
@@ -233,7 +272,7 @@ public class AddCards extends AppCompatActivity implements View.OnClickListener 
                 .setCancelable(false)
                 .setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Intent myIntent = new Intent(AddCards.this, MainMenu.class);
+                        Intent myIntent = new Intent(AddNewSeries.this, MainMenu.class);
                         startActivity(myIntent);
                         //finish();
                         finish();
@@ -249,20 +288,43 @@ public class AddCards extends AppCompatActivity implements View.OnClickListener 
     }
     @Override
     public void onClick(View v) {
-        if (v == buttonChoose) {
+        if (v == buttonChooseCard1) {
+            isbuttonChooseCard1=true;
+            showFileChooser();
+        }else if(v ==buttonChooseCard2){
+            isbuttonChooseCard2=true;
+            showFileChooser();
+        }else if(v ==buttonChooseCard3){
+            isbuttonChooseCard3=true;
+            showFileChooser();
+        }else if(v ==buttonChooseCard4){
+            isbuttonChooseCard4=true;
             showFileChooser();
         }
+
+
+
         if(v == buttonUpload){
-            if(imageCoosen) {
-                cardName=card1.getText().toString();
+
+            if(chekIfAllParmInit()){//chekIfAllParmInit() {
+                Toast.makeText(this,"All good",Toast.LENGTH_SHORT).show();
+                new sendSeriesToServer().execute(categoryName.getText().toString(),card1.getText().toString(),card2.getText().toString(),
+                                        card3.getText().toString(),card4.getText().toString(),
+                                        getStringImage(((BitmapDrawable)imageViewCard1.getDrawable()).getBitmap()),
+                                        getStringImage(((BitmapDrawable)imageViewCard2.getDrawable()).getBitmap()),
+                                        getStringImage(((BitmapDrawable)imageViewCard3.getDrawable()).getBitmap()),
+                                        getStringImage(((BitmapDrawable)imageViewCard4.getDrawable()).getBitmap()));
+
+
+                /*cardName=card1.getText().toString();
                 uploadImage();
                 if(upload_image_status){
                     addThisCardToLocalArray();
-                }
+                }*/
             }
             else
-                Toast.makeText(AddCards.this,
-                        getResources().getString(R.string.please_choose_image),
+                Toast.makeText(AddNewSeries.this,
+                        getResources().getString(R.string.empty_field),
                         Toast.LENGTH_SHORT).show();
         }if (v==buttonUploadSeries){
             uploadImage();
@@ -270,6 +332,25 @@ public class AddCards extends AppCompatActivity implements View.OnClickListener 
                 addThisCardToLocalArray();
             sendSeries();
         }
+
+    }
+
+    private Boolean chekIfAllParmInit(){
+        if(card1.getText().toString()==""||
+                card2.getText().toString()==""||
+                card3.getText().toString()==""||
+                card4.getText().toString()=="")
+            return false;
+
+
+        if(imageViewCard1.getDrawable()==null||
+                    imageViewCard2.getDrawable()==null||
+                    imageViewCard3.getDrawable()==null||
+                    imageViewCard4.getDrawable()==null)
+            return false;
+
+
+        return true;
 
     }
 
@@ -301,22 +382,30 @@ public class AddCards extends AppCompatActivity implements View.OnClickListener 
         }
     }
 
+
     public class sendSeriesToServer extends AsyncTask<String, Void, Boolean> {
-       // String upload_series = "http://10.0.2.2/final_project/db/upload_series.php";
-         String upload_series = "http://mysite.lidordigital.co.il/Quertets/db/upload_series.php";
+        String upload_series = "http://10.0.2.2/final_project/db/upload_series.php";
+        // String upload_series = "http://mysite.lidordigital.co.il/Quertets/db/upload_series.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
         protected Boolean doInBackground(String... params) {
-          /*  parms.put("card1",newSeries.get(0));
-            parms.put("card2",newSeries.get(1));
-            parms.put("card3",newSeries.get(2));
-            parms.put("card4",newSeries.get(3));
+            parms.put("category_id",String.valueOf(category_id));
+            parms.put("category_name",params[0]);
+            parms.put("user_id",String.valueOf(currentPlayer.getUserID()));
+            parms.put("card1",params[1]);
+            parms.put("card2",params[2]);
+            parms.put("card3",params[4]);
+            parms.put("card4",params[5]);
+            parms.put("image1",params[5]);
+            parms.put("image2",params[6]);
+            parms.put("image3",params[7]);
+            parms.put("image4",params[8]);
 
-            */
+
             JSONParser json = new JSONParser();
             try {
-                JSONObject response = json.makeHttpRequest(upload_series, "GET", parms);
+                JSONObject response = json.makeHttpRequest(upload_series, "POST", parms);
                 if (response.getInt("succsses")==1) {
                     newSeries.clear();
                     return true;
@@ -331,9 +420,9 @@ public class AddCards extends AppCompatActivity implements View.OnClickListener 
 
         protected void onPostExecute(Boolean result) {
             if (result) {
-                Toast.makeText(AddCards.this, "Series upload sucssfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddNewSeries.this, "Series upload sucssfully", Toast.LENGTH_SHORT).show();
             } else
-                Toast.makeText(AddCards.this, "Series upload failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddNewSeries.this, "Series upload failed", Toast.LENGTH_SHORT).show();
         }
 
     }

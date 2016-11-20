@@ -1,7 +1,6 @@
 package com.example.yosef.finalproject;
 
 import android.Manifest;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -34,7 +33,6 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
 import java.util.ArrayList;
-import java.util.Timer;
 
 public class MainMenu extends AppCompatActivity {
 
@@ -241,7 +239,7 @@ public class MainMenu extends AppCompatActivity {
                                 categoryName =new String( userInput.getText().toString());
 
                                 if (!categoryName.isEmpty()) {
-                                    Intent myIntent = new Intent(MainMenu.this, AddCards.class);
+                                    Intent myIntent = new Intent(MainMenu.this, AddNewSeries.class);
                                     myIntent.putExtra("currenUsrt",currentPlayer);
                                     myIntent.putExtra("categoryName",categoryName);
                                     startActivity(myIntent);

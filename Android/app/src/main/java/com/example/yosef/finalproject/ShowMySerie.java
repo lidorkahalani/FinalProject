@@ -1,17 +1,21 @@
 package com.example.yosef.finalproject;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -26,7 +30,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -38,9 +41,14 @@ public class ShowMySerie extends AppCompatActivity implements AdapterView.OnItem
 
     ListView lv;
     MyClassAdapter adapter;
+    public static int MENU_ID = 0;
+    private static final int SERIES_CLICK_MENU = 1;
+    private static final int UPDATE_SERIES_REQUEST = 2;
     ArrayList<Card> allMyCard =new ArrayList<Card>();
-   // ArrayList<String> categorys=new ArrayList();
-    ArrayList<Category> categorys=new ArrayList();
+   // ArrayList<String> series=new ArrayList();
+    ArrayList<Series> series =new ArrayList();
+    private Series selectedSeries;
+    int position;
     int myId;
 
 
@@ -60,9 +68,102 @@ public class ShowMySerie extends AppCompatActivity implements AdapterView.OnItem
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-    Toast.makeText(ShowMySerie.this,categorys.get(position).getCategory_name()+" was clicked ",Toast.LENGTH_SHORT).show();
+        //selectedSeries= series.get(position);
+    //Toast.makeText(ShowMySerie.this,series.get(position).getCategory_name()+" was clicked ",Toast.LENGTH_SHORT).show();
+    //Toast.makeText(ShowMySerie.this,"push and hold for more option",Toast.LENGTH_SHORT).show();
     }
+
+    public void onCreateContextMenu(ContextMenu menu, View view,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+
+        String menuItems[];
+        switch (view.getId()) {
+            case R.id.CategoryListView:
+                AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+                position=info.position;
+                menuItems = getResources().getStringArray(R.array.my_card);
+                menu.setHeaderTitle(getResources().getString(R.string.choose));
+                break;
+            default:
+                return;
+        }
+
+        for (int i = 0; i < menuItems.length; i++) {
+            menu.add(Menu.NONE, i, i, menuItems[i]);
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        final int menuItemIndex = item.getItemId();
+        MENU_ID = SERIES_CLICK_MENU;
+        /*localhost*/
+        final String delete_series = "http://10.0.2.2/final_project/db/deleteSeries.php";
+        final String update_card_url = "http://10.0.2.2/final_project/db/UpdateCard.php";
+
+        /*server*/
+        //String delete_card = "http://mysite.lidordigital.co.il/Quertets/db/deleteSeries.php";
+        //final String update_card_url="http://mysite.lidordigital.co.il/Quertets/db/UpdateCard.php";
+
+        if (MENU_ID == SERIES_CLICK_MENU) {
+            String[] menuItems = getResources().getStringArray(R.array.my_card);
+            String menuItemName = menuItems[menuItemIndex];//delete card
+            if (menuItemName.equals(menuItems[0])) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage(getResources().getString(R.string.Are_you_sure_delet_series))
+                        .setCancelable(false)
+                        .setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                new deleteSeries().execute(delete_series, String.valueOf(selectedSeries.getCategory_id()));
+                            }
+                        })
+                        .setNegativeButton(getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                AlertDialog alert = builder.create();
+                alert.show();
+                Toast.makeText(ShowMySerie.this,"Delete selected series",Toast.LENGTH_SHORT).show();
+            } else if (menuItemName.equals(menuItems[1])) {//Update Card
+                    Intent intent = new Intent(this, UpdateSeries.class);
+                    intent.putExtra("SelectedSeries", series.get(position));
+                    intent.putExtra("user_id",myId);
+
+                    startActivityForResult(intent, UPDATE_SERIES_REQUEST);
+
+            }
+
+
+        }
+
+        return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == UPDATE_SERIES_REQUEST)
+        {
+            if(resultCode == RESULT_OK)
+            {
+                startActivity(getIntent());
+                Toast.makeText(ShowMySerie.this,"Update series sucssess",Toast.LENGTH_SHORT).show();
+                //ArrayList<String> hobbies = data.getStringArrayListExtra("hobbies");
+                //hobbiesText.setText(hobbies.toString());
+            }else{
+
+            }
+        }
+    }
+
+    @Override
+    public void onContextMenuClosed(Menu menu) {
+
+    }
+
 
     /*class MyClassAdapter extends ArrayAdapter<Card> {
 
@@ -109,7 +210,7 @@ public class ShowMySerie extends AppCompatActivity implements AdapterView.OnItem
         protected Boolean doInBackground(String... params) {
             parms.put("user_id", params[0]);
             JSONParser json = new JSONParser();
-            Category temp_categorys=new Category();;
+            Series temp_categorys=new Series();;
             try {
                 JSONObject response = json.makeHttpRequest(GetMySeries, "GET", parms);
                 if (response.getInt("succsses") == 1) {
@@ -117,7 +218,7 @@ public class ShowMySerie extends AppCompatActivity implements AdapterView.OnItem
                     for (int i = 0; i < jsonArray.length(); i+=4) {
                      //   Card card = new Card();
                         if(i%4==0)
-                             temp_categorys=new Category();
+                             temp_categorys=new Series();
 
                         JSONObject jo = jsonArray.getJSONObject(i);
                         temp_categorys.setCategory_id(jo.getInt("category_id"));
@@ -131,7 +232,7 @@ public class ShowMySerie extends AppCompatActivity implements AdapterView.OnItem
                         temp_categorys.setImage2(jsonArray.getJSONObject(i+1).getString("image_name"));
                         temp_categorys.setImage3(jsonArray.getJSONObject(i+2).getString("image_name"));
                         temp_categorys.setImage4(jsonArray.getJSONObject(i+3).getString("image_name"));
-                        categorys.add(temp_categorys);
+                        series.add(temp_categorys);
                     }
                 }
 
@@ -148,11 +249,11 @@ public class ShowMySerie extends AppCompatActivity implements AdapterView.OnItem
 
         protected void onPostExecute(Boolean result) {
             if (result) {
-                if (categorys.isEmpty()) {//allMyCard.isEmpty()) {
+                if (series.isEmpty()) {//allMyCard.isEmpty()) {
                     Toast.makeText(ShowMySerie.this, getResources().getString(R.string.dont_have_cards), Toast.LENGTH_LONG).show();
                     finish();
                 } else {
-                    adapter = new MyClassAdapter(ShowMySerie.this, R.layout.single_quartets_layot,categorys);
+                    adapter = new MyClassAdapter(ShowMySerie.this, R.layout.single_quartets_layot, series);
                    // adapter = new MyClassAdapter(ShowMySerie.this, R.layout.single_quartets_layot,allMyCard);
 
                     category_list.setAdapter(adapter);
@@ -170,10 +271,9 @@ public class ShowMySerie extends AppCompatActivity implements AdapterView.OnItem
         }
     }
 
+    class MyClassAdapter extends ArrayAdapter<Series> {
 
-    class MyClassAdapter extends ArrayAdapter<Category> {
-
-        public MyClassAdapter(Context context, int resource, List<Category> objects) {
+        public MyClassAdapter(Context context, int resource, List<Series> objects) {
             super(context,resource,objects);
         }
 
@@ -188,7 +288,7 @@ public class ShowMySerie extends AppCompatActivity implements AdapterView.OnItem
             Uri uri;
             Log.i("TEST getView", "inside getView position " + position);
 
-            Category category = getItem(position);
+            Series series = getItem(position);
             //String card2 = getItem(position);
             if (convertView == null) {
                 Log.e("TEST getView", "inside if with position " + position);
@@ -200,36 +300,70 @@ public class ShowMySerie extends AppCompatActivity implements AdapterView.OnItem
             ImageView image3=(ImageView)convertView.findViewById(R.id.pic3);
             ImageView image4=(ImageView)convertView.findViewById(R.id.pic4);
 
-           /* imgFile = new File((imageRelativePat + category.getImage1()));
+           /* imgFile = new File((imageRelativePat + series.getImage1()));
             uri = Uri.fromFile(imgFile);
             image1.setImageURI(uri);
 
-            imgFile = new File((imageRelativePat + category.getImage2()));
+            imgFile = new File((imageRelativePat + series.getImage2()));
             uri = Uri.fromFile(imgFile);
             image2.setImageURI(uri);
 
-            imgFile = new File((imageRelativePat + category.getImage3()));
+            imgFile = new File((imageRelativePat + series.getImage3()));
             uri = Uri.fromFile(imgFile);
             image3.setImageURI(uri);
 
-            imgFile = new File((imageRelativePat + category.getImage4()));
+            imgFile = new File((imageRelativePat + series.getImage4()));
             uri = Uri.fromFile(imgFile);
             image4.setImageURI(uri);*/
 
-           // fullPath = imageRelativePat + category.getImage1();
+           // fullPath = imageRelativePat + series.getImage1();
             ImageLoader imageLoader = new ImageLoader(getContext());
-            imageLoader.DisplayImage((imageRelativePat + category.getImage1()), R.mipmap.ic_launcher, image1);
+            imageLoader.DisplayImage((imageRelativePat + series.getImage1()), R.mipmap.ic_launcher, image1);
 
-            imageLoader.DisplayImage(imageRelativePat + category.getImage2(), R.mipmap.ic_launcher, image2);
+            imageLoader.DisplayImage(imageRelativePat + series.getImage2(), R.mipmap.ic_launcher, image2);
 
-            imageLoader.DisplayImage(imageRelativePat + category.getImage3(), R.mipmap.ic_launcher, image3);
+            imageLoader.DisplayImage(imageRelativePat + series.getImage3(), R.mipmap.ic_launcher, image3);
 
-            imageLoader.DisplayImage(imageRelativePat + category.getImage4(), R.mipmap.ic_launcher, image4);
+            imageLoader.DisplayImage(imageRelativePat + series.getImage4(), R.mipmap.ic_launcher, image4);
 
-            categoryName.setText(category.getCategory_name());
+            categoryName.setText(series.getCategory_name());
 
             return convertView;
 
+        }
+    }
+
+    public class deleteSeries extends AsyncTask<String, Void, Boolean> {
+        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            parms.put("category_id", params[1]);
+            JSONParser json = new JSONParser();
+            try {
+                JSONObject response = json.makeHttpRequest(params[0], "POST", parms);
+
+                if (response.getInt("succsses") == 1) {
+                    return true;
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return false;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+
+            return false;
+        }
+        protected void onPostExecute(Boolean result) {
+            if (result) {
+                Toast.makeText(ShowMySerie.this, getResources().getString(R.string.delete_succsessfull), Toast.LENGTH_LONG).show();
+                //finish();
+                //startActivity(getIntent());
+            } else
+                Toast.makeText(ShowMySerie.this, getResources().getString(R.string.delete_failed), Toast.LENGTH_SHORT).show();
         }
     }
 }

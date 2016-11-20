@@ -2,11 +2,13 @@ package com.example.yosef.finalproject;
 
 import android.media.Image;
 
+import java.io.Serializable;
+
 /**
  * Created by Yosef on 13-Nov-16.
  */
 
-public class Category {
+public class Series implements Serializable {
     private String category_name;
     private int category_id;
     private String [] cardsName=new String[4];
