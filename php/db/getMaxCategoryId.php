@@ -1,7 +1,7 @@
 <?php
 require_once('connection.php');
 $response=array();
-$sth = $con->prepare("SELECT MAX(category_id) FROM cards");
+$sth = $con->prepare("SELECT MAX(category_id) FROM category");
 			$sth->execute();
 			$result = $sth->fetchColumn();
 			if($result){

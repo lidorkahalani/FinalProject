@@ -194,7 +194,7 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
 
             protected void onPostExecute(Integer s) {
                 if(s!=0)
-                    category_id =s;
+                    category_id =(s+1);
             }
         }
         GetMaxCategoryId g= new GetMaxCategoryId();
@@ -401,7 +401,6 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
             parms.put("image2",params[6]);
             parms.put("image3",params[7]);
             parms.put("image4",params[8]);
-
 
             JSONParser json = new JSONParser();
             try {

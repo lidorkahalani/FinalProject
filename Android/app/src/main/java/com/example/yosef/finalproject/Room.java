@@ -4,7 +4,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,6 +30,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.math.RoundingMode;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,6 +52,7 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
     private  User curentUser;
     private Game game;
     boolean isNewRoom;
+    String []allConnectedUsersId=new String [4];
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -154,7 +158,20 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                         .setMessage(getResources().getString(R.string.Group_Not_Found))
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                // continue with delete
+                                SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(Room.this);
+                                Boolean faceBookLogIN=myPref.getBoolean("loginWhitFacebook",false);
+
+                                SharedPreferences.Editor editor = myPref.edit();
+                                editor.putString("username", curentUser.getUserName());
+                                editor.putString("password", curentUser.getPassword());
+                                editor.putInt("score", curentUser.getScore());
+                                editor.putInt("user_id",curentUser.getUserID());
+
+                                editor.commit();
+
+                                Intent myIntent = new Intent(Room.this, MainMenu.class);
+                                startActivity(myIntent);
+                                finish();
                             }
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
@@ -180,6 +197,7 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                 if (response.getInt("successes") == 1) {
                     game.setGame_name(roomName);
                     game.setGame_id(response.getJSONArray("game").getJSONObject(0).getInt("game_id"));
+
                     return 1;
                 } else
                     return 0;
@@ -224,6 +242,7 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                 Toast.makeText(Room.this
                         , getResources().getString(R.string.room_name_in_use),
                         Toast.LENGTH_LONG).show();
+
             } else if (result == -1) {//connection problem
                 Toast.makeText(Room.this
                         , getResources().getString(R.string.connection_error),
@@ -324,6 +343,11 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                 JSONObject response = json.makeHttpRequest(checkIfRoomFull, "POST", parms);
 
                 if (response.getInt("succsses")== 1) {
+                    JSONArray jsonArray = response.getJSONArray("all_users_id");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jo = jsonArray.getJSONObject(i);
+                        allConnectedUsersId[i]=String.valueOf(jo.getInt("user_id"));
+                    }
                     return true;
                 } else {
                     return false;
@@ -335,6 +359,15 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
         }
         protected void onPostExecute(Boolean result) {
             if (result) {
+                /*Intent i = new Intent(getApplicationContext(), AdminChooseSeries.class);
+                game.setGame_name(game.getGame_name());
+                i.putExtra("Game",game);
+                i.putExtra("currentPlayer",curentUser);
+                i.putExtra("isNewRoom",true);
+                i.putExtra("allConnectedUsersId",allConnectedUsersId);
+                i.putExtra("allUsers",allUsers);
+                startActivity(i);
+                finish();*/
                 new setTurnOrder().execute();
             }else
                 new GetAllConnectedPlayers().execute();
@@ -369,11 +402,24 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
             if (result) {
                 timer.cancel();
                 timerFlag = false;
+
                 Intent i = new Intent(getApplicationContext(), GameScreen.class);
                 i.putExtra("Game", game);
                 i.putExtra("currentPlayer", curentUser);
+                i.putExtra("allConnectedUsersId",allConnectedUsersId);
                 startActivity(i);
                 finish();
+
+               /* Intent i = new Intent(getApplicationContext(), AdminChooseSeries.class);
+                game.setGame_name(game.getGame_name());
+                i.putExtra("Game",game);
+                i.putExtra("currentPlayer",curentUser);
+                //i.putExtra("isNewRoom",true);
+                i.putExtra("allConnectedUsersId",allConnectedUsersId);
+               // i.putExtra("allUsers",allUsers);
+                startActivity(i);
+                finish();*/
+
                 pDialog.dismiss();
             }else
                 Toast.makeText(Room.this,"There is problem no order set",Toast.LENGTH_LONG).show();

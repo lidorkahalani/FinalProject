@@ -21,6 +21,7 @@
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -65,15 +66,14 @@
             android:name=".UpdateCard"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitle" />
-
-        <activity android:name=".ShowMySerie"
+        <activity
+            android:name=".ShowMySerie"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitle"
-            />
-        <activity android:name=".UpdateSeries"
+            android:theme="@style/NoTitle" />
+        <activity
+            android:name=".UpdateSeries"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitle"
-            />
+            android:theme="@style/NoTitle" />
 
         <provider
             android:name="com.facebook.FacebookContentProvider"
@@ -84,6 +84,7 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
+        <activity android:name=".AdminChooseSeries"></activity>
     </application>
 
 </manifest>
