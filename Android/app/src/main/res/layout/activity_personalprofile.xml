@@ -51,7 +51,7 @@
             android:id="@+id/btnAddCardId"
             android:layout_marginTop="15dp"
             android:background="@drawable/add_new_cards_small"
-            android:text="@string/addNewCards"
+            android:text="@string/add_new_series"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />

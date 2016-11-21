@@ -8,7 +8,7 @@ $user_id=$_POST['user_id'];
  $response["game"]=array();
  $game=array();
 if(checkIfRoomNameAvailable($roomName)==0){
-	$insert = $con->exec("INSERT INTO game (game_name,my_turn_user_id) VALUES('$roomName',0)");
+	$insert = $con->exec("INSERT INTO game (game_name,my_turn_user_id,admin_user_id) VALUES('$roomName',0,'$user_id')");
  if ($insert !== FALSE) {
 	 $id = $con->lastInsertId();
 	  $game["game_id"]=$id;
