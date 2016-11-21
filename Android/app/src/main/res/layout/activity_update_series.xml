@@ -157,6 +157,7 @@
         android:layout_gravity="center_horizontal"
         android:text="@string/update_series"
         android:layout_marginTop="90dp"
+        android:layout_margin="10dp"
         android:background="@color/azure"
         android:id="@+id/buttonUpdateSeries" />
 

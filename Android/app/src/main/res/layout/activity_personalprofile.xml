@@ -15,7 +15,7 @@
         android:id="@+id/linearLayout"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true">
-
+    <!--
         <Button
             android:textSize="18dip"
             android:onClick="startGame"
@@ -28,6 +28,7 @@
             android:layout_above="@+id/button3"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
+    -->
         <Button
             android:textSize="18dip"
             android:onClick="openRoom"
@@ -64,7 +65,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:id="@+id/btnShowMyCardId"
-            android:text="@string/ShowMyCards"
+            android:text="@string/show_my_series"
             android:background="@drawable/my_cards"
             android:layout_below="@+id/linearLayout"
             android:layout_centerHorizontal="true" />
