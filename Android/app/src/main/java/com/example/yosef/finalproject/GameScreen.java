@@ -71,7 +71,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
             new getAllCards().execute();
         else
             new startPlay().execute();
-
+        
         randomGenerator = new Random();
 
         playerList.add(currentPlayer);
