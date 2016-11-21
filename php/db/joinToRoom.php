@@ -5,8 +5,8 @@ $user_id=$_POST['user_id'];
 $game_id=getGameId($roomName);
 $response=array();
 //if room exist
-if($game_id){
-	if(countPlayerInRoom($game_id)<4){
+if($game_id!=null){
+	if(countPlayerInRoom($game_id)<2){
 		//another way to insert working
 			/*try {
 				$sql = "INSERT INTO game_users (game_id,user_id) VALUES(6,18)";
@@ -19,11 +19,13 @@ if($game_id){
 		  $insert=$con->exec("INSERT INTO game_users (game_id,user_id) VALUES('$game_id','$user_id')");
 		  if($insert !== FALSE){
 			  $response["game_id"]=$game_id;
+			   $response["roomIsFull"]=0;
 			  $response["succsses"]=1;
 		  }else{
 			   $response["succsses"]=0;
 		  }
 	}else{
+	     $response["roomIsFull"]=1;
 		 $response["succsses"]=0;
 	}
 }else
@@ -31,7 +33,7 @@ if($game_id){
 echo json_encode($response);
 function getGameId($roomName){
 	require('connection.php');
-	$sth = $con->prepare("SELECT game_id FROM game where game_name='$roomName' AND is_active=1");
+	$sth = $con->prepare("SELECT game_id FROM game where game_name='$roomName'");
 	$sth->execute();
 	$result = $sth->fetch(PDO::FETCH_ASSOC);
 	if($result){

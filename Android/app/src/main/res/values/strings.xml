@@ -86,6 +86,7 @@
     <string name="room_empty">There is no user in room</string>
     <string name="card_load">card load successfully</string>
     <string name="update_series">Update series</string>
+    <string name="wait_for_admin_chose">Wait for admin chose series</string>
 
     <string-array name="card_click_menu">
         <item>send card</item>

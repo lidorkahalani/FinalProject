@@ -7,6 +7,7 @@ $sth = $con->prepare("SELECT * FROM game WHERE game_id='$game_id' AND admin_user
 			$sth->execute();
 			$result = $sth->fetchAll(PDO::FETCH_ASSOC);
 			if($result){
+				$response["result"]=1;
 				$response["succsses"]=1;
 			}
 			else	

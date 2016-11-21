@@ -48,7 +48,7 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
         category_list=(ListView)findViewById(R.id.choseSeriesList);
         game=(Game)getIntent().getSerializableExtra("Game");
         curentUser =(User) getIntent().getSerializableExtra("currentPlayer");
-        //allUsers=(ArrayList<User>)getIntent().getSerializableExtra("allUsers");
+        allUsers=(ArrayList<User>)getIntent().getSerializableExtra("allUsers");
         allConnectedUsersId=getIntent().getExtras().getStringArray("allConnectedUsersId");
 
         new GetMySeries().execute(String.valueOf(allConnectedUsersId[0]));
@@ -63,12 +63,13 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
 
 
     public void startGame(View v){
-        CheckBox cb = (CheckBox) v.getRootView().findViewById(R.id.checkBox);
+       // CheckBox cb = (CheckBox) v.getRootView().findViewById(R.id.checkBox);
         //CheckBox checkBox=(CheckBox)v.findViewById(R.id.checkBox);
-        Toast.makeText(AdminChooseSeries.this,cb.getText().toString(),Toast.LENGTH_SHORT).show();
+       // Toast.makeText(AdminChooseSeries.this,cb.getText().toString(),Toast.LENGTH_SHORT).show();
 
-        if(true)
-            new setTurnOrder().execute();
+        if(true) {
+            new setGameToActive().execute("1",String.valueOf(game.getGame_id()));
+        }
 
 
     }
@@ -256,8 +257,6 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
                 i.putExtra("debug",false);
                 startActivity(i);
                 finish();
-
-
             }else
                 Toast.makeText(AdminChooseSeries.this,"There is problem no order set",Toast.LENGTH_LONG).show();
 
@@ -265,6 +264,39 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
 
     }
 
+    public class setGameToActive extends AsyncTask<String, Void, Boolean> {
+        String setGameToActive = "http://10.0.2.2/final_project/db/setGameToActive.php";
+        // String setGameToActive = "http://mysite.lidordigital.co.il/Quertets/db/setGameToActive.php";
+        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            parms.put("opertion",params[0]);
+            parms.put("game_id",params[1]);
+
+            JSONParser json = new JSONParser();
+            try {
+                JSONObject response = json.makeHttpRequest(setGameToActive, "POST", parms);
+
+                if (response.getInt("succsses")== 1) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        protected void onPostExecute(Boolean result) {
+            if (result) {
+                new setTurnOrder().execute();
+            }else
+                Toast.makeText(AdminChooseSeries.this,"Cant set game to be active",Toast.LENGTH_LONG).show();
+
+        }
+
+    }
 
     public String getMyName(String user_id){
         final String[] userName = new String[1];
