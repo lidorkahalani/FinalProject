@@ -31,7 +31,7 @@ $query1="INSERT INTO `cards` (card_name,category_id,card_img,user_id) VALUES ('$
 $query2="INSERT INTO `cards` (card_name,category_id,card_img,user_id) VALUES ('$card2','$category_id','$card_img2','$user_id')";
 $query3="INSERT INTO `cards` (card_name,category_id,card_img,user_id) VALUES ('$card3','$category_id','$card_img3','$user_id')";
 $query4="INSERT INTO `cards` (card_name,category_id,card_img,user_id) VALUES ('$card4','$category_id','$card_img4','$user_id')";
-$final_query="INSERT into category (category_name,category_color) VALUES('$categoryName','$category_color')";
+$final_query=" into category (category_name,category_color) VALUES('$categoryName','$category_color')";
 
 if(move_uploaded_file($image1['tmp_name'], $file_path1)) {
 	  $host='localhost';
@@ -45,28 +45,35 @@ if(move_uploaded_file($image1['tmp_name'], $file_path1)) {
 			//$card_img=basename( $image2['name']);
 			//$file_path =$file_path.basename( $image2['name']);
 			move_uploaded_file($image2['tmp_name'], $file_path2);
-	  }
+	  
 		  if(mysqli_query($link,$query2)){
 			$file_path = "../images/";
 			//$card_img=basename( $image3['name']);
 			//$file_path =$file_path.basename( $image3['name']);
 			move_uploaded_file($image3['tmp_name'], $file_path3);
-			}
+			
 			  if(mysqli_query($link,$query3)){
 				  $file_path = "../images/";
 				  //$card_img=basename( $image4['name']);
 				//$file_path =$file_path.basename( $image4['name']);
 				move_uploaded_file($image4['tmp_name'], $file_path4);
-			  }
+			  
 				  if(mysqli_query($link,$query4)){
-					  
 					   if(mysqli_query($link,$final_query))
-						$response["succsses"]=1;
-				  }
-		 
+							$response=1;
+						else
+							$response=0;
+				  }else
+						$response=0;
+				}else
+					$response=0;
+			}else
+				$response=0;
+		}else
+			$response=0;			  		 
 	  mysqli_close($link);
 } else{
-    $response["succsses"]=0;
+    $response=0;
 }
 echo json_encode($response);
 

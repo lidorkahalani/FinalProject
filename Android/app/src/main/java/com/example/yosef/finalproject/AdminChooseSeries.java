@@ -40,6 +40,7 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
     String allConnectedUsersId[]=new String[4];
     Game game;
     User curentUser;
+    int i=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,7 +128,7 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
 
         protected void onPostExecute(Boolean result) {
             if(result) {
-                for(int i=1;i<(allConnectedUsersId.length-1);i++)
+                for(;i<(allConnectedUsersId.length-1);i++)
                     new GetMySeries().execute(String.valueOf(allConnectedUsersId[i]));
 
             }
@@ -251,6 +252,7 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
         }
         protected void onPostExecute(Boolean result) {
             if (result) {
+
                 Intent i = new Intent(getApplicationContext(), GameScreen.class);
                 i.putExtra("Game", game);
                 i.putExtra("currentPlayer",curentUser);

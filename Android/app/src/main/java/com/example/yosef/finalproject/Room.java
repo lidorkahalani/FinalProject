@@ -419,6 +419,10 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
         protected void onPostExecute(Boolean result) {
             if (result) {
                 if(isAdmin) {
+                    timer.cancel();
+                    timerFlag = false;
+                    pDialog.dismiss();
+
                     Intent i = new Intent(getApplicationContext(), AdminChooseSeries.class);
                     game.setGame_name(game.getGame_name());
                     i.putExtra("Game", game);

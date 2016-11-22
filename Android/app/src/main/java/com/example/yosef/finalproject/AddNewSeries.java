@@ -1,18 +1,28 @@
 package com.example.yosef.finalproject;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Environment;
+import android.preference.PreferenceManager;
+import android.provider.ContactsContract;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,12 +30,37 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.internal.http.multipart.MultipartEntity;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.EntityBuilder;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.InputStreamEntity;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.ContentBody;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.apache.http.util.EntityUtilsHC4;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
@@ -79,6 +114,25 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
     private boolean imageCoosen;
     private static int category_id;
 
+    private File file1;
+    private File file2;
+    private File file3;
+    private File file4;
+
+    private String imageName1;
+    private String imageName2;
+    private String imageName3;
+    private String imageName4;
+
+    String charset = "UTF-8";
+    HttpURLConnection conn;
+    DataOutputStream wr;
+    StringBuilder result;
+    URL urlObj;
+    JSONObject jObj = null;
+    StringBuilder sbParams;
+    String paramsString;
+
 
 
     private Uri filePath;
@@ -131,6 +185,7 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
         startActivityForResult(Intent.createChooser(intent,getResources().getString(R.string.Select_Picture)), PICK_IMAGE_REQUEST);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -142,18 +197,26 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
                 if(isbuttonChooseCard1) {
+                    imageName1=getRealPathFromURI_BelowAPI11(getBaseContext(),filePath);
+                     file1= new File(Environment.getExternalStorageDirectory().getAbsolutePath(),imageFile.getPath());
                     imageViewCard1.setImageBitmap(bitmap);
                     isbuttonChooseCard1=false;
                 }
                 else if(isbuttonChooseCard2) {
+                    imageName2=getRealPathFromURI_BelowAPI11(getBaseContext(),filePath);
+                    file2= new File(Environment.getExternalStorageDirectory().getAbsolutePath(),imageFile.getPath());
                     imageViewCard2.setImageBitmap(bitmap);
                     isbuttonChooseCard2=false;
                 }
                 else if(isbuttonChooseCard3) {
+                    imageName3=getRealPathFromURI_BelowAPI11(getBaseContext(),filePath);
+                    file3= new File(Environment.getExternalStorageDirectory().getAbsolutePath(),imageFile.getPath());
                     imageViewCard3.setImageBitmap(bitmap);
                     isbuttonChooseCard3=false;
                 }
                 else if(isbuttonChooseCard4) {
+                    imageName4=getRealPathFromURI_BelowAPI11(getBaseContext(),filePath);
+                    file4= new File(Environment.getExternalStorageDirectory().getAbsolutePath(),imageFile.getPath());
                     imageViewCard4.setImageBitmap(bitmap);
                     isbuttonChooseCard4=false;
                 }
@@ -307,13 +370,11 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
         if(v == buttonUpload){
 
             if(chekIfAllParmInit()){//chekIfAllParmInit() {
-                Toast.makeText(this,"All good",Toast.LENGTH_SHORT).show();
-                new sendSeriesToServer().execute(categoryName.getText().toString(),card1.getText().toString(),card2.getText().toString(),
-                                        card3.getText().toString(),card4.getText().toString(),
-                                        getStringImage(((BitmapDrawable)imageViewCard1.getDrawable()).getBitmap()),
-                                        getStringImage(((BitmapDrawable)imageViewCard2.getDrawable()).getBitmap()),
-                                        getStringImage(((BitmapDrawable)imageViewCard3.getDrawable()).getBitmap()),
-                                        getStringImage(((BitmapDrawable)imageViewCard4.getDrawable()).getBitmap()));
+               // Toast.makeText(this,"All good",Toast.LENGTH_SHORT).show();
+                new sendSeriesToServer().execute(categoryName.getText().toString(),card1.getText().toString(),
+                                                                                card2.getText().toString(),
+                                                                                card3.getText().toString(),
+                                                                                card4.getText().toString());
 
 
                 /*cardName=card1.getText().toString();
@@ -382,7 +443,39 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public String getRealPathFromURI_BelowAPI11(Context contex, Uri uri){
 
+        String name="";
+        if (uri.getHost().contains("com.android.providers.media")) {
+            // Image pick from recent
+            String wholeID = DocumentsContract.getDocumentId(uri);
+
+            // Split at colon, use second item in the array
+            String id = wholeID.split(":")[1];
+
+            String[] column = {MediaStore.Images.Media.DATA};
+
+            // where id is equal to
+            String sel = MediaStore.Images.Media._ID + "=?";
+
+            Cursor cursor = getBaseContext().getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    column, sel, new String[]{id}, null);
+
+            int columnIndex = cursor.getColumnIndex(column[0]);
+
+            if (cursor.moveToFirst()) {
+                name = cursor.getString(columnIndex);
+            }
+            cursor.close();
+        }else {
+            // image pick from gallery
+            getRealPathFromURI_BelowAPI11(contex,uri);
+        }
+        return name;
+
+
+    }
     public class sendSeriesToServer extends AsyncTask<String, Void, Boolean> {
         String upload_series = "http://10.0.2.2/final_project/db/upload_series.php";
         // String upload_series = "http://mysite.lidordigital.co.il/Quertets/db/upload_series.php";
@@ -390,10 +483,10 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
 
         @Override
         protected Boolean doInBackground(String... params) {
-            parms.put("category_id",String.valueOf(category_id));
+           /* parms.put("category_id",String.valueOf(category_id));
             parms.put("category_name",params[0]);
             parms.put("user_id",String.valueOf(currentPlayer.getUserID()));
-            parms.put("card1",params[1]);
+            parms.put("card1",file1.getAbsolutePath());
             parms.put("card2",params[2]);
             parms.put("card3",params[4]);
             parms.put("card4",params[5]);
@@ -412,14 +505,64 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
             } catch(Exception ex) {
                 ex.printStackTrace();
             }
-            return false;
+            return false;*/
 
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpPost httppost = new HttpPost(upload_series);
+
+            MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
+            entityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+
+            entityBuilder.addTextBody("category_id", String.valueOf(category_id));
+            entityBuilder.addTextBody("category_name", params[0]);
+            entityBuilder.addTextBody("user_id",String.valueOf(currentPlayer.getUserID()));
+            entityBuilder.addTextBody("card1", params[1]);
+            entityBuilder.addTextBody("card2", params[2]);
+            entityBuilder.addTextBody("card3", params[3]);
+            entityBuilder.addTextBody("card4", params[4]);
+            entityBuilder.addPart("image1",new FileBody(new File(imageName1)));
+            entityBuilder.addPart("image2",new FileBody(new File(imageName2)));
+            entityBuilder.addPart("image3",new FileBody(new File(imageName3)));
+            entityBuilder.addPart("image4",new FileBody(new File(imageName4)));
+            httppost.setEntity(entityBuilder.build());
+
+            try {
+                HttpResponse response = httpclient.execute(httppost);
+                String json= EntityUtils.toString(response.getEntity());
+                if(response.getStatusLine().getStatusCode()==200){
+                    if(json=="1")
+                        return true;
+                    else
+                        return false;
+                }else
+                    return false;
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                return false;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
         }
 
 
         protected void onPostExecute(Boolean result) {
+            SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(AddNewSeries.this);
+            Boolean faceBookLogIN=myPref.getBoolean("loginWhitFacebook",false);
             if (result) {
-                Toast.makeText(AddNewSeries.this, "Series upload sucssfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddNewSeries.this, "Series upload successfully!", Toast.LENGTH_SHORT).show();
+
+                SharedPreferences.Editor editor = myPref.edit();
+                editor.putString("username", currentPlayer.getUserName());
+                editor.putString("password", currentPlayer.getPassword());
+                editor.putInt("score", currentPlayer.getScore());
+                editor.putInt("user_id",currentPlayer.getUserID());
+
+                editor.commit();
+
+                Intent myIntent = new Intent(AddNewSeries.this, MainMenu.class);
+                startActivity(myIntent);
+                finish();
             } else
                 Toast.makeText(AddNewSeries.this, "Series upload failed", Toast.LENGTH_SHORT).show();
         }

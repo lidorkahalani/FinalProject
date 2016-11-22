@@ -5,6 +5,10 @@ android {
     buildToolsVersion "23.0.2"
     useLibrary 'org.apache.http.legacy'
 
+    packagingOptions {
+        exclude 'META-INF/LICENSE'
+    }
+
     defaultConfig {
         applicationId "com.example.yosef.finalproject"
         minSdkVersion 15
@@ -33,4 +37,7 @@ dependencies {
     compile 'com.facebook.android:facebook-android-sdk:4.+'
     compile 'com.google.code.gson:gson:2.2.4'
     compile group: 'org.apache.httpcomponents' , name: 'httpclient-android' , version: '4.3.5.1'
+    compile('org.apache.httpcomponents:httpmime:4.3') {
+        exclude module: "httpclient"
+    }
 }
