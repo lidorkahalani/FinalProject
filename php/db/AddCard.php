@@ -22,6 +22,7 @@ if(move_uploaded_file($_FILES['uploaded_file']['tmp_name'], $file_path)) {
     $response["succsses"]=0;
 }
 echo json_encode($response);
+mysqli_close($link);
 
 function getMaxCcategoryId(){
 	require('connection.php');
@@ -29,5 +30,6 @@ function getMaxCcategoryId(){
 			$sth->execute();
 			$result = $sth->fetchColumn();
 			return $result;
+	mysqli_close($con);
 }
 ?>

@@ -164,9 +164,9 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                             //new GetRoomStatus().execute(roomName);
                         }
                     }
-                }, 3000);
+                }, 2000);
 
-               // new GetAllConnectedPlayers().execute();
+                //new GetAllConnectedPlayers().execute();
             } else if (result == 0) {//room name already in use
                 Toast.makeText(Room.this
                         , getResources().getString(R.string.room_name_in_use),

@@ -32,7 +32,8 @@ if(mysqli_num_rows($result) >0 )
  {   
  $response["succsses"]=0;
  echo json_encode($response);  
- }  
+ }
+mysqli_close($con); 
 function getCategoryName($category_id){
 $con=mysqli_connect("localhost","root","","quartetsdb");
 $response=array();
@@ -64,10 +65,13 @@ mysqli_set_charset($con,"utf8");
 		if(mysqli_num_rows($result) >0 )  
 		{
 			while($row=mysqli_fetch_array($result)){
+				mysqli_close($con);
 		      return $row["category_color"];
 		      
 			} 
-		}		
+		}
+		mysqli_close($con);
+		
  }
  function getAllItems($category_id){
 	 $con=mysqli_connect("localhost","root","","quartetsdb");
@@ -82,7 +86,9 @@ mysqli_set_charset($con,"utf8");
 				$card_labels["card_name"]=$row["card_name"];
 				array_push($ABCD,$card_labels);
 				}
+				mysqli_close($con);
 			return $ABCD;
 		}
+		mysqli_close($con);
  }
 ?>

@@ -27,5 +27,6 @@ if(mysqli_num_rows($result) >0 )
  {   
  $response["succsses"]=0;
  echo json_encode($response);  
- }  
+ }
+mysqli_close($con); 
 ?>

@@ -46,8 +46,9 @@ if(checkIfRoomNameAvailable($roomName)==0){
  }else
 	 $response["successes"]=0;
 }else
-	$response["successes"]=0;	
+	$response["successes"]=0;
  echo json_encode($response);
+ mysqli_close($conn);
 function checkIfRoomNameAvailable($req_Room_name){
 	require('connection.php');
 	$sth = $con->prepare("SELECT is_active FROM game where game_name='$req_Room_name'");

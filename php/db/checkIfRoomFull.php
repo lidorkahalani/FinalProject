@@ -31,6 +31,7 @@
 		$response["succsses"]=3;
 	
 	echo json_encode($response);
+	mysqli_close($con);
 	
 	function getGameId($roomName){
 	include('connection.php');

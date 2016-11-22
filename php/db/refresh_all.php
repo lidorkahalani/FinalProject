@@ -23,6 +23,7 @@ if(mysqli_num_rows($result) >0 )
  $response["isMyturn"]=isMyTurn($userId,$game_id);
  $response["succsses"]=1;
  echo json_encode($response);
+ 
 
  }
  else  
@@ -30,8 +31,9 @@ if(mysqli_num_rows($result) >0 )
  $response["succsses"]=0;
  echo json_encode($response);  
  }
+ mysqli_close($con);
 function isMyTurn($user_id,$game_id){
-	include('connection.php');
+	require('connection.php');
 	$sth = $con->prepare("SELECT my_turn_user_id FROM game where game_id='$game_id'");
 			$sth->execute();
 			$result = $sth->fetch(PDO::FETCH_ASSOC);
@@ -58,8 +60,10 @@ function getAllMyCard($cardId){
 			$card["card_labels"]=array();
 			$card["card_labels"]=getAllItems($card["category_id"]);
 		}
+		mysqli_close($con);
 		return $card;
 	}
+	mysqli_close($con);
 	
 } 
 function getCategoryName($category_id){
@@ -75,10 +79,12 @@ mysqli_set_charset($con,"utf8");
 		if(mysqli_num_rows($result) >0 )  
 		{
 			while($row=mysqli_fetch_array($result)){
+				mysqli_close($con);
 		      return $row["category_name"];
 		      
 			} 
-		}		
+		}
+mysqli_close($con);		
  }
 function getCategorColor($category_id){
 $con=mysqli_connect("localhost","root","","quartetsdb");
@@ -93,10 +99,12 @@ mysqli_set_charset($con,"utf8");
 		if(mysqli_num_rows($result) >0 )  
 		{
 			while($row=mysqli_fetch_array($result)){
+				mysqli_close($con);
 		      return $row["category_color"];
 		      
 			} 
-		}		
+		}
+mysqli_close($con);		
  }
 function getAllItems($category_id){
 	 $con=mysqli_connect("localhost","root","","quartetsdb");
@@ -111,7 +119,9 @@ function getAllItems($category_id){
 				$card_labels["card_name"]=$row["card_name"];
 				array_push($ABCD,$card_labels);
 				}
+				mysqli_close($con);
 			return $ABCD;
 		}
+		mysqli_close($con);
  }
 ?>
