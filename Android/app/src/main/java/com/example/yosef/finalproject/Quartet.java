@@ -10,20 +10,6 @@ public class Quartet {
     private String category;
     private ArrayList<Card>cards ;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public ArrayList<Card> getCards() {
         return cards;
     }

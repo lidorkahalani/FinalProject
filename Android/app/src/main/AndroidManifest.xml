@@ -18,13 +18,8 @@
             android:name=".MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitle"
-            android:windowSoftInputMode="adjustResize">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:windowSoftInputMode="adjustResize"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".SignUp"
             android:screenOrientation="portrait"
@@ -32,13 +27,15 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".SplashActivity"
-            android:theme="@style/NoTitle" />
+            android:theme="@style/NoTitle" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".MainMenu"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoTitle" />
-        <activity
-            android:name=".ShowMyCards"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitle" />
         <activity
@@ -51,15 +48,7 @@
             android:theme="@style/NoTitle" />
         <activity android:name="com.facebook.FacebookActivity" />
         <activity
-            android:name=".PreGame"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoTitle" />
-        <activity
             android:name=".AddNewSeries"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoTitle" />
-        <activity
-            android:name=".AllPerson"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitle" />
         <activity

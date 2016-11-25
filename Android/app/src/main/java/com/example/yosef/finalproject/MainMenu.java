@@ -215,7 +215,7 @@ public class MainMenu extends AppCompatActivity {
         profileTracker.stopTracking();
     }
 
-    public void addCardToDB(View v) {
+    public void addNewSeries(View v) {
 
         LayoutInflater li = LayoutInflater.from(this);
         View promptsView = li.inflate(R.layout.prompt_category, null);
@@ -244,7 +244,7 @@ public class MainMenu extends AppCompatActivity {
                                     myIntent.putExtra("currenUsrt",currentPlayer);
                                     myIntent.putExtra("categoryName",categoryName);
                                     startActivity(myIntent);
-                                    finish();
+                                    //finish();
                                 } else {
                                     new AlertDialog.Builder(MainMenu.this)
                                             .setTitle(getResources().getString(R.string.Warning))

@@ -70,7 +70,7 @@ public class ShowMySerie extends AppCompatActivity implements AdapterView.OnItem
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         //selectedSeries= series.get(position);
     //Toast.makeText(ShowMySerie.this,series.get(position).getCategory_name()+" was clicked ",Toast.LENGTH_SHORT).show();
-    //Toast.makeText(ShowMySerie.this,"push and hold for more option",Toast.LENGTH_SHORT).show();
+    Toast.makeText(ShowMySerie.this,"push and hold for more option",Toast.LENGTH_SHORT).show();
     }
 
     public void onCreateContextMenu(ContextMenu menu, View view,
@@ -125,8 +125,7 @@ public class ShowMySerie extends AppCompatActivity implements AdapterView.OnItem
                         });
                 AlertDialog alert = builder.create();
                 alert.show();
-                Toast.makeText(ShowMySerie.this,"Delete selected series",Toast.LENGTH_SHORT).show();
-            } else if (menuItemName.equals(menuItems[1])) {//Update Card
+            } else if (menuItemName.equals(menuItems[1])) {//Update series
                     Intent intent = new Intent(this, UpdateSeries.class);
                     intent.putExtra("SelectedSeries", series.get(position));
                     intent.putExtra("user_id",myId);
@@ -163,41 +162,6 @@ public class ShowMySerie extends AppCompatActivity implements AdapterView.OnItem
     public void onContextMenuClosed(Menu menu) {
 
     }
-
-
-    /*class MyClassAdapter extends ArrayAdapter<Card> {
-
-        public MyClassAdapter(Context context, int resource, List<Card> objects) {
-            super(context,resource,objects);
-        }
-
-        // the method getView is in charge of creating a single line in the list
-        // it receives the position (index) of the line to be created
-        // the method populates the view with the data from the relevant object (according to the position)
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-
-            String fullPath;
-            Log.i("TEST getView", "inside getView position " + position);
-
-            Card card = getItem(position);
-            //String card2 = getItem(position);
-            if (convertView == null) {
-                Log.e("TEST getView", "inside if with position " + position);
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.single_quartets_layot, parent, false);
-            }
-            TextView categoryName = (TextView) convertView.findViewById(R.id.category_name);
-            ImageView image1=(ImageView)convertView.findViewById(R.id.pic1);
-            fullPath = imageRelativePat + card.getImageName();
-            ImageLoader imageLoader = new ImageLoader(getContext());
-            imageLoader.DisplayImage(fullPath, R.mipmap.ic_launcher, image1);
-
-            categoryName.setText(card.getCategoryName());
-
-            return convertView;
-
-        }
-    }*/
 
     public class GetMySeries extends AsyncTask<String, Void, Boolean> {
         String GetMySeries = "http://10.0.2.2/final_project/db/getMySeries.php";

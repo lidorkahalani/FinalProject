@@ -250,14 +250,6 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Hebrew", Toast.LENGTH_SHORT).show();*/
     }
 
-    public void showAllRecords(View v) {
-        ArrayList<User> UsersList = dbHandler.getAllUsers();
-        Intent myIntent = new Intent(this, ShowMyCards.class);
-        myIntent.putExtra("userList", UsersList);
-        startActivity(myIntent); //app get crash her
-
-    }
-
 
     public class logIn extends AsyncTask<String, Void, Boolean> {
         String login_url = "http://10.0.2.2/final_project/db/login.php";

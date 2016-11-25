@@ -1,11 +1,13 @@
 package com.example.yosef.finalproject;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -90,12 +92,22 @@ public class SplashActivity extends AppCompatActivity {
                 Intent myIntent = new Intent(SplashActivity.this, MainActivity.class);
                 startActivity(myIntent);
             } else {
-                counter++;
+               /* counter++;
                 if(counter==1)
-                    Toast.makeText(SplashActivity.this, "No internet Connection app try to connect", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SplashActivity.this, "No internet Connection app try to connect", Toast.LENGTH_LONG).show();*/
                 noConnectionMassage.setVisibility(View.VISIBLE);
-                MyLoaderTask tryAgain = new MyLoaderTask();
-                tryAgain.execute("");
+                AlertDialog.Builder builder = new AlertDialog.Builder(SplashActivity.this);
+                builder.setMessage(getResources().getString(R.string.no_internet))
+                        .setCancelable(false)
+                        .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                SplashActivity.this.finish();
+                            }
+                        });
+                AlertDialog alert = builder.create();
+                alert.show();
+                /*MyLoaderTask tryAgain = new MyLoaderTask();
+                tryAgain.execute("");*/
             }
         }
 

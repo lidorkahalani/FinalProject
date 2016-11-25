@@ -18,10 +18,21 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.LinkedHashMap;
 
 public class UpdateSeries extends AppCompatActivity {
@@ -97,12 +108,11 @@ public class UpdateSeries extends AppCompatActivity {
 
     public void onClick(View v) {
         if(v==buttonUpdateSeries){
-            new UpdateSeriesTask().execute(category_name.getText().toString(),card1.getText().toString(),card2.getText().toString(),
-                    card3.getText().toString(),card4.getText().toString(),
-                    getStringImage(((BitmapDrawable)imageViewCard1.getDrawable()).getBitmap()),
-                    getStringImage(((BitmapDrawable)imageViewCard2.getDrawable()).getBitmap()),
-                    getStringImage(((BitmapDrawable)imageViewCard3.getDrawable()).getBitmap()),
-                    getStringImage(((BitmapDrawable)imageViewCard4.getDrawable()).getBitmap()));
+            new UpdateSeriesTask().execute(category_name.getText().toString(),
+                                            card1.getText().toString(),
+                                            card2.getText().toString(),
+                                            card3.getText().toString(),
+                                            card4.getText().toString());
         }
     }
 
@@ -121,36 +131,43 @@ public class UpdateSeries extends AppCompatActivity {
         LinkedHashMap<String,String> parms=new LinkedHashMap<>();
         @Override
         protected Boolean doInBackground(String... params) {
-            parms.put("category_id",String.valueOf(selctedSeries.getCategory_id()));
-            parms.put("category_name",params[0]);
-            parms.put("user_id",String.valueOf(myId));
-            parms.put("card1",params[1]);
-            parms.put("card2",params[2]);
-            parms.put("card3",params[4]);
-            parms.put("card4",params[5]);
-            parms.put("image1",params[5]);
-            parms.put("image2",params[6]);
-            parms.put("image3",params[7]);
-            parms.put("image4",params[8]);
+           /* HttpClient httpclient = new DefaultHttpClient();
+            HttpPost httppost = new HttpPost(UpdateSeriesTask);
 
-            JSONParser json=new JSONParser();
+            MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
+            entityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+
+            entityBuilder.addTextBody("category_id", String.valueOf(category_id));
+            entityBuilder.addTextBody("category_name", params[0]);
+            entityBuilder.addTextBody("user_id",String.valueOf(currentPlayer.getUserID()));
+            entityBuilder.addTextBody("card1", params[1]);
+            entityBuilder.addTextBody("card2", params[2]);
+            entityBuilder.addTextBody("card3", params[3]);
+            entityBuilder.addTextBody("card4", params[4]);
+            entityBuilder.addPart("image1",new FileBody(new File(imageName1)));
+            entityBuilder.addPart("image2",new FileBody(new File(imageName2)));
+            entityBuilder.addPart("image3",new FileBody(new File(imageName3)));
+            entityBuilder.addPart("image4",new FileBody(new File(imageName4)));
+            httppost.setEntity(entityBuilder.build());
+
             try {
-                JSONObject response=json.makeHttpRequest(UpdateSeriesTask,"POST",parms);
-
-
-                if(response.getInt("sucsses")==1){
-
-                    return true;
-                }else{
+                HttpResponse response = httpclient.execute(httppost);
+                String json= EntityUtils.toString(response.getEntity());
+                if(response.getStatusLine().getStatusCode()==200){
+                    if(json=="1")
+                        return true;
+                    else
+                        return false;
+                }else
                     return false;
-                }
-            } catch (JSONException e) {
+            } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 return false;
-            }catch (Exception e) {
+            } catch (IOException e) {
                 e.printStackTrace();
                 return false;
-            }
+            }*/
+            return true;
         }
         protected void onPostExecute(Boolean result) {
             Intent resultIntent = getIntent();

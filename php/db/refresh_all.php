@@ -21,6 +21,7 @@ if(mysqli_num_rows($result) >0 )
 	}
 
  $response["isMyturn"]=isMyTurn($userId,$game_id);
+ //$response["isAllPlayersConnected"]=isAllPlayersConnected($game_id);
  $response["succsses"]=1;
  echo json_encode($response);
  
@@ -124,4 +125,8 @@ function getAllItems($category_id){
 		}
 		mysqli_close($con);
  }
+function isAllPlayersConnected($game_id){
+	 
+	return 1; 
+}
 ?>

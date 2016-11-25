@@ -547,12 +547,10 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
 
 
         protected void onPostExecute(Boolean result) {
-            SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(AddNewSeries.this);
-            Boolean faceBookLogIN=myPref.getBoolean("loginWhitFacebook",false);
             if (result) {
                 Toast.makeText(AddNewSeries.this, "Series upload successfully!", Toast.LENGTH_SHORT).show();
 
-                SharedPreferences.Editor editor = myPref.edit();
+               /* SharedPreferences.Editor editor = myPref.edit();
                 editor.putString("username", currentPlayer.getUserName());
                 editor.putString("password", currentPlayer.getPassword());
                 editor.putInt("score", currentPlayer.getScore());
@@ -561,10 +559,11 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
                 editor.commit();
 
                 Intent myIntent = new Intent(AddNewSeries.this, MainMenu.class);
-                startActivity(myIntent);
-                finish();
-            } else
+                startActivity(myIntent);*/
+            } else {
                 Toast.makeText(AddNewSeries.this, "Series upload failed", Toast.LENGTH_SHORT).show();
+            }
+            finish();
         }
 
     }

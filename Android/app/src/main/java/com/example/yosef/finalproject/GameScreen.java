@@ -32,6 +32,7 @@ import java.util.TimerTask;
 
 public class GameScreen extends AppCompatActivity implements AdapterView.OnItemClickListener {
     private ArrayList<Card> deck = new ArrayList<Card>();
+    private ArrayList<Card> tempDeck = new ArrayList<Card>();
     private ArrayList<User> playerList = new ArrayList<>();
     private User currentPlayer;
 
@@ -428,8 +429,8 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         }
 
         protected void onPostExecute(Boolean result) {
-            if (result) {
 
+            if (result) {
                 if(isMyTurnStatus)
                     activePlayer.setBackgroundColor(Color.GREEN);
                 else
@@ -452,13 +453,12 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         protected Boolean doInBackground(String... params) {
             parms.put("game_id",String.valueOf(newGame.getGame_id()));
             parms.put("user_id",String.valueOf(currentPlayer.getUserID()));
-           /* parms.put("game_id","6");
-            parms.put("user_id","16");*/
 
             JSONParser json = new JSONParser();
             try {
                 JSONObject response = json.makeHttpRequest(refresh_all, "POST", parms);
                 if (response.getInt("succsses") == 1) {
+                    tempDeck=deck;
                     deck.clear();
                     JSONArray jsonArray = response.getJSONArray("myCards");
                     for (int i = 0; i < jsonArray.length(); i++) {
@@ -476,7 +476,6 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                             cardLabels[j] = jo2.getString("card_name");
                         }
                         card.setItemsArray(cardLabels);
-                        //card.setItemPicture(getResources().getDrawable(R.drawable.car));
                         deck.add(card);
                     }
                    if( response.getInt("isMyturn")==1   )
@@ -494,12 +493,13 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
         protected void onPostExecute(Boolean result) {
             if (result) {
-                setCardsList();
-               if(isMyTurnStatus) {
-                    activePlayer.setBackgroundColor(Color.GREEN);
-                }
-                else
-                   activePlayer.setBackgroundColor(Color.TRANSPARENT);
+               // if(!deck.equals(tempDeck)) {
+                    setCardsList();
+                    if (isMyTurnStatus) {
+                        activePlayer.setBackgroundColor(Color.GREEN);
+                    } else
+                        activePlayer.setBackgroundColor(Color.TRANSPARENT);
+
             } else
                 Toast.makeText(GameScreen.this, "refresh failed !", Toast.LENGTH_SHORT).show();
         }
@@ -553,141 +553,8 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
     }
 
-    public class checkQuartets extends AsyncTask<String, Void, Boolean> {
-       String checkQuarets = "http://10.0.2.2/final_project/db/checkQuarets.php";
-        //String checkQuarets = "http://mysite.lidordigital.co.il/Quertets/db/checkQuarets.php";
-
-        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
-
-        @Override
-        protected Boolean doInBackground(String... params) {
-            parms.put("user_id", String.valueOf(currentPlayer.getUserID()));
-            parms.put("game_id", String.valueOf(newGame.getGame_id()));
-
-            JSONParser json = new JSONParser();
-            try {
-                JSONObject response = json.makeHttpRequest(checkQuarets, "POST", parms);
-                if (response.getInt("successes") == 1) {
-                    isMyTurnStatus =true;
-                } else if(response.getInt("successes") == 0) {
-                    isMyTurnStatus =false;
-                }else
-                    return false;
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                return false;
-            }
-            return true;
-        }
-
-        protected void onPostExecute(Boolean result) {
-            if (result) {
-
-            } else
-                Toast.makeText(GameScreen.this, "wait to your turn", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    public class isTheGameOver extends AsyncTask<String, Void, Boolean> {
-        String isTheGameOver = "http://10.0.2.2/final_project/db/isTheGameOver.php";
-        //String isTheGameOver = "http://mysite.lidordigital.co.il/Quertets/db/isTheGameOver.php";
-
-        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
-
-        @Override
-        protected Boolean doInBackground(String... params) {
-            parms.put("user_id", String.valueOf(currentPlayer.getUserID()));
-            parms.put("game_id", String.valueOf(newGame.getGame_id()));
-
-            JSONParser json = new JSONParser();
-            try {
-                JSONObject response = json.makeHttpRequest(isTheGameOver, "POST", parms);
-                if (response.getInt("successes") == 1) {
-                    isMyTurnStatus =true;
-                } else if(response.getInt("successes") == 0) {
-                    isMyTurnStatus =false;
-                }else
-                    return false;
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                return false;
-            }
-            return true;
-        }
-
-        protected void onPostExecute(Boolean result) {
-            if (result) {
-
-            } else
-                Toast.makeText(GameScreen.this, "wait to your turn", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    public class tryTakeOneCardFromDeck extends AsyncTask<String, Void, Boolean> {
-        String takeOneCardFromDeck = "http://10.0.2.2/final_project/db/takeOneCardFromDeck.php";
-      //  String takeOneCardFromDeck = "http://mysite.lidordigital.co.il/Quertets/db/takeOneCardFromDeck.php";
-
-        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
-
-        @Override
-        protected Boolean doInBackground(String... params) {
-            parms.put("user_id",String.valueOf(currentPlayer.getUserID()));
-            parms.put("game_id", String.valueOf(newGame.getGame_id()));
-
-            JSONParser json = new JSONParser();
-            try {
-                JSONObject response = json.makeHttpRequest(takeOneCardFromDeck, "POST", parms);
-                if (response.getInt("successes") == 1) {
-                    return true;
-                } else
-                    return false;
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                return false;
-            }
-        }
-
-
-        protected void onPostExecute(Boolean result) {
-            if (result) {
-                new takeOneCardFromDeck().execute();
-            } else
-                Toast.makeText(GameScreen.this,"wait to your turn!",Toast.LENGTH_LONG).show();
-        }
-
-
-    }
-
     public void passCardByNFC() {
 
-    }
-
-    public void giveCardEachPlayer() {
-        //give each player 4 card from deck and remove it from the server not in client!
-        for (int i = 0; i < 1; i++) {
-            ArrayList<Card> onePlayercard = new ArrayList<>();
-            for (int k = 0; k < 4; k++) {
-                int index = randomGenerator.nextInt(deck.size() + i);
-                System.out.println("rand number: " + index);
-                //(k*7)
-                onePlayercard.add(deck.get(index));
-            }
-            playerList.get(i).setPlayerCards(onePlayercard);
-        }
-        //for(int i=0;i<playerList.size();i++)
-
-        ArrayList<Card> playerCards = playerList.get(0).getPlayerCards();
-        for (int i = 0; i < playerCards.size(); i++) {
-            // insertDataToCard(playerCards.get(i), i);
-        }
-    }
-
-    public void painCurrentPlayer(View v) {
-        v.setBackgroundColor(Color.GREEN);
-    }
-
-    public void onMyTurnEnd() {
-        bottomLayout.setBackgroundColor(Color.TRANSPARENT);
     }
 
 

@@ -46,7 +46,7 @@
         <Button
             android:textSize="17.5dip"
             android:textStyle="bold"
-            android:onClick="addCardToDB"
+            android:onClick="addNewSeries"
             android:layout_width="185dp"
             android:layout_height="wrap_content"
             android:id="@+id/btnAddCardId"
