@@ -35,6 +35,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     private ArrayList<Card> tempDeck = new ArrayList<Card>();
     private ArrayList<User> playerList = new ArrayList<>();
     private User currentPlayer;
+    private ArrayList<Integer> fullSereiesId=new ArrayList<Integer>();
 
     private Random randomGenerator;
 
@@ -478,6 +479,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                         card.setItemsArray(cardLabels);
                         deck.add(card);
                     }
+
                    if( response.getInt("isMyturn")==1   )
                        isMyTurnStatus =true;
                     else
@@ -493,6 +495,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
         protected void onPostExecute(Boolean result) {
             if (result) {
+               // checkIfCompleteSeries();
                // if(!deck.equals(tempDeck)) {
                     setCardsList();
                     if (isMyTurnStatus) {
@@ -549,6 +552,46 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                 setCardsList();
             } else
                 Toast.makeText(GameScreen.this, "the deck not load !", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    public void checkIfCompleteSeries(){
+        new CheckIfCompleteSeries().execute(String.valueOf(currentPlayer.getUserID()),String.valueOf(newGame.getGame_id()));
+
+        for(int counter=0,j=0,i=0;i<fullSereiesId.size();i++){
+            if(deck.get(i).getCategoryId()==fullSereiesId.get(j)) {
+                deck.remove(i);
+                counter++;
+                if(counter==4)
+                    j++;
+            }
+        }
+        setCardsList();
+    }
+
+    public class CheckIfCompleteSeries extends AsyncTask<String, Void, Boolean> {
+        String checkIfCompleteSeries = "http://10.0.2.2/final_project/db/checkIfCompleteSeries.php";
+        //String checkIfCompleteSeries = "http://mysite.lidordigital.co.il/Quertets/db/checkIfCompleteSeries.php";
+
+        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            parms.put("user_id",params[0]);
+            parms.put("game_id",params[1]);
+
+            JSONParser json = new JSONParser();
+            try {
+                JSONObject response = json.makeHttpRequest(checkIfCompleteSeries, "POST", parms);
+                if (response.getInt("successes") == 1) {
+                    fullSereiesId.add(Integer.parseInt(params[0]));
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return false;
+            }
+            return true;
         }
 
     }

@@ -16,7 +16,7 @@ if(checkIfRoomNameAvailable($roomName)==0){
 	 if ($insert !== FALSE) {
 	    $conn=mysqli_connect("localhost","root","","quartetsdb");
 		mysqli_set_charset($conn,"utf8");
-		$sql_query = "select card_id from cards";  
+		$sql_query = "select card_id,category_id from cards";  
 		$result = mysqli_query($conn,$sql_query);  
 		$card_id=0;
 		if(mysqli_num_rows($result) >0 ) {
@@ -26,7 +26,9 @@ if(checkIfRoomNameAvailable($roomName)==0){
 			//	$stmt->bindParam(':card_id',$card_id);
 			while($row=mysqli_fetch_array($result)){
 				$card_id = $row['card_id'];
-				$insert=$con->exec("INSERT INTO games_cards (game_id,card_id,user_id) VALUES('$id','$card_id',0)");
+				$category_id = $row['category_id'];
+				
+				$insert=$con->exec("INSERT INTO games_cards (game_id,card_id,category_id,user_id) VALUES('$id','$card_id','$category_id',0)");
 				/*if($insert === FALSE){
 					$response["successes"]=0;
 					break;

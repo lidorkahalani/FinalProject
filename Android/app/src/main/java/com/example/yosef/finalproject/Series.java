@@ -119,4 +119,19 @@ public class Series implements Serializable {
     public void setImage4(String image4) {
         this.image4 = image4;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof Series) {
+            if (this.getCategory_id()==(((Series) o).getCategory_id()))
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.getCategory_id();
+    }
+
 }

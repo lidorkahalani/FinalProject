@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -24,13 +25,22 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 public class AdminChooseSeries extends AppCompatActivity implements AdapterView.OnItemClickListener {
-    static ArrayList<Series> series =new ArrayList();
+    static HashSet<Series> series =new HashSet();
     ListView lv;
     MyClassAdapter adapter;
     CheckBox checkBoxIndicator;
@@ -41,6 +51,8 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
     Game game;
     User curentUser;
     int i=1;
+    boolean []chosenList;
+    Boolean setBoolenList=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,11 +64,9 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
         allUsers=(ArrayList<User>)getIntent().getSerializableExtra("allUsers");
         allConnectedUsersId=getIntent().getExtras().getStringArray("allConnectedUsersId");
 
+
         new GetMySeries().execute(String.valueOf(allConnectedUsersId[0]));
 
-
-        //get Defulte Sereis
-        new GetDefultSeries().execute("0");
 
 
     }
@@ -68,9 +78,85 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
         //CheckBox checkBox=(CheckBox)v.findViewById(R.id.checkBox);
        // Toast.makeText(AdminChooseSeries.this,cb.getText().toString(),Toast.LENGTH_SHORT).show();
 
-        if(true) {
-            new setGameToActive().execute("1",String.valueOf(game.getGame_id()));
-        }
+         int counter=0;
+        final int cnt;
+        final List<Series> list = new ArrayList<Series>(series);
+        for (int i=0;i<series.size();i++)
+            if(chosenList[i])
+                counter++;
+        cnt=counter;
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OutputStream os = null;
+                InputStream is = null;
+                HttpURLConnection conn = null;
+                try {
+                    //constants
+                    URL url = new URL("http://10.0.2.2/final_project/db/sendActiveSerie.php");
+                    JSONObject jsonObject = new JSONObject();
+                    for (int i=0;i<list.size();i++){
+                        if(chosenList[i])
+                        jsonObject.put("seriesId"+i, list.get(i).getCategory_id());
+                    }
+                    String message = jsonObject.toString();
+
+                    conn = (HttpURLConnection) url.openConnection();
+                    conn.setReadTimeout( 10000 /*milliseconds*/ );
+                    conn.setConnectTimeout( 15000 /* milliseconds */ );
+                    conn.setRequestMethod("POST");
+                    conn.setDoInput(true);
+                    conn.setDoOutput(true);
+                    conn.setFixedLengthStreamingMode(message.getBytes().length);
+
+                    //make some HTTP header nicety
+                    conn.setRequestProperty("Content-Type", "application/json;charset=utf-8");
+                    conn.setRequestProperty("X-Requested-With", "XMLHttpRequest");
+
+                    //open
+                    conn.connect();
+
+                    //setup send
+                    os = new BufferedOutputStream(conn.getOutputStream());
+                    os.write(message.getBytes());
+                    //clean up
+                    os.flush();
+
+                    //do somehting with response
+                    is = conn.getInputStream();
+                    if(is!=null)
+                        Toast.makeText(AdminChooseSeries.this,"insert Good!",Toast.LENGTH_SHORT).show();
+                    else
+                        Toast.makeText(AdminChooseSeries.this,"insert BAD!",Toast.LENGTH_SHORT).show();
+
+                    //String contentAsString = readIt(is,len);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+               finally {
+                    //clean up
+                    try {
+                        os.close();
+                        is.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    conn.disconnect();
+                }
+            }
+        }).start();
+
+
+
+        if(counter>=7){
+            //List<Series> list = new ArrayList<Series>(series);
+            //new setGameToActive().execute("1",String.valueOf(game.getGame_id()));
+        }else
+            Toast.makeText(this,"please select minimum 7 series",Toast.LENGTH_SHORT).show();
 
 
     }
@@ -130,8 +216,11 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
             if(result) {
                 for(;i<(allConnectedUsersId.length-1);i++)
                     new GetMySeries().execute(String.valueOf(allConnectedUsersId[i]));
-
             }
+            if(i==(allConnectedUsersId.length-1))
+                new GetDefultSeries().execute("0");
+
+
         }
     }
 
@@ -184,7 +273,10 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
 
         protected void onPostExecute(Boolean result) {
             if(result) {
-                adapter = new MyClassAdapter(AdminChooseSeries.this, R.layout.single_chose_series, series);
+                chosenList= new boolean[series.size()];
+                setBoolenList=true;
+                List<Series> list = new ArrayList<Series>(series);
+                adapter = new MyClassAdapter(AdminChooseSeries.this, R.layout.single_chose_series, list);
 
                 category_list.setAdapter(adapter);
 
@@ -192,6 +284,7 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
 
                 lv = (ListView) findViewById(R.id.choseSeriesList);
                 registerForContextMenu(lv);
+
             }
         }
     }
@@ -206,7 +299,7 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
         // it receives the position (index) of the line to be created
         // the method populates the view with the data from the relevant object (according to the position)
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
 
             Log.i("TEST getView", "inside getView position " + position);
 
@@ -221,6 +314,14 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
 
             CheckBox checkBox=(CheckBox)convertView.findViewById(R.id.checkBox);
             checkBox.setText(series.getCategory_name());
+            if(setBoolenList)
+            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    chosenList[position]=isChecked;
+                }
+            });
+
 
 
             return convertView;
@@ -264,6 +365,54 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
 
         }
 
+    }
+
+    public class sendActiveSerie extends AsyncTask<String, Void, Boolean> {
+        String sendActiveSerie = "http://10.0.2.2/final_project/db/sendActiveSerie.php";
+        //String sendActiveSerie = "http://mysite.lidordigital.co.il/Quertets/db/sendActiveSerie.php";
+
+
+        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            final List<Series> list = new ArrayList<Series>(series);
+            JSONObject jsonObject = new JSONObject();
+            for (int i = 0; i < list.size(); i++) {
+                if (chosenList[i])
+                    try {
+                        jsonObject.put("seriesId" + i, list.get(i).getCategory_id());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+            }
+            String message = jsonObject.toString();
+            parms.put("json",message);
+            parms.put("game_id",String.valueOf(game.getGame_id()));
+            parms.put("user_id",String.valueOf(curentUser.getUserID()));
+
+
+            JSONParser json = new JSONParser();
+            try {
+                JSONObject response = json.makeHttpRequest(sendActiveSerie, "POST", parms);
+
+                if (response.getInt("succsses")== 1) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        protected void onPostExecute(Boolean result) {
+            if(result) {
+                //new setGameToActive().execute("1",String.valueOf(game.getGame_id()));
+            }else
+                Toast.makeText(AdminChooseSeries.this,"set cards game trow eror",Toast.LENGTH_SHORT).show();
+        }
     }
 
     public class setGameToActive extends AsyncTask<String, Void, Boolean> {
