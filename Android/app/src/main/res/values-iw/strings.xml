@@ -40,7 +40,7 @@
     <string name="receive">קבל קלף</string>
     <string name="choose">בחר</string>
     <string name="string_choose_file">בחר תמונה</string>
-   <string name="string_upload_image">העלה תמונה</string>
+    <string name="string_upload_image">העלה תמונה</string>
     <string name="string_view_image">ראה תמונה</string>
     <string name="get_All_person">הצג את כל השחקנים</string>
     <string name="set_person">הרשמת שחקן</string>
@@ -80,8 +80,11 @@
     <string name="you_didnt_join_to_room">הצטרפות נכשלה</string>
     <string name="refresh">רענן</string>
     <string name="enter_categry_name">הכנס קטגוריה חדשה</string>
-
-
+    <string name="card_load">טעינת קלפים הצליחה</string>
+    <string name="update_series">טעינת סדרות הצליחה</string>
+    <string name="wait_for_admin_chose">מחכה לבחירת סדרות על ידי האדמין</string>
+    <string name="show_my_series">הסדרות שלי</string>
+    <string name="no_internet">לא נמצא חיבור לאינטרנט</string>
 
     <string-array name="card_click_menu">
         <item>שלח קלף</item>

@@ -49,6 +49,7 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
     boolean timerFlag = false;
     Boolean isGameActive;
     Boolean isAdmin;
+    boolean isAdminOpenTheRoomAndCloseIt=false;
 
 
     ProgressDialog pDialog2;
@@ -70,11 +71,31 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
         curentUser =(User) getIntent().getSerializableExtra("currentPlayer");
         isNewRoom=getIntent().getExtras().getBoolean("isNewRoom");
         roomName.setText(getResources().getString(R.string.wellcome)+" To: "+game.getGame_name()+" Room");
-        if(isNewRoom)
-            new openNewRoom().execute(game.getGame_name());
-        else {
+        if(isNewRoom) {
+            //new openNewRoom().execute(game.getGame_name());
+            new checkIfRoomNameAvilabale().execute(game.getGame_name());
+        } else {
             new joinToRoom().execute(game.getGame_name());
         }
+    }
+
+    public void onBackPressed() {
+        // TODO Auto-generated method stub
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getResources().getString(R.string.exitWarning))
+                .setCancelable(false)
+                .setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        new setGameToInactive().execute(String.valueOf(game.getGame_id()));
+                    }
+                })
+                .setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     @Override
@@ -106,80 +127,6 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
             return convertView;
 
         }
-    }
-
-    public class openNewRoom extends AsyncTask<String, User, Integer> {
-        String openNewRoom = "http://10.0.2.2/final_project/db/openNewRoom.php";
-        // String openNewRoom="http://mysite.lidordigital.co.il/Quertets/db/openNewRoom.php";
-        LinkedHashMap parms = new LinkedHashMap<>();
-        String roomName;
-        @Override
-        protected Integer doInBackground(String... params) {
-            parms.put("room_name", params[0]);
-            parms.put("user_id", String.valueOf(curentUser.getUserID()));
-            // parms.put("current_user",currentPlayer);
-            JSONParser json = new JSONParser();
-            try {
-                JSONObject response = json.makeHttpRequest(openNewRoom, "POST", parms);
-
-                if (response.getInt("successes") == 1) {
-                    game.setGame_name(roomName);
-                    game.setGame_id(response.getJSONArray("game").getJSONObject(0).getInt("game_id"));
-
-                    return 1;
-                } else
-                    return 0;
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                return -1;
-            }
-
-        }
-        protected void onPostExecute(Integer result) {
-            if (result == 1) {//all good
-                //2. show progress dialog - waiting for 3 more players
-                pDialog = new ProgressDialog(Room.this);
-                pDialog.setIndeterminate(true);
-                pDialog.setCancelable(false);
-                pDialog.setMessage(getResources().getString(R.string.waiting_for_players));
-
-                pDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        timer.cancel();
-                        timerFlag = false;
-                    }
-                });
-
-                pDialog.show();
-                timer = new Timer();
-                timerFlag = true;
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        if (timerFlag) {
-                            new GetAllConnectedPlayers().execute();
-                            // new Room.waitForOtherPlayer().execute(roomName);
-                            //new GetRoomStatus().execute(roomName);
-                        }
-                    }
-                }, 2000);
-
-                //new GetAllConnectedPlayers().execute();
-            } else if (result == 0) {//room name already in use
-                Toast.makeText(Room.this
-                        , getResources().getString(R.string.room_name_in_use),
-                        Toast.LENGTH_LONG).show();
-
-            } else if (result == -1) {//connection problem
-                Toast.makeText(Room.this
-                        , getResources().getString(R.string.connection_error),
-                        Toast.LENGTH_LONG).show();
-            }
-
-        }
-
     }
 
     public class joinToRoom extends AsyncTask<String, Void, Boolean> {
@@ -474,7 +421,7 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
         }
         protected void onPostExecute(Boolean result) {
             if (result) {
-                if(isGameActive) {
+                if (isGameActive && isAdminOpenTheRoomAndCloseIt) {
                     timer.cancel();
                     timerFlag = false;
                     pDialog.dismiss();
@@ -489,38 +436,149 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                     i.putExtra("debug", false);
                     startActivity(i);
                     finish();
-                }else{
+                } else {
                     timer2 = new Timer();
                     timerFlag2 = true;
                     timer2.schedule(new TimerTask() {
                         @Override
                         public void run() {
                             if (timerFlag2) {
+
                                 new checkIfGameIsActive().execute(String.valueOf(game.getGame_id()));
                             }
                         }
-                    }, 3000);
-                    }
-            }else {
-
-                timer2 = new Timer();
-                timerFlag2 = true;
-                timer2.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        if (timerFlag2) {
-                            new checkIfGameIsActive().execute(String.valueOf(game.getGame_id()));
+                    }, 2000);
+                }
+                if (!isGameActive) {
+                    isAdminOpenTheRoomAndCloseIt = true;
+                    timer2 = new Timer();
+                    timerFlag2 = true;
+                    timer2.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            if (timerFlag2) {
+                                //Toast.makeText(Room.this, "Admin was lost Connection", Toast.LENGTH_SHORT).show();
+                                Intent myIntent = new Intent(Room.this, MainMenu.class);
+                                startActivity(myIntent);
+                                finish();
+                            }
                         }
-                    }
-                }, 3000);
-            }
+                    }, 2000);
+                }
+            }else
+                Toast.makeText(Room.this,"internet Connection problem",Toast.LENGTH_SHORT).show();
 
 
         }
 
     }
 
+    public class checkIfRoomNameAvilabale extends AsyncTask<String, User, Integer> {
+        String checkIfRoomNameAvailable = "http://10.0.2.2/final_project/db/cheekIfRoomNameAvailable.php";
+        // String checkIfRoomNameAvailable="http://mysite.lidordigital.co.il/Quertets/db/cheekIfRoomNameAvailable.php";
+        LinkedHashMap parms = new LinkedHashMap<>();
+        String roomName;
+        @Override
+        protected Integer doInBackground(String... params) {
+            parms.put("room_name", params[0]);
+            parms.put("user_id", String.valueOf(curentUser.getUserID()));
+            // parms.put("current_user",currentPlayer);
+            JSONParser json = new JSONParser();
+            try {
+                JSONObject response = json.makeHttpRequest(checkIfRoomNameAvailable, "POST", parms);
 
+                if (response.getInt("room_status") == 1) {
+                    game.setGame_name(roomName);
+                    game.setGame_id(response.getJSONArray("game").getJSONObject(0).getInt("game_id"));
+                    return 1;
+                }
+                else
+                    return 0;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return -1;
+            }
+
+        }
+        protected void onPostExecute(Integer result) {
+            if (result == 1) {//all good
+                //2. show progress dialog - waiting for 3 more players
+                pDialog = new ProgressDialog(Room.this);
+                pDialog.setIndeterminate(true);
+                pDialog.setCancelable(false);
+                pDialog.setMessage(getResources().getString(R.string.waiting_for_players));
+
+                pDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        timer.cancel();
+                        timerFlag = false;
+                    }
+                });
+
+                pDialog.show();
+                timer = new Timer();
+                timerFlag = true;
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        if (timerFlag) {
+                            new GetAllConnectedPlayers().execute();
+                            // new Room.waitForOtherPlayer().execute(roomName);
+                            //new GetRoomStatus().execute(roomName);
+                        }
+                    }
+                }, 2000);
+
+                //new GetAllConnectedPlayers().execute();
+            } else if (result == 0) {//room name already in use
+                Toast.makeText(Room.this
+                        , getResources().getString(R.string.room_name_in_use),
+                        Toast.LENGTH_LONG).show();
+
+            } else if (result == -1) {//connection problem
+                Toast.makeText(Room.this
+                        , getResources().getString(R.string.connection_error),
+                        Toast.LENGTH_LONG).show();
+            }
+
+        }
+
+    }
+
+    public class setGameToInactive extends AsyncTask<String, Void, Boolean> {
+        String setGameToInactive = "http://10.0.2.2/final_project/db/setGameToInactive.php";
+        //String setGameToInactive = "http://mysite.lidordigital.co.il/Quertets/db/setGameToInactive.php";
+
+        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            parms.put("game_id", params[0]);
+
+            JSONParser json = new JSONParser();
+            try {
+                JSONObject response = json.makeHttpRequest(setGameToInactive, "POST", parms);
+                if (response.getInt("successes") == 1)
+                    return true;
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return false;
+            }
+            return false;
+        }
+
+        protected void onPostExecute(Boolean result) {
+            if (result) {
+                Intent myIntent = new Intent(Room.this, MainMenu.class);
+                startActivity(myIntent);
+                finish();
+            } else
+                Toast.makeText(Room.this, "There was problem on log out", Toast.LENGTH_SHORT).show();
+        }
+
+    }
 
     public class setTurnOrder extends AsyncTask<String, Void, Boolean> {
         String setTurnOrder = "http://10.0.2.2/final_project/db/moveToNextPlayer.php";
@@ -601,6 +659,80 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
         }
         GetGameId g= new GetGameId();
         g.execute();
+    }
+
+    public class openNewRoom extends AsyncTask<String, User, Integer> {
+        String openNewRoom = "http://10.0.2.2/final_project/db/openNewRoom.php";
+        // String openNewRoom="http://mysite.lidordigital.co.il/Quertets/db/openNewRoom.php";
+        LinkedHashMap parms = new LinkedHashMap<>();
+        String roomName;
+        @Override
+        protected Integer doInBackground(String... params) {
+            parms.put("room_name", params[0]);
+            parms.put("user_id", String.valueOf(curentUser.getUserID()));
+            // parms.put("current_user",currentPlayer);
+            JSONParser json = new JSONParser();
+            try {
+                JSONObject response = json.makeHttpRequest(openNewRoom, "POST", parms);
+
+                if (response.getInt("successes") == 1) {
+                    game.setGame_name(roomName);
+                    game.setGame_id(response.getJSONArray("game").getJSONObject(0).getInt("game_id"));
+
+                    return 1;
+                } else
+                    return 0;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return -1;
+            }
+
+        }
+        protected void onPostExecute(Integer result) {
+            if (result == 1) {//all good
+                //2. show progress dialog - waiting for 3 more players
+                pDialog = new ProgressDialog(Room.this);
+                pDialog.setIndeterminate(true);
+                pDialog.setCancelable(false);
+                pDialog.setMessage(getResources().getString(R.string.waiting_for_players));
+
+                pDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        timer.cancel();
+                        timerFlag = false;
+                    }
+                });
+
+                pDialog.show();
+                timer = new Timer();
+                timerFlag = true;
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        if (timerFlag) {
+                            new GetAllConnectedPlayers().execute();
+                            // new Room.waitForOtherPlayer().execute(roomName);
+                            //new GetRoomStatus().execute(roomName);
+                        }
+                    }
+                }, 2000);
+
+                //new GetAllConnectedPlayers().execute();
+            } else if (result == 0) {//room name already in use
+                Toast.makeText(Room.this
+                        , getResources().getString(R.string.room_name_in_use),
+                        Toast.LENGTH_LONG).show();
+
+            } else if (result == -1) {//connection problem
+                Toast.makeText(Room.this
+                        , getResources().getString(R.string.connection_error),
+                        Toast.LENGTH_LONG).show();
+            }
+
+        }
+
     }
 
 }

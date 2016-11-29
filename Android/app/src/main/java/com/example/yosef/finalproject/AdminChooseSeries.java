@@ -2,10 +2,12 @@ package com.example.yosef.finalproject;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,6 +40,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class AdminChooseSeries extends AppCompatActivity implements AdapterView.OnItemClickListener {
     static HashSet<Series> series =new HashSet();
@@ -71,8 +75,25 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
 
     }
 
-
-
+    public void onBackPressed() {
+        // TODO Auto-generated method stub
+        // TODO Auto-generated method stub
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getResources().getString(R.string.exitWarning))
+                .setCancelable(false)
+                .setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        new setGameToInactive().execute(String.valueOf(game.getGame_id()));
+                    }
+                })
+                .setNegativeButton(getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
     public void startGame(View v){
        // CheckBox cb = (CheckBox) v.getRootView().findViewById(R.id.checkBox);
         //CheckBox checkBox=(CheckBox)v.findViewById(R.id.checkBox);
@@ -82,77 +103,13 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
         final int cnt;
         final List<Series> list = new ArrayList<Series>(series);
         for (int i=0;i<series.size();i++)
-            if(chosenList[i])
+            if(chosenList[i])//if current item checked
                 counter++;
         cnt=counter;
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                OutputStream os = null;
-                InputStream is = null;
-                HttpURLConnection conn = null;
-                try {
-                    //constants
-                    URL url = new URL("http://10.0.2.2/final_project/db/sendActiveSerie.php");
-                    JSONObject jsonObject = new JSONObject();
-                    for (int i=0;i<list.size();i++){
-                        if(chosenList[i])
-                        jsonObject.put("seriesId"+i, list.get(i).getCategory_id());
-                    }
-                    String message = jsonObject.toString();
-
-                    conn = (HttpURLConnection) url.openConnection();
-                    conn.setReadTimeout( 10000 /*milliseconds*/ );
-                    conn.setConnectTimeout( 15000 /* milliseconds */ );
-                    conn.setRequestMethod("POST");
-                    conn.setDoInput(true);
-                    conn.setDoOutput(true);
-                    conn.setFixedLengthStreamingMode(message.getBytes().length);
-
-                    //make some HTTP header nicety
-                    conn.setRequestProperty("Content-Type", "application/json;charset=utf-8");
-                    conn.setRequestProperty("X-Requested-With", "XMLHttpRequest");
-
-                    //open
-                    conn.connect();
-
-                    //setup send
-                    os = new BufferedOutputStream(conn.getOutputStream());
-                    os.write(message.getBytes());
-                    //clean up
-                    os.flush();
-
-                    //do somehting with response
-                    is = conn.getInputStream();
-                    if(is!=null)
-                        Toast.makeText(AdminChooseSeries.this,"insert Good!",Toast.LENGTH_SHORT).show();
-                    else
-                        Toast.makeText(AdminChooseSeries.this,"insert BAD!",Toast.LENGTH_SHORT).show();
-
-                    //String contentAsString = readIt(is,len);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-               finally {
-                    //clean up
-                    try {
-                        os.close();
-                        is.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    conn.disconnect();
-                }
-            }
-        }).start();
-
-
 
         if(counter>=7){
+            new sendActiveSerie().execute();
             //List<Series> list = new ArrayList<Series>(series);
             //new setGameToActive().execute("1",String.valueOf(game.getGame_id()));
         }else
@@ -285,7 +242,10 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
                 lv = (ListView) findViewById(R.id.choseSeriesList);
                 registerForContextMenu(lv);
 
-            }
+                new setGameToActive().execute("1",String.valueOf(game.getGame_id()));
+
+            }else
+                Toast.makeText(AdminChooseSeries.this,"there was problem to get defult series",Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -329,6 +289,101 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
         }
     }
 
+    public class sendActiveSerie extends AsyncTask<String, Void, Boolean> {
+        String sendActiveSerie = "http://10.0.2.2/final_project/db/sendActiveSerie.php";
+        //String sendActiveSerie = "http://mysite.lidordigital.co.il/Quertets/db/sendActiveSerie.php";
+
+
+        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+
+
+            final List<Series> list = new ArrayList<Series>(series);
+            JSONArray jsonArr = new JSONArray();
+            JSONObject json = new JSONObject();
+            for (int i = 0; i < list.size(); i++) {
+
+                if (chosenList[i]) {
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject.put("seriesId"+i, list.get(i).getCategory_id());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    jsonArr.put(jsonObject);
+                }
+            }
+
+            try {
+                json.put("seriesIds",jsonArr);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            String message = json.toString();
+            Log.d("JSON", message);
+
+
+            parms.put("game_id",String.valueOf(game.getGame_id()));
+            parms.put("user_id",String.valueOf(curentUser.getUserID()));
+            parms.put("json",message);
+
+
+            JSONParser jsonPars = new JSONParser();
+            try {
+                JSONObject response = jsonPars.makeHttpRequest(sendActiveSerie, "POST", parms);
+
+                if (response.getInt("successes")== 1) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        protected void onPostExecute(Boolean result) {
+            if(result) {
+               // new setGameToActive().execute("1",String.valueOf(game.getGame_id()));
+                new setTurnOrder().execute();
+            }else
+                Toast.makeText(AdminChooseSeries.this,"set series for game failed",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public class setGameToActive extends AsyncTask<String, Void, Boolean> {
+        String setGameToActive = "http://10.0.2.2/final_project/db/setGameToActive.php";
+        // String setGameToActive = "http://mysite.lidordigital.co.il/Quertets/db/setGameToActive.php";
+        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            parms.put("opertion",params[0]);
+            parms.put("game_id",params[1]);
+
+            JSONParser json = new JSONParser();
+            try {
+                JSONObject response = json.makeHttpRequest(setGameToActive, "POST", parms);
+
+                if (response.getInt("succsses")== 1) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        protected void onPostExecute(Boolean result) {
+            if (result==false)
+                Toast.makeText(AdminChooseSeries.this,"Cant set game to be active",Toast.LENGTH_LONG).show();
+        }
+
+    }
+
     public class setTurnOrder extends AsyncTask<String, Void, Boolean> {
         String setTurnOrder = "http://10.0.2.2/final_project/db/moveToNextPlayer.php";
         // String setTurnOrder = "http://mysite.lidordigital.co.il/Quertets/db/moveToNextPlayer.php";
@@ -367,117 +422,37 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
 
     }
 
-    public class sendActiveSerie extends AsyncTask<String, Void, Boolean> {
-        String sendActiveSerie = "http://10.0.2.2/final_project/db/sendActiveSerie.php";
-        //String sendActiveSerie = "http://mysite.lidordigital.co.il/Quertets/db/sendActiveSerie.php";
-
+    public class setGameToInactive extends AsyncTask<String, Void, Boolean> {
+        String setGameToInactive = "http://10.0.2.2/final_project/db/setGameToInactive.php";
+        //String setGameToInactive = "http://mysite.lidordigital.co.il/Quertets/db/setGameToInactive.php";
 
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
         protected Boolean doInBackground(String... params) {
-            final List<Series> list = new ArrayList<Series>(series);
-            JSONObject jsonObject = new JSONObject();
-            for (int i = 0; i < list.size(); i++) {
-                if (chosenList[i])
-                    try {
-                        jsonObject.put("seriesId" + i, list.get(i).getCategory_id());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-            }
-            String message = jsonObject.toString();
-            parms.put("json",message);
-            parms.put("game_id",String.valueOf(game.getGame_id()));
-            parms.put("user_id",String.valueOf(curentUser.getUserID()));
-
+            parms.put("game_id", params[0]);
 
             JSONParser json = new JSONParser();
             try {
-                JSONObject response = json.makeHttpRequest(sendActiveSerie, "POST", parms);
-
-                if (response.getInt("succsses")== 1) {
+                JSONObject response = json.makeHttpRequest(setGameToInactive, "POST", parms);
+                if (response.getInt("successes") == 1)
                     return true;
-                } else {
-                    return false;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (Exception ex) {
+                ex.printStackTrace();
                 return false;
             }
+            return false;
         }
 
-        protected void onPostExecute(Boolean result) {
-            if(result) {
-                //new setGameToActive().execute("1",String.valueOf(game.getGame_id()));
-            }else
-                Toast.makeText(AdminChooseSeries.this,"set cards game trow eror",Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public class setGameToActive extends AsyncTask<String, Void, Boolean> {
-        String setGameToActive = "http://10.0.2.2/final_project/db/setGameToActive.php";
-        // String setGameToActive = "http://mysite.lidordigital.co.il/Quertets/db/setGameToActive.php";
-        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
-
-        @Override
-        protected Boolean doInBackground(String... params) {
-            parms.put("opertion",params[0]);
-            parms.put("game_id",params[1]);
-
-            JSONParser json = new JSONParser();
-            try {
-                JSONObject response = json.makeHttpRequest(setGameToActive, "POST", parms);
-
-                if (response.getInt("succsses")== 1) {
-                    return true;
-                } else {
-                    return false;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
-            }
-        }
         protected void onPostExecute(Boolean result) {
             if (result) {
-                new setTurnOrder().execute();
-            }else
-                Toast.makeText(AdminChooseSeries.this,"Cant set game to be active",Toast.LENGTH_LONG).show();
-
+                Intent myIntent = new Intent(AdminChooseSeries.this, MainMenu.class);
+                startActivity(myIntent);
+                finish();
+            } else
+                Toast.makeText(AdminChooseSeries.this, "There was problem on log out", Toast.LENGTH_SHORT).show();
         }
 
-    }
-
-    public String getMyName(String user_id){
-        final String[] userName = new String[1];
-        class GetMyName extends AsyncTask<String,Void,String>{
-            //public static final String getMyName = "http://mysite.lidordigital.co.il/Quertets/db/getMyName.php";
-            public static final String getMyName = "http://10.0.2.2/final_project/db/getMyName.php";
-
-            @Override
-            protected String doInBackground(String... params) {
-                LinkedHashMap<String,String> data = new LinkedHashMap<>();
-                data.put("user_id",params[0]);
-
-                JSONParser json = new JSONParser();
-                JSONObject response = json.makeHttpRequest(getMyName, "POST", data);
-                try {
-                    if (response.getInt("succsses") == 1) {
-                        userName[0] = response.getString("user_name");
-                    }else
-                        return null;
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    return null;
-                }
-                return null;
-            }
-        }
-
-        GetMyName ui = new GetMyName();
-        ui.execute(user_id);
-        return userName[1];
     }
 
 }

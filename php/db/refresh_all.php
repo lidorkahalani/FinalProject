@@ -2,33 +2,34 @@
 include('connection.php');
 $con=mysqli_connect("localhost","root","","quartetsdb");
 $response=array();
-if (mysqli_connect_errno($con))
-{
+if (mysqli_connect_errno($con)){
    echo '{"query_result":"ERROR"}';
 }
 $userId=$_POST["user_id"];
 $game_id=$_POST["game_id"];
 mysqli_set_charset($con,"utf8");
-$sql_query = "select card_id from games_cards where user_id='$userId' AND game_id='$game_id'"; 
+$sql_query = "select card_id from games_cards where user_id='$userId' AND game_id='$game_id' AND series_complete=0"; 
  
 $result = mysqli_query($con,$sql_query);  
 $response["myCards"]=array();
-if(mysqli_num_rows($result) >0 )  
-{
+if(mysqli_num_rows($result) >0 )  {
 	while($row=mysqli_fetch_array($result)){
 		$card=getAllMyCard($row['card_id']);
 		array_push($response["myCards"],$card);
 	}
 
  $response["isMyturn"]=isMyTurn($userId,$game_id);
- //$response["isAllPlayersConnected"]=isAllPlayersConnected($game_id);
+ /*$seriseIdList=getIdOfAllFullSeries($userId,$game_id);
+ if($seriseIdList!=null){
+	 $response["SeriesIds"]=$seriseIdList;
+	 $response["finishSeries"]=1;
+ }else
+	$response["finishSeries"]=0;
+ $response["isAllPlayersConnected"]=isAllPlayersConnected($game_id);//1-all connected 0-one or more logut
+ */
  $response["succsses"]=1;
  echo json_encode($response);
- 
-
- }
- else  
- {   
+ }else {   
  $response["succsses"]=0;
  echo json_encode($response);  
  }
@@ -67,6 +68,9 @@ function getAllMyCard($cardId){
 	mysqli_close($con);
 	
 } 
+function getIdOfAllFullSeries($user_id,$game_id){
+	
+}
 function getCategoryName($category_id){
 $con=mysqli_connect("localhost","root","","quartetsdb");
 $response=array();
@@ -126,7 +130,13 @@ function getAllItems($category_id){
 		mysqli_close($con);
  }
 function isAllPlayersConnected($game_id){
-	 
-	return 1; 
+	require('connection.php');
+	$sth = $con->prepare("SELECT is_active FROM game where game_id='$game_id'");
+			$sth->execute();
+			$result = $sth->fetch(PDO::FETCH_ASSOC);
+			if($result['is_active']==1)
+				return 1;
+			else
+				return 0;
 }
 ?>

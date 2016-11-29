@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -32,7 +33,10 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 public class MainMenu extends AppCompatActivity {
 
@@ -243,6 +247,7 @@ public class MainMenu extends AppCompatActivity {
                                     Intent myIntent = new Intent(MainMenu.this, AddNewSeries.class);
                                     myIntent.putExtra("currenUsrt",currentPlayer);
                                     myIntent.putExtra("categoryName",categoryName);
+                                    myIntent.putExtra("Game",newGame);
                                     startActivity(myIntent);
                                     //finish();
                                 } else {
@@ -421,6 +426,8 @@ public class MainMenu extends AppCompatActivity {
         intent.putExtra("debug",true);
         startActivity(intent);
     }
+
+
 
 
 }

@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -23,10 +25,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -81,6 +86,7 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
 
 
     private Button buttonUpload;
+    private Game game;
 
     private ImageView imageViewCard1;
     private ImageView imageViewCard2;
@@ -141,7 +147,7 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_series);
-
+        game=(Game) getIntent().getSerializableExtra("Game");
         buttonChooseCard1 = (Button) findViewById(R.id.buttonChooseCard1);
         buttonChooseCard2 = (Button) findViewById(R.id.buttonChooseCard2);
         buttonChooseCard3 = (Button) findViewById(R.id.buttonChooseCard3);
@@ -177,7 +183,12 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
         buttonChooseCard3.setOnClickListener(this);
         buttonChooseCard4.setOnClickListener(this);
         buttonUpload.setOnClickListener(this);
+        imageViewCard1.setOnClickListener(this);
+        imageViewCard2.setOnClickListener(this);
+        imageViewCard3.setOnClickListener(this);
+        imageViewCard4.setOnClickListener(this);
     }
+
     private void showFileChooser() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -194,30 +205,38 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
 
             filePath = data.getData();
             imageFile=new File(filePath.getPath());
+            Bitmap rotatedBitmap=null;
+
+            Matrix matrix = new Matrix();
+            matrix.postRotate(180);
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
                 if(isbuttonChooseCard1) {
                     imageName1=getRealPathFromURI_BelowAPI11(getBaseContext(),filePath);
                      file1= new File(Environment.getExternalStorageDirectory().getAbsolutePath(),imageFile.getPath());
-                    imageViewCard1.setImageBitmap(bitmap);
+
+                    imageViewCard1.setImageBitmap(rotatedBitmap);
                     isbuttonChooseCard1=false;
                 }
                 else if(isbuttonChooseCard2) {
                     imageName2=getRealPathFromURI_BelowAPI11(getBaseContext(),filePath);
                     file2= new File(Environment.getExternalStorageDirectory().getAbsolutePath(),imageFile.getPath());
-                    imageViewCard2.setImageBitmap(bitmap);
+
+                    imageViewCard2.setImageBitmap(rotatedBitmap);
                     isbuttonChooseCard2=false;
                 }
                 else if(isbuttonChooseCard3) {
                     imageName3=getRealPathFromURI_BelowAPI11(getBaseContext(),filePath);
                     file3= new File(Environment.getExternalStorageDirectory().getAbsolutePath(),imageFile.getPath());
-                    imageViewCard3.setImageBitmap(bitmap);
+
+                    imageViewCard3.setImageBitmap(rotatedBitmap);
                     isbuttonChooseCard3=false;
                 }
                 else if(isbuttonChooseCard4) {
                     imageName4=getRealPathFromURI_BelowAPI11(getBaseContext(),filePath);
                     file4= new File(Environment.getExternalStorageDirectory().getAbsolutePath(),imageFile.getPath());
-                    imageViewCard4.setImageBitmap(bitmap);
+                    imageViewCard4.setImageBitmap(rotatedBitmap);
                     isbuttonChooseCard4=false;
                 }
 
@@ -328,17 +347,13 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
     }
 
     public void onBackPressed() {
-
         // TODO Auto-generated method stub
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getResources().getString(R.string.back_Main_Menu))
                 .setCancelable(false)
                 .setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Intent myIntent = new Intent(AddNewSeries.this, MainMenu.class);
-                        startActivity(myIntent);
-                        //finish();
-                        finish();
+                        new setGameToInactive().execute(String.valueOf(game.getGame_id()));
                     }
                 })
                 .setNegativeButton(getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
@@ -363,7 +378,35 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
         }else if(v ==buttonChooseCard4){
             isbuttonChooseCard4=true;
             showFileChooser();
+        }else if(v==imageViewCard1){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+            final AlertDialog dialog = builder.create();
+            LayoutInflater inflater = getLayoutInflater();
+            View dialogLayout = inflater.inflate(R.layout.zoom_image_layout, null);
+            dialog.setView(dialogLayout);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+            dialog.show();
+
+            dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface d) {
+                    ImageView image = (ImageView) dialog.findViewById(R.id.goProDialogImage);
+                    Bitmap icon = ((BitmapDrawable)image.getDrawable()).getBitmap();
+                    float imageWidthInPX = (float)image.getWidth();
+
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(Math.round(imageWidthInPX),
+                            Math.round(imageWidthInPX * (float)icon.getHeight() / (float)icon.getWidth()));
+                    image.setLayoutParams(layoutParams);
+                }
+            });
         }
+
 
 
 
@@ -476,6 +519,7 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
 
 
     }
+
     public class sendSeriesToServer extends AsyncTask<String, Void, Boolean> {
         String upload_series = "http://10.0.2.2/final_project/db/upload_series.php";
         // String upload_series = "http://mysite.lidordigital.co.il/Quertets/db/upload_series.php";
@@ -567,4 +611,39 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
         }
 
     }
+
+    public class setGameToInactive extends AsyncTask<String, Void, Boolean> {
+        String setGameToInactive = "http://10.0.2.2/final_project/db/setGameToInactive.php";
+        //String setGameToInactive = "http://mysite.lidordigital.co.il/Quertets/db/setGameToInactive.php";
+
+        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            parms.put("game_id", params[0]);
+
+            JSONParser json = new JSONParser();
+            try {
+                JSONObject response = json.makeHttpRequest(setGameToInactive, "POST", parms);
+                if (response.getInt("successes") == 1)
+                    return true;
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return false;
+            }
+            return false;
+        }
+
+        protected void onPostExecute(Boolean result) {
+            if (result) {
+                Intent myIntent = new Intent(AddNewSeries.this, MainMenu.class);
+                startActivity(myIntent);
+                finish();
+            } else
+                Toast.makeText(AddNewSeries.this, "There was problem on log out", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+
 }

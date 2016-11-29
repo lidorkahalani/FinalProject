@@ -134,5 +134,13 @@
         android:layout_marginTop="44dp"
         android:layout_alignParentRight="true" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pointField"
+        android:layout_below="@+id/top_layout"
+        android:layout_toLeftOf="@+id/ac"
+        android:layout_toStartOf="@+id/ac" />
+
 
 </RelativeLayout>

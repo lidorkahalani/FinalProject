@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -44,6 +45,9 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     private RelativeLayout top_layout;
     private RelativeLayout right_layout;
     private RelativeLayout activePlayer;
+    private TextView point;
+    private int currentPoint=0;
+    private ArrayList<Integer> finishSeriesList=new ArrayList<>();
 
 
     private RecyclerView myListView;
@@ -65,6 +69,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_screen);
+        point=(TextView)findViewById(R.id.pointField);
         newGame = (Game) getIntent().getSerializableExtra("Game");
         Intent i = getIntent();
         currentPlayer = (User) i.getSerializableExtra("currentPlayer");
@@ -112,9 +117,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                 .setCancelable(false)
                 .setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Intent myIntent = new Intent(GameScreen.this, MainMenu.class);
-                        startActivity(myIntent);
-                        finish();
+                        new setGameToInactive().execute(String.valueOf(newGame.getGame_id()));
                     }
                 })
                 .setNegativeButton(getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
@@ -484,6 +487,15 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                        isMyTurnStatus =true;
                     else
                        isMyTurnStatus =false;
+
+                    if(response.getInt("finishSeries")==1) {
+                        jsonArray = response.getJSONArray("SeriesIds");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            finishSeriesList.add(jsonArray.getJSONObject(i).getInt("sereisId"));
+                        }
+                    }
+
+
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -556,42 +568,35 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
     }
 
-    public void checkIfCompleteSeries(){
-        new CheckIfCompleteSeries().execute(String.valueOf(currentPlayer.getUserID()),String.valueOf(newGame.getGame_id()));
-
-        for(int counter=0,j=0,i=0;i<fullSereiesId.size();i++){
-            if(deck.get(i).getCategoryId()==fullSereiesId.get(j)) {
-                deck.remove(i);
-                counter++;
-                if(counter==4)
-                    j++;
-            }
-        }
-        setCardsList();
-    }
-
-    public class CheckIfCompleteSeries extends AsyncTask<String, Void, Boolean> {
-        String checkIfCompleteSeries = "http://10.0.2.2/final_project/db/checkIfCompleteSeries.php";
-        //String checkIfCompleteSeries = "http://mysite.lidordigital.co.il/Quertets/db/checkIfCompleteSeries.php";
+    public class setGameToInactive extends AsyncTask<String, Void, Boolean> {
+        String setGameToInactive = "http://10.0.2.2/final_project/db/setGameToInactive.php";
+        //String setGameToInactive = "http://mysite.lidordigital.co.il/Quertets/db/setGameToInactive.php";
 
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
         protected Boolean doInBackground(String... params) {
-            parms.put("user_id",params[0]);
-            parms.put("game_id",params[1]);
+            parms.put("game_id", params[0]);
 
             JSONParser json = new JSONParser();
             try {
-                JSONObject response = json.makeHttpRequest(checkIfCompleteSeries, "POST", parms);
-                if (response.getInt("successes") == 1) {
-                    fullSereiesId.add(Integer.parseInt(params[0]));
-                }
+                JSONObject response = json.makeHttpRequest(setGameToInactive, "POST", parms);
+                if (response.getInt("successes") == 1)
+                  return true;
             } catch (Exception ex) {
                 ex.printStackTrace();
                 return false;
             }
-            return true;
+            return false;
+        }
+
+        protected void onPostExecute(Boolean result) {
+            if (result) {
+                Intent myIntent = new Intent(GameScreen.this, MainMenu.class);
+                startActivity(myIntent);
+                finish();
+            } else
+                Toast.makeText(GameScreen.this, "There was problem on log out", Toast.LENGTH_SHORT).show();
         }
 
     }

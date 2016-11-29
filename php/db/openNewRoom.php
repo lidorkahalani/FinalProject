@@ -28,7 +28,7 @@ if(checkIfRoomNameAvailable($roomName)==0){
 				$card_id = $row['card_id'];
 				$category_id = $row['category_id'];
 				
-				$insert=$con->exec("INSERT INTO games_cards (game_id,card_id,category_id,user_id) VALUES('$id','$card_id','$category_id',0)");
+				$insert=$con->exec("INSERT INTO games_cards (game_id,card_id,category_id,user_id,series_complete) VALUES('$id','$card_id','$category_id',0,0)");
 				/*if($insert === FALSE){
 					$response["successes"]=0;
 					break;
