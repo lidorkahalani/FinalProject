@@ -307,6 +307,7 @@ public class MainMenu extends AppCompatActivity {
                 intent.putExtra("currentPlayer",currentPlayer);
                 intent.putExtra("isNewRoom",true);
                 startActivity(intent);
+                finish();
 
 
             }

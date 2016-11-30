@@ -6,15 +6,15 @@
 	$response=array();
 	$result = $con->query("SELECT COUNT(*) FROM game_users WHERE game_id='$game_id'")->fetchColumn();
 	if($result==2){
-		$con=mysqli_connect("localhost","root","","quartetsdb");
+		$conn=mysqli_connect("localhost","root","","quartetsdb");
 		$response=array();
-		if (mysqli_connect_errno($con))
+		if (mysqli_connect_errno($conn))
 		{
 		   echo '{"query_result":"ERROR"}';
 		}
-		mysqli_set_charset($con,"utf8");
+		mysqli_set_charset($conn,"utf8");
 		$sql_query = "SELECT user_id FROM game_users WHERE game_id='$game_id'";
-		$result = mysqli_query($con,$sql_query); 
+		$result = mysqli_query($conn,$sql_query); 
 		if(mysqli_num_rows($result) >0 )  
 		{	
 			$response['all_users_id']=array();
@@ -31,7 +31,7 @@
 		$response["succsses"]=3;
 	
 	echo json_encode($response);
-	mysqli_close($con);
+	mysqli_close($conn);
 	
 	function getGameId($roomName){
 	include('connection.php');

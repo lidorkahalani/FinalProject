@@ -2,6 +2,7 @@
 include('connection.php');
 $con=mysqli_connect("localhost","root","","quartetsdb");
 $response=array();
+$seriseIdList=array();
 if (mysqli_connect_errno($con)){
    echo '{"query_result":"ERROR"}';
 }
@@ -19,14 +20,19 @@ if(mysqli_num_rows($result) >0 )  {
 	}
 
  $response["isMyturn"]=isMyTurn($userId,$game_id);
- /*$seriseIdList=getIdOfAllFullSeries($userId,$game_id);
+ $seriseIdList=getIdOfAllFullSeries($userId,$game_id);
  if($seriseIdList!=null){
 	 $response["SeriesIds"]=$seriseIdList;
 	 $response["finishSeries"]=1;
  }else
 	$response["finishSeries"]=0;
- $response["isAllPlayersConnected"]=isAllPlayersConnected($game_id);//1-all connected 0-one or more logut
- */
+
+  $response["isAllPlayersConnected"]=isAllPlayersConnected($game_id);//1-all connected 0-one or more logut
+  if(getStatusGame($game_id)!=0)
+	$response['is_active']=1;
+  else
+	$response['is_active']=0;
+ 
  $response["succsses"]=1;
  echo json_encode($response);
  }else {   
@@ -69,7 +75,18 @@ function getAllMyCard($cardId){
 	
 } 
 function getIdOfAllFullSeries($user_id,$game_id){
+	require('Connection.php');
+	$game_id=$_POST['game_id'];
+	$sth = $con->prepare("SELECT category_id FROM games_cards WHERE user_id='$user_id' AND game_id='$game_id' GROUP BY category_id HAVING COUNT(category_id)=4");
+	$sth->execute();
+	$result = $sth->fetchAll(PDO::FETCH_ASSOC);
+	if($result){
+		return $result;
+	}else{
+		return null;
+	}
 	
+
 }
 function getCategoryName($category_id){
 $con=mysqli_connect("localhost","root","","quartetsdb");
@@ -138,5 +155,17 @@ function isAllPlayersConnected($game_id){
 				return 1;
 			else
 				return 0;
+}
+function getStatusGame($game_id){
+	require('Connection.php');
+	$game_id=$_POST['game_id'];
+	$sth = $con->prepare("SELECT is_active FROM game where game_id='$game_id'");
+	$sth->execute();
+	$result = $sth->fetch(PDO::FETCH_ASSOC);
+	if($result){
+		return $result['is_active'];
+	}else{
+		return null;
+	}
 }
 ?>

@@ -47,12 +47,12 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
     ProgressDialog pDialog;
     Timer timer;
     boolean timerFlag = false;
-    Boolean isGameActive;
+    Boolean isGameActive=false;
     Boolean isAdmin;
+    Boolean startGame=false;
     boolean isAdminOpenTheRoomAndCloseIt=false;
 
 
-    ProgressDialog pDialog2;
     Timer timer2;
     boolean timerFlag2 = false;
    // private  EditText roomName;
@@ -159,11 +159,12 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                 pDialog.setCancelable(false);
                 pDialog.setMessage(getResources().getString(R.string.waiting_for_players));
 
-                pDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                pDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.exit), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         timer.cancel();
                         timerFlag = false;
+                        new setGameToInactive().execute(String.valueOf(game.getGame_id()));
                     }
                 });
 
@@ -186,17 +187,6 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                         .setMessage(getResources().getString(R.string.Group_Not_Found))
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(Room.this);
-                                Boolean faceBookLogIN=myPref.getBoolean("loginWhitFacebook",false);
-
-                                SharedPreferences.Editor editor = myPref.edit();
-                                editor.putString("username", curentUser.getUserName());
-                                editor.putString("password", curentUser.getPassword());
-                                editor.putInt("score", curentUser.getScore());
-                                editor.putInt("user_id",curentUser.getUserID());
-
-                                editor.commit();
-
                                 Intent myIntent = new Intent(Room.this, MainMenu.class);
                                 startActivity(myIntent);
                                 finish();
@@ -249,38 +239,10 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
 
                 lv = (ListView) findViewById(R.id.PlayerList);
                 registerForContextMenu(lv);
-              /* pDialog = new ProgressDialog(Room.this);
-                pDialog.setIndeterminate(true);
-                pDialog.setCancelable(false);
-                pDialog.setMessage(getResources().getString(R.string.waiting_for_players));
-
-                pDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        timer.cancel();
-                        timerFlag = false;
-                    }
-                });
-
-                pDialog.show();
-                timer = new Timer();
-                timerFlag = true;
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        if (timerFlag) {
-                            new checkIfRoomFull().execute(roomName.getText().toString());
-                            // new Room.waitForOtherPlayer().execute(roomName);
-                            //new GetRoomStatus().execute(roomName);
-                        }
-                    }
-                }, 3000);*/
-
                 new checkIfRoomFull().execute(String.valueOf(game.getGame_id()));
 
 
             }else
-                //new GetAllConnectedPlayers().execute();
                 Toast.makeText(Room.this,getResources().getString(R.string.connection_error),Toast.LENGTH_LONG).show();
 
         }
@@ -315,19 +277,7 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
         }
         protected void onPostExecute(Boolean result) {
             if (result) {
-
                 new checkIfImAdmin().execute(String.valueOf(game.getGame_id()));
-
-                /*Intent i = new Intent(getApplicationContext(), AdminChooseSeries.class);
-                game.setGame_name(game.getGame_name());
-                i.putExtra("Game",game);
-                i.putExtra("currentPlayer",curentUser);
-                i.putExtra("isNewRoom",true);
-                i.putExtra("allConnectedUsersId",allConnectedUsersId);
-                i.putExtra("allUsers",allUsers);
-                startActivity(i);
-                finish();*/
-                //new setTurnOrder().execute();
             }else
                 new GetAllConnectedPlayers().execute();
 
@@ -382,12 +332,10 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                     pDialog.setMessage(getResources().getString(R.string.wait_for_admin_chose));
                     new checkIfGameIsActive().execute(String.valueOf(game.getGame_id()));
                 }
-                //new setTurnOrder().execute();
             }else {
                 pDialog.setMessage(getResources().getString(R.string.wait_for_admin_chose));
                 new checkIfGameIsActive().execute(String.valueOf(game.getGame_id()));
             }
-                //new GetAllConnectedPlayers().execute();
 
         }
 
@@ -406,10 +354,13 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                 JSONObject response = json.makeHttpRequest(checkIfGameIsActive, "POST", parms);
 
                 if (response.getInt("succsses")== 1) {
-                    if(response.getJSONObject("result").getInt("is_active")==1)
-                          isGameActive=true;
-                    else
-                          isGameActive=false;
+                    if(response.getJSONObject("result").getInt("is_active")==1) {
+                        isGameActive = true;
+                        return true;
+                    }else if(response.getJSONObject("result").getInt("is_active")==2) {
+                        startGame = true;
+                        return true;
+                    }
                     return true;
                 } else {
                     return false;
@@ -432,7 +383,6 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                     Intent i = new Intent(getApplicationContext(), GameScreen.class);
                     i.putExtra("Game", game);
                     i.putExtra("currentPlayer", curentUser);
-                    //i.putExtra("selctedCard",selctedCard);
                     i.putExtra("debug", false);
                     startActivity(i);
                     finish();
@@ -443,13 +393,12 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                         @Override
                         public void run() {
                             if (timerFlag2) {
-
                                 new checkIfGameIsActive().execute(String.valueOf(game.getGame_id()));
                             }
                         }
                     }, 2000);
                 }
-                if (!isGameActive) {
+                if (!isGameActive) {//somone is disconected go back to mainMenu
                     isAdminOpenTheRoomAndCloseIt = true;
                     timer2 = new Timer();
                     timerFlag2 = true;
@@ -457,13 +406,24 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                         @Override
                         public void run() {
                             if (timerFlag2) {
-                                //Toast.makeText(Room.this, "Admin was lost Connection", Toast.LENGTH_SHORT).show();
-                                Intent myIntent = new Intent(Room.this, MainMenu.class);
-                                startActivity(myIntent);
-                                finish();
+                                openMainMenu();
                             }
                         }
                     }, 2000);
+                }else if(startGame){
+                    timer.cancel();
+                    timerFlag = false;
+                    pDialog.dismiss();
+
+                    timer2.cancel();
+                    timerFlag2 = false;
+
+                    Intent i = new Intent(getApplicationContext(), GameScreen.class);
+                    i.putExtra("Game", game);
+                    i.putExtra("currentPlayer", curentUser);
+                    i.putExtra("debug", false);
+                    startActivity(i);
+                    finish();
                 }
             }else
                 Toast.makeText(Room.this,"internet Connection problem",Toast.LENGTH_SHORT).show();
@@ -571,6 +531,13 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
 
         protected void onPostExecute(Boolean result) {
             if (result) {
+                timer.cancel();
+                timerFlag = false;
+                pDialog.dismiss();
+
+                timer2.cancel();
+                timerFlag2 = false;
+
                 Intent myIntent = new Intent(Room.this, MainMenu.class);
                 startActivity(myIntent);
                 finish();
@@ -633,32 +600,13 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
 
     }
 
-    public void getGameId(String gameName){
-        final String s=gameName;
-        class GetGameId extends AsyncTask<String, Void, Integer> {
-            String getGameId="http://10.0.2.2/final_project/db/getGameId.php";
-            LinkedHashMap<String, String> parms = new LinkedHashMap<>();
-            @Override
-            protected Integer doInBackground(String... params) {
-                parms.put("game_name",s);
-                JSONParser json = new JSONParser();
-                try {
-                    JSONObject response = json.makeHttpRequest(getGameId, "GET", parms);
-                    if(response.getInt("succsses")==1)
-                        return (response.getJSONObject("game_id").getInt("game_id"));
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-                return 0;
-            }
-
-            protected void onPostExecute(Integer s) {
-                if(s!=0)
-                    game.setGame_id(s);
-            }
-        }
-        GetGameId g= new GetGameId();
-        g.execute();
+    public void openMainMenu(){
+        timer2.cancel();
+        timerFlag2 = false;
+        Intent myIntent = new Intent(Room.this, MainMenu.class);
+        startActivity(myIntent);
+        //Toast.makeText(Room.this, "Admin was lost Connection", Toast.LENGTH_SHORT).show();
+        finish();
     }
 
     public class openNewRoom extends AsyncTask<String, User, Integer> {

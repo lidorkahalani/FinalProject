@@ -62,9 +62,9 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     private Game newGame;
     private Boolean debugStatus;
     private Boolean deckIsOver=false;
+    private Boolean gameIsActive=true;
     private Boolean isMyTurnStatus;
-    private Timer timer;
-
+    Timer myTimer = new Timer("MyTimer", true);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,21 +93,26 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         myListView.setLayoutManager(lm);
         myListView.setItemAnimator(new DefaultItemAnimator());
 
+        myTimer.scheduleAtFixedRate(new MyTask(), 3000, 2000);
+    }
+
+    private class MyTask extends TimerTask {
+
+        public void run(){
+            if(!gameIsActive)
+                openMainMenu();
+            else
+                new refresh().execute();
+        }
 
     }
 
-   /* @Override
-    public void onResume() {
-        super.onResume();
-        timer = new Timer();
-        // This timer task will be executed every 1 sec.
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-               new refresh().execute();
-            }
-        }, 0, 1000);
-    }*/
+    public void openMainMenu(){
+        myTimer.cancel();
+        Intent myIntent = new Intent(GameScreen.this, MainMenu.class);
+        startActivity(myIntent);
+        finish();
+    }
 
     public void onBackPressed() {
         // TODO Auto-generated method stub
@@ -489,14 +494,17 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                        isMyTurnStatus =false;
 
                     if(response.getInt("finishSeries")==1) {
+                        finishSeriesList.clear();
                         jsonArray = response.getJSONArray("SeriesIds");
                         for (int i = 0; i < jsonArray.length(); i++) {
-                            finishSeriesList.add(jsonArray.getJSONObject(i).getInt("sereisId"));
+                            finishSeriesList.add(jsonArray.getJSONObject(i).getInt("category_id"));
                         }
                     }
 
-
-                }
+                     if(response.getInt("is_active")==0) {
+                         gameIsActive=false;
+                        }
+                    }
             } catch (Exception ex) {
                 ex.printStackTrace();
                 return false;
@@ -507,8 +515,19 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
         protected void onPostExecute(Boolean result) {
             if (result) {
-               // checkIfCompleteSeries();
-               // if(!deck.equals(tempDeck)) {
+                if(!finishSeriesList.isEmpty()) {
+                    Toast.makeText(GameScreen.this,"fulll sereis!",Toast.LENGTH_SHORT).show();
+                }
+                 /*   for (int i = 0; i < fullSereiesId.size(); i++) {
+                        for (Card c : deck) {
+                            if (c.getCategoryId() == fullSereiesId.get(i))
+                                    deck.remove(i);
+                        }
+                        point.setText(++currentPoint);
+                    }
+                }*/
+
+
                     setCardsList();
                     if (isMyTurnStatus) {
                         activePlayer.setBackgroundColor(Color.GREEN);

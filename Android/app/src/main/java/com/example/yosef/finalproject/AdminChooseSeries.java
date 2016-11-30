@@ -4,9 +4,11 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -50,6 +52,7 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
     CheckBox checkBoxIndicator;
     private ListView category_list;
     private User currentPlayer;
+    private boolean isSomoneDisconected=false;
     ArrayList<User> allUsers =new ArrayList();
     String allConnectedUsersId[]=new String[4];
     Game game;
@@ -57,6 +60,10 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
     int i=1;
     boolean []chosenList;
     Boolean setBoolenList=false;
+    Boolean adminChose=false;
+    private Timer timer = new Timer();
+    boolean timerFlag;
+    Timer myTimer = new Timer("MyTimer", true);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +79,29 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
         new GetMySeries().execute(String.valueOf(allConnectedUsersId[0]));
 
 
+        myTimer.scheduleAtFixedRate(new MyTask(), 5000, 2000);
+
+
+    }
+
+   /* @Override
+    public void onResume() {
+        super.onResume();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                new checkIfGameIsActive().execute(String.valueOf(game.getGame_id()));
+            }
+        }, 3000);
+    }*/
+
+
+
+    private class MyTask extends TimerTask {
+
+        public void run(){
+            new checkIfGameIsActive().execute(String.valueOf(game.getGame_id()));
+        }
 
     }
 
@@ -94,6 +124,7 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
         AlertDialog alert = builder.create();
         alert.show();
     }
+
     public void startGame(View v){
        // CheckBox cb = (CheckBox) v.getRootView().findViewById(R.id.checkBox);
         //CheckBox checkBox=(CheckBox)v.findViewById(R.id.checkBox);
@@ -109,9 +140,10 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
 
 
         if(counter>=7){
-            new sendActiveSerie().execute();
+            adminChose=true;
+            //new sendActiveSerie().execute();
             //List<Series> list = new ArrayList<Series>(series);
-            //new setGameToActive().execute("1",String.valueOf(game.getGame_id()));
+            new setGameToActive().execute("2",String.valueOf(game.getGame_id()));
         }else
             Toast.makeText(this,"please select minimum 7 series",Toast.LENGTH_SHORT).show();
 
@@ -249,46 +281,6 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
         }
     }
 
-    class MyClassAdapter extends ArrayAdapter<Series> {
-
-        public MyClassAdapter(Context context, int resource, List<Series> objects) {
-            super(context,resource,objects);
-        }
-
-        // the method getView is in charge of creating a single line in the list
-        // it receives the position (index) of the line to be created
-        // the method populates the view with the data from the relevant object (according to the position)
-        @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
-
-            Log.i("TEST getView", "inside getView position " + position);
-
-            Series series = getItem(position);
-
-            //String card2 = getItem(position);
-            if (convertView == null) {
-                Log.e("TEST getView", "inside if with position " + position);
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.single_chose_series, parent, false);
-            }
-
-
-            CheckBox checkBox=(CheckBox)convertView.findViewById(R.id.checkBox);
-            checkBox.setText(series.getCategory_name());
-            if(setBoolenList)
-            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    chosenList[position]=isChecked;
-                }
-            });
-
-
-
-            return convertView;
-
-        }
-    }
-
     public class sendActiveSerie extends AsyncTask<String, Void, Boolean> {
         String sendActiveSerie = "http://10.0.2.2/final_project/db/sendActiveSerie.php";
         //String sendActiveSerie = "http://mysite.lidordigital.co.il/Quertets/db/sendActiveSerie.php";
@@ -303,12 +295,14 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
             final List<Series> list = new ArrayList<Series>(series);
             JSONArray jsonArr = new JSONArray();
             JSONObject json = new JSONObject();
+            int index=0;
             for (int i = 0; i < list.size(); i++) {
 
                 if (chosenList[i]) {
                     JSONObject jsonObject = new JSONObject();
                     try {
-                        jsonObject.put("seriesId"+i, list.get(i).getCategory_id());
+                        jsonObject.put("seriesId"+index, list.get(i).getCategory_id());
+                        index++;
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -378,7 +372,9 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
             }
         }
         protected void onPostExecute(Boolean result) {
-            if (result==false)
+            if(result)
+                new sendActiveSerie().execute();
+           else
                 Toast.makeText(AdminChooseSeries.this,"Cant set game to be active",Toast.LENGTH_LONG).show();
         }
 
@@ -396,7 +392,7 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
             try {
                 JSONObject response = json.makeHttpRequest(setTurnOrder, "POST", parms);
 
-                if (response.getInt("successes")== 1) {
+                if (response.getInt("successes") == 1) {
                     return true;
                 } else {
                     return false;
@@ -406,17 +402,18 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
                 return false;
             }
         }
+
         protected void onPostExecute(Boolean result) {
-            if (result) {
+            if (result&&adminChose) {
 
                 Intent i = new Intent(getApplicationContext(), GameScreen.class);
                 i.putExtra("Game", game);
-                i.putExtra("currentPlayer",curentUser);
-                i.putExtra("debug",false);
+                i.putExtra("currentPlayer", curentUser);
+                i.putExtra("debug", false);
                 startActivity(i);
                 finish();
-            }else
-                Toast.makeText(AdminChooseSeries.this,"There is problem no order set",Toast.LENGTH_LONG).show();
+            } else
+                Log.d("setTurrnBag", "There is problem no order set");
 
         }
 
@@ -454,5 +451,154 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
         }
 
     }
+
+    public class checkIfGameIsActive extends AsyncTask<String, Void, Boolean> {
+        String checkIfGameIsActive = "http://10.0.2.2/final_project/db/checkIfGameIsActive.php";
+        // String checkIfGameIsActive = "http://mysite.lidordigital.co.il/Quertets/db/checkIfGameIsActive.php";
+        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            parms.put("game_id", params[0]);
+            JSONParser json = new JSONParser();
+            try {
+                JSONObject response = json.makeHttpRequest(checkIfGameIsActive, "POST", parms);
+
+                if (response.getInt("succsses")== 1) {
+                    if(response.getJSONObject("result").getInt("is_active")==0)
+                        return true;
+                    else
+                        return false;
+                } else {
+                    return false;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        protected void onPostExecute(Boolean result) {
+            if (result) {
+                //someone was disconected
+
+                myTimer.cancel();
+                Intent myIntent = new Intent(AdminChooseSeries.this, MainMenu.class);
+                startActivity(myIntent);
+                Toast.makeText(AdminChooseSeries.this,"Somone Disconected",Toast.LENGTH_SHORT).show();
+                finish();
+
+            }
+        }
+
+    }
+
+    class MyClassAdapter extends ArrayAdapter<Series> {
+
+        public MyClassAdapter(Context context, int resource, List<Series> objects) {
+            super(context, resource, objects);
+        }
+
+        // the method getView is in charge of creating a single line in the list
+        // it receives the position (index) of the line to be created
+        // the method populates the view with the data from the relevant object (according to the position)
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+
+            Log.i("TEST getView", "inside getView position " + position);
+
+            Series series = getItem(position);
+
+            //String card2 = getItem(position);
+            if (convertView == null) {
+                Log.e("TEST getView", "inside if with position " + position);
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.single_chose_series, parent, false);
+            }
+
+
+            CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.checkBox);
+            checkBox.setText(series.getCategory_name());
+            if (setBoolenList)
+                checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        chosenList[position] = isChecked;
+                    }
+                });
+
+
+            return convertView;
+
+        }
+    }
+
+    public class checkIfSomoneDisconected extends AsyncTask<String, Void, Boolean> {
+        String GetMySeries = "http://10.0.2.2/final_project/db/getMySeries.php";
+        //String GetMySeries = "http://mysite.lidordigital.co.il/Quertets/db/getMySeries.php";
+        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
+
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            //String userName= params[0];
+            parms.put("user_id", params[0]);
+            JSONParser json = new JSONParser();
+            Series temp_categorys = new Series();
+            try {
+                JSONObject response = json.makeHttpRequest(GetMySeries, "GET", parms);
+                if (response.getInt("succsses") == 1) {
+                    JSONArray jsonArray = response.getJSONArray("myCards");
+                    for (int i = 0; i < jsonArray.length(); i += 4) {
+                        if (i % 4 == 0)
+                            temp_categorys = new Series();
+
+                        JSONObject jo = jsonArray.getJSONObject(i);
+                        temp_categorys.setCategory_id(jo.getInt("category_id"));
+                        temp_categorys.setCategory_name(jo.getString("category_name"));
+                        temp_categorys.setCard_name1(jo.getString("card_name"));
+                        temp_categorys.setCard_name2(jsonArray.getJSONObject(i + 1).getString("card_name"));
+                        temp_categorys.setCard_name3(jsonArray.getJSONObject(i + 2).getString("card_name"));
+                        temp_categorys.setCard_name4(jsonArray.getJSONObject(i + 3).getString("card_name"));
+                        temp_categorys.setImage1(jo.getString("image_name"));
+                        temp_categorys.setImage2(jsonArray.getJSONObject(i + 1).getString("image_name"));
+                        temp_categorys.setImage3(jsonArray.getJSONObject(i + 2).getString("image_name"));
+                        temp_categorys.setImage4(jsonArray.getJSONObject(i + 3).getString("image_name"));
+                        series.add(temp_categorys);
+                    }
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return false;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+
+        }
+
+        protected void onPostExecute(Boolean result) {
+            if (result) {
+                SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(AdminChooseSeries.this);
+                Boolean faceBookLogIN=myPref.getBoolean("loginWhitFacebook",false);
+
+                SharedPreferences.Editor editor = myPref.edit();
+                editor.putString("username", curentUser.getUserName());
+                editor.putString("password", curentUser.getPassword());
+                editor.putInt("score", curentUser.getScore());
+                editor.putInt("user_id",curentUser.getUserID());
+
+                editor.commit();
+
+                Intent myIntent = new Intent(AdminChooseSeries.this, MainMenu.class);
+                startActivity(myIntent);
+                Toast.makeText(AdminChooseSeries.this,"Somone Disconected",Toast.LENGTH_SHORT).show();
+                finish();
+
+            }
+        }
+
+    }
+
 
 }
