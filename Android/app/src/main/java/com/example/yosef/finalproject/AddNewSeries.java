@@ -527,30 +527,6 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
 
         @Override
         protected Boolean doInBackground(String... params) {
-           /* parms.put("category_id",String.valueOf(category_id));
-            parms.put("category_name",params[0]);
-            parms.put("user_id",String.valueOf(currentPlayer.getUserID()));
-            parms.put("card1",file1.getAbsolutePath());
-            parms.put("card2",params[2]);
-            parms.put("card3",params[4]);
-            parms.put("card4",params[5]);
-            parms.put("image1",params[5]);
-            parms.put("image2",params[6]);
-            parms.put("image3",params[7]);
-            parms.put("image4",params[8]);
-
-            JSONParser json = new JSONParser();
-            try {
-                JSONObject response = json.makeHttpRequest(upload_series, "POST", parms);
-                if (response.getInt("succsses")==1) {
-                    newSeries.clear();
-                    return true;
-                }
-            } catch(Exception ex) {
-                ex.printStackTrace();
-            }
-            return false;*/
-
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(upload_series);
 
@@ -574,7 +550,7 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
                 HttpResponse response = httpclient.execute(httppost);
                 String json= EntityUtils.toString(response.getEntity());
                 if(response.getStatusLine().getStatusCode()==200){
-                    if(json=="1")
+                    if(json.equals("1"))
                         return true;
                     else
                         return false;
@@ -594,16 +570,6 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
             if (result) {
                 Toast.makeText(AddNewSeries.this, "Series upload successfully!", Toast.LENGTH_SHORT).show();
 
-               /* SharedPreferences.Editor editor = myPref.edit();
-                editor.putString("username", currentPlayer.getUserName());
-                editor.putString("password", currentPlayer.getPassword());
-                editor.putInt("score", currentPlayer.getScore());
-                editor.putInt("user_id",currentPlayer.getUserID());
-
-                editor.commit();
-
-                Intent myIntent = new Intent(AddNewSeries.this, MainMenu.class);
-                startActivity(myIntent);*/
             } else {
                 Toast.makeText(AddNewSeries.this, "Series upload failed", Toast.LENGTH_SHORT).show();
             }

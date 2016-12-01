@@ -64,17 +64,19 @@ public class ShowMySerie extends AppCompatActivity implements AdapterView.OnItem
         else
             Toast.makeText(this,"user id not exist",Toast.LENGTH_SHORT).show();
 
+
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        //selectedSeries= series.get(position);
+            //selectedSeries= series.get(position);
     //Toast.makeText(ShowMySerie.this,series.get(position).getCategory_name()+" was clicked ",Toast.LENGTH_SHORT).show();
     Toast.makeText(ShowMySerie.this,"push and hold for more option",Toast.LENGTH_SHORT).show();
     }
 
     public void onCreateContextMenu(ContextMenu menu, View view,
                                     ContextMenu.ContextMenuInfo menuInfo) {
+        //selectedSeries= series.get(getBaseContext()position);
 
         String menuItems[];
         switch (view.getId()) {
@@ -115,7 +117,7 @@ public class ShowMySerie extends AppCompatActivity implements AdapterView.OnItem
                         .setCancelable(false)
                         .setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                new deleteSeries().execute(delete_series, String.valueOf(selectedSeries.getCategory_id()));
+                                new deleteSeries().execute(delete_series, String.valueOf(series.get(position).getCategory_id()));
                             }
                         })
                         .setNegativeButton(getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
@@ -129,9 +131,8 @@ public class ShowMySerie extends AppCompatActivity implements AdapterView.OnItem
                     Intent intent = new Intent(this, UpdateSeries.class);
                     intent.putExtra("SelectedSeries", series.get(position));
                     intent.putExtra("user_id",myId);
-
-                    startActivityForResult(intent, UPDATE_SERIES_REQUEST);
-
+                    startActivity(intent);
+                    finish();
             }
 
 
@@ -324,10 +325,11 @@ public class ShowMySerie extends AppCompatActivity implements AdapterView.OnItem
         protected void onPostExecute(Boolean result) {
             if (result) {
                 Toast.makeText(ShowMySerie.this, getResources().getString(R.string.delete_succsessfull), Toast.LENGTH_LONG).show();
-                //finish();
+
                 //startActivity(getIntent());
             } else
                 Toast.makeText(ShowMySerie.this, getResources().getString(R.string.delete_failed), Toast.LENGTH_SHORT).show();
+            finish();
         }
     }
 }

@@ -1,5 +1,5 @@
 <?php
-include('connection.php');
+//include('connection.php');
 $category_id=$_POST['category_id'];
 $user_id=$_POST['user_id'];
 $card1=$_POST['card1'];
@@ -31,33 +31,34 @@ $query2="UPDATE cards set card_name='$card2',card_img='$card_img2' WHERE card_id
 $query3="UPDATE cards set card_name='$card3',card_img='$card_img3' WHERE card_id='$card_id'";
 $query4="UPDATE cards set card_name='$card4',card_img='$card_img4' WHERE card_id='$card_id'";
 
-if(move_uploaded_file($image1['tmp_name'], $file_path1)) {
-	  $host='localhost';
+  $host='localhost';
 	  $username='root';
 	  $password='';
 	  $dbname='quartetsdb';
-	
-	  if($card_id!=null){
+	 $link=mysqli_connect($host,$username,$password,$dbname);
+	 
+if($image1==null||$image2==null||$image3==null||$image4==null){
+		  if($card_id!=null){
 		  //$link=mysqli_connect($host,$username,$password,$dbname);
-		  if($con->exec($query1)!==false){
+		  if(mysqli_query($link,$query1)){
 			  $file_path = "../images/";
 			  $card_id=$allCardsIds[1]["card_id"];
 			  
 			  if($card_id!=null){
 				  move_uploaded_file($image2['tmp_name'], $file_path2);
-				  if($con->exec($query2)!==false){
+				  if(mysqli_query($link,$query2)){
 					$file_path = "../images/";
 					$card_id=$allCardsIds[2]["card_id"];
 					
 					 if($card_id!=null){
 						move_uploaded_file($image3['tmp_name'], $file_path3);
-					if($con->exec($query3)!==false){
+					if(mysqli_query($link,$query3)){
 						  $file_path = "../images/";
 						  $card_id=$allCardsIds[3]["card_id"];
 						  
 						if($card_id!=null){
 						  move_uploaded_file($image4['tmp_name'], $file_path4);
-						  if($con->exec($query4)!==false){
+						  if(mysqli_query($link,$query4)){
 								$response=1;
 						  }else
 							  $response=0;
@@ -73,14 +74,63 @@ if(move_uploaded_file($image1['tmp_name'], $file_path1)) {
 					$response=0;
 			}else
 			  $response=0;
-			//mysqli_close($link);
 		
 	  }else
-		  $response=0;		
+		  $response=0;	
+	
+}
+
+if(move_uploaded_file($image1['tmp_name'], $file_path1)) {
+	 /* $host='localhost';
+	  $username='root';
+	  $password='';
+	  $dbname='quartetsdb';
+	 $link=mysqli_connect($host,$username,$password,$dbname);*/
+	  if($card_id!=null){
+		  //$link=mysqli_connect($host,$username,$password,$dbname);
+		  if(mysqli_query($link,$query1)){
+			  $file_path = "../images/";
+			  $card_id=$allCardsIds[1]["card_id"];
+			  
+			  if($card_id!=null){
+				  move_uploaded_file($image2['tmp_name'], $file_path2);
+				  if(mysqli_query($link,$query2)){
+					$file_path = "../images/";
+					$card_id=$allCardsIds[2]["card_id"];
+					
+					 if($card_id!=null){
+						move_uploaded_file($image3['tmp_name'], $file_path3);
+					if(mysqli_query($link,$query3)){
+						  $file_path = "../images/";
+						  $card_id=$allCardsIds[3]["card_id"];
+						  
+						if($card_id!=null){
+						  move_uploaded_file($image4['tmp_name'], $file_path4);
+						  if(mysqli_query($link,$query4)){
+								$response=1;
+						  }else
+							  $response=0;
+						}else
+							$response=0;
+					  }else
+						  $response=0;
+					}else
+						 $response=0;
+				  }else
+						$response=0;
+				}else
+					$response=0;
+			}else
+			  $response=0;
+		
+	  }else
+		  $response=0;	
+  
 }else
     $response=0;
 
 echo json_encode($response);
+mysqli_close($link);
 function getCardId($category_id){
 	require('connection.php');
 	$sth = $con->prepare("SELECT card_id FROM cards where category_id='$category_id'");

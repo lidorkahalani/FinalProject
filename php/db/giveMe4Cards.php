@@ -6,7 +6,7 @@ $game_id=$_POST['game_id'];
 $cnt=0;
 $response["AllCards"]=array();
 		while($cnt<4){
-			   $randCard=checkIfCardAvailable();
+			   $randCard=checkIfCardAvailable($game_id);
 			    if($randCard!=0){
 					$res = $con->exec("UPDATE games_cards SET user_id = '$user_id' WHERE game_id = '$game_id' AND card_id='$randCard'");
 					if($res!==false ){
@@ -28,11 +28,14 @@ $response["AllCards"]=array();
 								array_push($response["AllCards"],$card);
 							}
 						   $cnt++;
-						   if($cnt==4)
+						   if($cnt==4){
 								$response["succsses"]=1;
+								$con=null;
+						   }
 						}else
 								$response["succsses"]=0;
 					}else{ 
+						$con=null;
 						$response["succsses"]=0;
 						break;
 					}
@@ -42,17 +45,39 @@ $response["AllCards"]=array();
 		echo json_encode($response);
 		mysqli_close($conn);
 
-function checkIfCardAvailable(){
-			require('connection.php');
-			$randCard=rand(1, 32);//need to be set acording to all cards sum
-			$sth = $con->prepare("SELECT user_id FROM games_cards where card_id='$randCard'");
+function checkIfCardAvailable($game_id){
+require('connection.php');
+			$allCardsId=array();
+			$allCardsId=getOneCardFromRange($game_id);
+			if($allCardsId!=null){
+				$randCard=array_rand($allCardsId, 1);
+				$randCard=$allCardsId[$randCard]["card_id"];
+				$sth = $con->prepare("SELECT user_id FROM games_cards where card_id='$randCard' AND game_id='$game_id'");
+				$sth->execute();
+				$result = $sth->fetchAll();
+				if($result){
+					$con=null;
+					return $randCard;
+				}else{
+					$con=null;
+					return 0;
+				}
+				
+			}	
+}
+function getOneCardFromRange($game_id){
+	 require('connection.php');
+		$sth = $con->prepare("SELECT card_id FROM games_cards WHERE game_id='$game_id' AND user_id=0");
 			$sth->execute();
-			$result = $sth->fetchAll();
+			$result = $sth->fetchAll(PDO::FETCH_ASSOC);
 			if($result){
-				return $randCard;
+				$con=null;
+			  return $result;
 			}else{
-				return 0;
+				$con=null;
+			  return null;
 			}
+	
 }
 function getCategoryName($category_id){
 $con=mysqli_connect("localhost","root","","quartetsdb");

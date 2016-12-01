@@ -17,7 +17,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:layout_marginBottom="10dp"
-        android:id="@+id/categoryName"/>
+        android:id="@+id/ucategoryName"/>
 
     <LinearLayout
         android:paddingTop="@dimen/activity_vertical_margin"
@@ -31,11 +31,11 @@
             android:layout_width="57dp"
             android:layout_height="36dp"
             android:background="@android:drawable/ic_menu_camera"
-            android:id="@+id/buttonChooseCard1"
+            android:id="@+id/ubuttonChooseCard1"
             />
 
         <EditText
-            android:id="@+id/card1"
+            android:id="@+id/ucard1"
             android:layout_width="211dp"
             android:layout_height="wrap_content"
             android:textColorHint="@android:color/darker_gray"
@@ -50,7 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:id="@+id/imageViewCard1" />
+            android:id="@+id/uimageViewCard1" />
     </LinearLayout>
 
     <LinearLayout
@@ -64,11 +64,11 @@
             android:layout_width="57dp"
             android:layout_height="36dp"
             android:background="@android:drawable/ic_menu_camera"
-            android:id="@+id/buttonChooseCard2"
+            android:id="@+id/ubuttonChooseCard2"
             />
 
         <EditText
-            android:id="@+id/card2"
+            android:id="@+id/ucard2"
             android:layout_width="211dp"
             android:layout_height="wrap_content"
             android:textColorHint="@android:color/darker_gray"
@@ -83,7 +83,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
 
-            android:id="@+id/imageViewCard2" />
+            android:id="@+id/uimageViewCard2" />
     </LinearLayout>
 
     <LinearLayout
@@ -97,10 +97,10 @@
             android:layout_width="57dp"
             android:layout_height="36dp"
             android:background="@android:drawable/ic_menu_camera"
-            android:id="@+id/buttonChooseCard3" />
+            android:id="@+id/ubuttonChooseCard3" />
 
         <EditText
-            android:id="@+id/card3"
+            android:id="@+id/ucard3"
             android:layout_width="211dp"
             android:layout_height="wrap_content"
             android:textColorHint="@android:color/darker_gray"
@@ -116,7 +116,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
 
-            android:id="@+id/imageViewCard3" />
+            android:id="@+id/uimageViewCard3" />
     </LinearLayout>
 
     <LinearLayout
@@ -130,10 +130,10 @@
             android:layout_width="57dp"
             android:layout_height="36dp"
             android:background="@android:drawable/ic_menu_camera"
-            android:id="@+id/buttonChooseCard4" />
+            android:id="@+id/ubuttonChooseCard4" />
 
         <EditText
-            android:id="@+id/card4"
+            android:id="@+id/ucard4"
             android:layout_width="211dp"
             android:layout_height="wrap_content"
             android:textColorHint="@android:color/darker_gray"
@@ -148,10 +148,11 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
 
-            android:id="@+id/imageViewCard4" />
+            android:id="@+id/uimageViewCard4" />
     </LinearLayout>
 
     <Button
+        android:onClick=""
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -159,7 +160,7 @@
         android:layout_marginTop="90dp"
         android:layout_margin="10dp"
         android:background="@color/azure"
-        android:id="@+id/buttonUpdateSeries" />
+        android:id="@+id/ubuttonUpdateSeries" />
 
 
 </LinearLayout>

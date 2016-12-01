@@ -33,6 +33,8 @@ $query3="INSERT INTO `cards` (card_name,category_id,card_img,user_id) VALUES ('$
 $query4="INSERT INTO `cards` (card_name,category_id,card_img,user_id) VALUES ('$card4','$category_id','$card_img4','$user_id')";
 $final_query="INSERT into category (category_name,category_color) VALUES('$categoryName','$category_color')";
 
+
+
 if(move_uploaded_file($image1['tmp_name'], $file_path1)) {
 	  $host='localhost';
 	  $username='root';

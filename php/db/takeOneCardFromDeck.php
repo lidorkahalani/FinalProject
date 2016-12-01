@@ -1,13 +1,13 @@
 <?php
-include('connection.php');
+require('connection.php');
 $response=array();
 $user_id=$_POST['user_id'];
 $game_id=$_POST['game_id'];
 		$cnt=0;			
-		
+
 if(!checkIfDeckEnd($game_id)){
 	while($cnt<1){
-			   $randCard=checkIfCardAvailable();
+			   $randCard=checkIfCardAvailable($game_id);
 			    if($randCard!=0){
 					$res = $con->exec("UPDATE games_cards SET user_id = '$user_id' WHERE game_id = '$game_id' AND card_id=$randCard");
 					if($res!==false ){
@@ -58,7 +58,7 @@ if(!checkIfDeckEnd($game_id)){
 }
 		
 function checkIfDeckEnd($game_id){
-   require('connection.php');
+  require('connection.php');
 	$sth = $con->prepare("SELECT * FROM games_cards where user_id=0 AND game_id='$game_id'");
 			$sth->execute();
 			$result = $sth->fetch(PDO::FETCH_ASSOC);
@@ -67,17 +67,36 @@ function checkIfDeckEnd($game_id){
 			else
 			  return true;
 }
-function checkIfCardAvailable(){
-			require('connection.php');
-			$randCard=rand(1, 32);
-			$sth = $con->prepare("SELECT user_id FROM games_cards where card_id='$randCard'");
-			$sth->execute();
-			$result = $sth->fetchAll();
-			if($result){
-				return $randCard;
-			}else{
+function checkIfCardAvailable($game_id){
+require('connection.php');
+
+			$allCardsId=array();
+			$allCardsId=getAllCardFromRange($game_id);
+			if($allCardsId!=null){
+				$randCard=array_rand($allCardsId, 1);
+				$randCard=$allCardsId[$randCard]["card_id"];
+				$sth = $con->prepare("SELECT user_id FROM games_cards where card_id='$randCard' AND game_id='$game_id'");
+				$sth->execute();
+				$result = $sth->fetchAll();
+				if($result){
+					return $randCard;
+				}else{
+					return 0;
+				}
+				
+			}else
 				return 0;
-			}
+}
+function getAllCardFromRange($game_id){
+	require('connection.php');
+		$sth = $con->prepare("SELECT card_id FROM games_cards WHERE game_id='$game_id' AND user_id=0");
+			$sth->execute();
+			$result = $sth->fetchAll(PDO::FETCH_ASSOC);
+			if($result)
+			  return $result;
+			else
+			  return null;
+	
 }
 function getCategoryName($category_id){
 $con=mysqli_connect("localhost","root","","quartetsdb");

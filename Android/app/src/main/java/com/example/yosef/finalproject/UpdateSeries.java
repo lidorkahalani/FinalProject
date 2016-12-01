@@ -1,11 +1,20 @@
 package com.example.yosef.finalproject;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
@@ -35,7 +44,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 
-public class UpdateSeries extends AppCompatActivity {
+public class UpdateSeries extends AppCompatActivity implements View.OnClickListener {
 
     private ImageView imageViewCard1;
     private ImageView imageViewCard2;
@@ -46,7 +55,21 @@ public class UpdateSeries extends AppCompatActivity {
     private Button buttonChooseCard2;
     private Button buttonChooseCard3;
     private Button buttonChooseCard4;
+
+    Boolean isbuttonChooseCard1;
+    Boolean isbuttonChooseCard2;
+    Boolean isbuttonChooseCard3;
+    Boolean isbuttonChooseCard4;
+
+    Boolean imageCoosen;
+    private int PICK_IMAGE_REQUEST = 1;
+
     private Button buttonUpdateSeries;
+
+    private String imageName1;
+    private String imageName2;
+    private String imageName3;
+    private String imageName4;
 
     private TextView category_name;
     private EditText category;
@@ -55,6 +78,9 @@ public class UpdateSeries extends AppCompatActivity {
     private EditText card3;
     private EditText card4;
     int myId;
+    private Uri filePath;
+    private File imageFile;
+    private Bitmap bitmap;
 
     final String imageRelativePat = "http://10.0.2.2/final_project/images/";
 
@@ -64,24 +90,24 @@ public class UpdateSeries extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_series);
-        buttonUpdateSeries=(Button)findViewById(R.id.buttonUpdateSeries);
+        buttonUpdateSeries=(Button)findViewById(R.id.ubuttonUpdateSeries);
 
-        buttonChooseCard1 = (Button) findViewById(R.id.buttonChooseCard1);
-        buttonChooseCard2 = (Button) findViewById(R.id.buttonChooseCard2);
-        buttonChooseCard3 = (Button) findViewById(R.id.buttonChooseCard3);
-        buttonChooseCard4 = (Button) findViewById(R.id.buttonChooseCard4);
+        buttonChooseCard1 = (Button) findViewById(R.id.ubuttonChooseCard1);
+        buttonChooseCard2 = (Button) findViewById(R.id.ubuttonChooseCard2);
+        buttonChooseCard3 = (Button) findViewById(R.id.ubuttonChooseCard3);
+        buttonChooseCard4 = (Button) findViewById(R.id.ubuttonChooseCard4);
 
         //category=(EditText)findViewById(R.id.series);
-        category_name=(TextView)findViewById(R.id.categoryName);
-        card1=(EditText)findViewById(R.id.card1);
-        card2=(EditText)findViewById(R.id.card2);
-        card3=(EditText)findViewById(R.id.card3);
-        card4=(EditText)findViewById(R.id.card4);
+        category_name=(TextView)findViewById(R.id.ucategoryName);
+        card1=(EditText)findViewById(R.id.ucard1);
+        card2=(EditText)findViewById(R.id.ucard2);
+        card3=(EditText)findViewById(R.id.ucard3);
+        card4=(EditText)findViewById(R.id.ucard4);
 
-        imageViewCard1 = (ImageView) findViewById(R.id.imageViewCard1);
-        imageViewCard2 = (ImageView) findViewById(R.id.imageViewCard2);
-        imageViewCard3 = (ImageView) findViewById(R.id.imageViewCard3);
-        imageViewCard4 = (ImageView) findViewById(R.id.imageViewCard4);
+        imageViewCard1 = (ImageView) findViewById(R.id.uimageViewCard1);
+        imageViewCard2 = (ImageView) findViewById(R.id.uimageViewCard2);
+        imageViewCard3 = (ImageView) findViewById(R.id.uimageViewCard3);
+        imageViewCard4 = (ImageView) findViewById(R.id.uimageViewCard4);
 
         selctedSeries=(Series)getIntent().getSerializableExtra("SelectedSeries");
         SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -102,12 +128,129 @@ public class UpdateSeries extends AppCompatActivity {
         imageLoader.DisplayImage((imageRelativePat + selctedSeries.getImage3()), R.mipmap.ic_launcher, imageViewCard3);
         imageLoader.DisplayImage((imageRelativePat + selctedSeries.getImage4()), R.mipmap.ic_launcher, imageViewCard4);
 
+        imageName1=selctedSeries.getImage1();
+        imageName2=selctedSeries.getImage2();
+        imageName3=selctedSeries.getImage3();
+        imageName4=selctedSeries.getImage4();
+
+
+        buttonChooseCard1.setOnClickListener(this);
+        buttonChooseCard2.setOnClickListener(this);
+        buttonChooseCard3.setOnClickListener(this);
+        buttonChooseCard4.setOnClickListener(this);
+        imageViewCard1.setOnClickListener(this);
+        imageViewCard2.setOnClickListener(this);
+        imageViewCard3.setOnClickListener(this);
+        imageViewCard4.setOnClickListener(this);
+        buttonUpdateSeries.setOnClickListener(this);
 
     }
 
+    private void showFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent,getResources().getString(R.string.Select_Picture)), PICK_IMAGE_REQUEST);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+
+            filePath = data.getData();
+            imageFile=new File(filePath.getPath());
+            Bitmap rotatedBitmap=null;
+
+            Matrix matrix = new Matrix();
+            matrix.postRotate(180);
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                if(isbuttonChooseCard1) {
+                    imageName1=getRealPathFromURI_BelowAPI11(getBaseContext(),filePath);
+                    //file1= new File(Environment.getExternalStorageDirectory().getAbsolutePath(),imageFile.getPath());
+                    imageViewCard1.setImageBitmap(rotatedBitmap);
+                    isbuttonChooseCard1=false;
+                }
+                else if(isbuttonChooseCard2) {
+                    imageName2=getRealPathFromURI_BelowAPI11(getBaseContext(),filePath);
+                    //file2= new File(Environment.getExternalStorageDirectory().getAbsolutePath(),imageFile.getPath());
+
+                    imageViewCard2.setImageBitmap(rotatedBitmap);
+                    isbuttonChooseCard2=false;
+                }
+                else if(isbuttonChooseCard3) {
+                    imageName3=getRealPathFromURI_BelowAPI11(getBaseContext(),filePath);
+                    //file3= new File(Environment.getExternalStorageDirectory().getAbsolutePath(),imageFile.getPath());
+
+                    imageViewCard3.setImageBitmap(rotatedBitmap);
+                    isbuttonChooseCard3=false;
+                }
+                else if(isbuttonChooseCard4) {
+                    imageName4=getRealPathFromURI_BelowAPI11(getBaseContext(),filePath);
+                    //file4= new File(Environment.getExternalStorageDirectory().getAbsolutePath(),imageFile.getPath());
+                    imageViewCard4.setImageBitmap(rotatedBitmap);
+                    isbuttonChooseCard4=false;
+                }
+
+                imageCoosen=true;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public String getRealPathFromURI_BelowAPI11(Context contex, Uri uri){
+
+        String name="";
+        if (uri.getHost().contains("com.android.providers.media")) {
+            // Image pick from recent
+            String wholeID = DocumentsContract.getDocumentId(uri);
+
+            // Split at colon, use second item in the array
+            String id = wholeID.split(":")[1];
+
+            String[] column = {MediaStore.Images.Media.DATA};
+
+            // where id is equal to
+            String sel = MediaStore.Images.Media._ID + "=?";
+
+            Cursor cursor = getBaseContext().getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    column, sel, new String[]{id}, null);
+
+            int columnIndex = cursor.getColumnIndex(column[0]);
+
+            if (cursor.moveToFirst()) {
+                name = cursor.getString(columnIndex);
+            }
+            cursor.close();
+        }else {
+            // image pick from gallery
+            getRealPathFromURI_BelowAPI11(contex,uri);
+        }
+        return name;
+
+
+    }
 
     public void onClick(View v) {
-        if(v==buttonUpdateSeries){
+            if (v == buttonChooseCard1) {
+            isbuttonChooseCard1=true;
+            showFileChooser();
+        }else if(v ==buttonChooseCard2){
+            isbuttonChooseCard2=true;
+            showFileChooser();
+        }else if(v ==buttonChooseCard3){
+            isbuttonChooseCard3=true;
+            showFileChooser();
+        }else if(v ==buttonChooseCard4){
+            isbuttonChooseCard4=true;
+            showFileChooser();
+        }else if(v==buttonUpdateSeries){
             new UpdateSeriesTask().execute(category_name.getText().toString(),
                                             card1.getText().toString(),
                                             card2.getText().toString(),
@@ -131,15 +274,15 @@ public class UpdateSeries extends AppCompatActivity {
         LinkedHashMap<String,String> parms=new LinkedHashMap<>();
         @Override
         protected Boolean doInBackground(String... params) {
-           /* HttpClient httpclient = new DefaultHttpClient();
+            HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(UpdateSeriesTask);
 
             MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
             entityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
 
-            entityBuilder.addTextBody("category_id", String.valueOf(category_id));
+            entityBuilder.addTextBody("category_id", String.valueOf(selctedSeries.getCategory_id()));
             entityBuilder.addTextBody("category_name", params[0]);
-            entityBuilder.addTextBody("user_id",String.valueOf(currentPlayer.getUserID()));
+            entityBuilder.addTextBody("user_id",String.valueOf(myId));
             entityBuilder.addTextBody("card1", params[1]);
             entityBuilder.addTextBody("card2", params[2]);
             entityBuilder.addTextBody("card3", params[3]);
@@ -149,12 +292,11 @@ public class UpdateSeries extends AppCompatActivity {
             entityBuilder.addPart("image3",new FileBody(new File(imageName3)));
             entityBuilder.addPart("image4",new FileBody(new File(imageName4)));
             httppost.setEntity(entityBuilder.build());
-
             try {
                 HttpResponse response = httpclient.execute(httppost);
                 String json= EntityUtils.toString(response.getEntity());
                 if(response.getStatusLine().getStatusCode()==200){
-                    if(json=="1")
+                    if(json.equals("1"))
                         return true;
                     else
                         return false;
@@ -166,20 +308,20 @@ public class UpdateSeries extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
                 return false;
-            }*/
-            return true;
+            }
         }
         protected void onPostExecute(Boolean result) {
             Intent resultIntent = getIntent();
 
             if(result) {
-                setResult(RESULT_OK, resultIntent);
-                finish();
+                Toast.makeText(UpdateSeries.this,"Update successes",Toast.LENGTH_SHORT).show();
+                //setResult(RESULT_OK, resultIntent);
             }
             else{
-                setResult(RESULT_CANCELED, resultIntent);
-                finish();
+                Toast.makeText(UpdateSeries.this,"Update failed",Toast.LENGTH_SHORT).show();
+
             }
+            finish();
 
 
 

@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/card_name2"
             android:text="Medium Text"
-            android:textSize="15dp"
+            android:textSize="11dp"
             android:textAlignment="center"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/card_name3"
             android:text="Medium Text"
-            android:textSize="15dp"
+            android:textSize="11dp"
             android:textAlignment="center"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/card_name4"
             android:text="Medium Text"
-            android:textSize="15dp"
+            android:textSize="11dp"
             android:textAlignment="center"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -70,7 +70,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Medium Text"
-            android:textSize="15dp"
+            android:textSize="11dp"
             android:textAlignment="center"
             android:textAppearance="?android:attr/textAppearanceMedium" />
     </LinearLayout>

@@ -84,19 +84,6 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
 
     }
 
-   /* @Override
-    public void onResume() {
-        super.onResume();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                new checkIfGameIsActive().execute(String.valueOf(game.getGame_id()));
-            }
-        }, 3000);
-    }*/
-
-
-
     private class MyTask extends TimerTask {
 
         public void run(){
@@ -139,7 +126,7 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
         cnt=counter;
 
 
-        if(counter>=7){
+        if(counter>=2){
             adminChose=true;
             //new sendActiveSerie().execute();
             //List<Series> list = new ArrayList<Series>(series);

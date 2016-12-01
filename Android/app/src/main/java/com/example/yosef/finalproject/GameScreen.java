@@ -93,7 +93,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         myListView.setLayoutManager(lm);
         myListView.setItemAnimator(new DefaultItemAnimator());
 
-        myTimer.scheduleAtFixedRate(new MyTask(), 3000, 2000);
+        myTimer.scheduleAtFixedRate(new MyTask(), 10000, 3000);
     }
 
     private class MyTask extends TimerTask {
@@ -101,8 +101,8 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         public void run(){
             if(!gameIsActive)
                 openMainMenu();
-            else
-                new refresh().execute();
+           // else
+           //    new refresh().execute();
         }
 
     }

@@ -49,7 +49,6 @@
     <string name="addPerson_dialog_title">יצירת משתמש חדש</string>
     <string name="addPerson_dialog_masge">הכנס את הפרטים הבאים</string>
     <string name="series">קטגוריה</string>
-    <string name="item1">פריט1</string>
     <string name="updateCard">עדכן קלף</string>
     <string name="update_Card_dialog_title">עדכן קלף דיאלוג</string>
     <string name="update_Card_masage">אנא הכנס פרטים</string>
@@ -73,7 +72,6 @@
     <string name="card2">קלף 2</string>
     <string name="card3">קלף 3</string>
     <string name="card4">קלף 4</string>
-    <string name="add_new_card">צור קלף</string>
     <string name="series_full">סידרה מלאה</string>
     <string name="card_not_load">טעינת הקלפים נכשלה</string>
     <string name="you_join_to_room">הצטרפת לחדר</string>
