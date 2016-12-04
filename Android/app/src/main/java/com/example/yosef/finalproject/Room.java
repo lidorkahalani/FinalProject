@@ -40,27 +40,26 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Room extends AppCompatActivity implements AdapterView.OnItemClickListener {
-    ListView personList;
-    ListView lv;
-    MyClassAdapter adapter;
-    ArrayList<User> allUsers =new ArrayList();
-    ProgressDialog pDialog;
-    Timer timer;
+    private ListView personList;
+    private ListView lv;
+    private  MyClassAdapter adapter;
+    private ArrayList<User> allUsers =new ArrayList();
+    private  ProgressDialog pDialog;
+    private Timer timer;
     boolean timerFlag = false;
-    Boolean isGameActive=false;
-    Boolean isAdmin;
-    Boolean startGame=false;
+    private Boolean isGameActive=false;
+    private Boolean isAdmin;
+    private Boolean startGame=false;
     boolean isAdminOpenTheRoomAndCloseIt=false;
 
 
-    Timer timer2;
+    private Timer timer2;
     boolean timerFlag2 = false;
-   // private  EditText roomName;
     private TextView roomName;
     private  User curentUser;
     private Game game;
     boolean isNewRoom;
-    String []allConnectedUsersId=new String [4];
+    private String []allConnectedUsersId=new String [4];
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -130,8 +129,8 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
     }
 
     public class joinToRoom extends AsyncTask<String, Void, Boolean> {
-        String joinToRoom = "http://10.0.2.2/final_project/db/joinToRoom.php";
-        // String joinToRoom = "http://mysite.lidordigital.co.il/Quertets/db/joinToRoom.php";
+        //String joinToRoom = "http://10.0.2.2/final_project/db/joinToRoom.php";
+        //String joinToRoom = "http://mysite.lidordigital.co.il/Quertets/php/db/joinToRoom.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
         @Override
         protected Boolean doInBackground(String... params) {
@@ -139,7 +138,7 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
             parms.put("user_id", String.valueOf(curentUser.getUserID()));
             JSONParser json = new JSONParser();
             try {
-                JSONObject response = json.makeHttpRequest(joinToRoom, "POST", parms);
+                JSONObject response = json.makeHttpRequest(ServerUtils.joinToRoom, "POST", parms);
                 if (response.getInt("succsses") == 1) {
                     game.setGame_name(params[0]);
                     game.setGame_id(response.getInt("game_id"));
@@ -199,15 +198,15 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
     }
 
     public class GetAllConnectedPlayers extends AsyncTask<String, Void, Boolean> {
-        String getPlayerLIst="http://10.0.2.2/final_project/db/getListNameOfThePLayerInRoom.php";
-       // String getPlayerLIst="http://mysite.lidordigital.co.il/Quertets/db/getListNameOfThePLayerInRoom.php";
+       // String getPlayerLIst="http://10.0.2.2/final_project/db/getListNameOfThePLayerInRoom.php";
+       // String getPlayerLIst="http://mysite.lidordigital.co.il/Quertets/php/db/getListNameOfThePLayerInRoom.php";
         @Override
         protected Boolean doInBackground(String... params) {
             LinkedHashMap<String, String> parms = new LinkedHashMap<>();
             parms.put("game_id",String.valueOf(game.getGame_id()));
             try {
                 JSONParser json = new JSONParser();
-                JSONObject response = json.makeHttpRequest(getPlayerLIst, "POST",parms);
+                JSONObject response = json.makeHttpRequest(ServerUtils.getPlayerLIst, "POST",parms);
                 JSONArray res=response.getJSONArray("usersList");
                 allUsers.clear();
                 for (int i = 0; i < res.length(); i++) {
@@ -249,8 +248,8 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
     }
 
     public class checkIfRoomFull extends AsyncTask<String, Void, Boolean> {
-        String checkIfRoomFull = "http://10.0.2.2/final_project/db/checkIfRoomFull.php";
-       // String checkIfRoomFull = "http://mysite.lidordigital.co.il/Quertets/db/checkIfRoomFull.php";
+        //String checkIfRoomFull = "http://10.0.2.2/final_project/db/checkIfRoomFull.php";
+       // String checkIfRoomFull = "http://mysite.lidordigital.co.il/Quertets/php/db/checkIfRoomFull.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
@@ -258,7 +257,7 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
             parms.put("game_id", params[0]);
             JSONParser json = new JSONParser();
             try {
-                JSONObject response = json.makeHttpRequest(checkIfRoomFull, "POST", parms);
+                JSONObject response = json.makeHttpRequest(ServerUtils.checkIfRoomFull, "POST", parms);
 
                 if (response.getInt("succsses")== 1) {
                     JSONArray jsonArray = response.getJSONArray("all_users_id");
@@ -286,8 +285,8 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
     }
 
     public class checkIfImAdmin extends AsyncTask<String, Void, Boolean> {
-        String checkIfImAdmin = "http://10.0.2.2/final_project/db/checkIfAdmin.php";
-        // String checkIfImAdmin = "http://mysite.lidordigital.co.il/Quertets/db/checkIfAdmin.php";
+        //String checkIfImAdmin = "http://10.0.2.2/final_project/db/checkIfAdmin.php";
+       //  String checkIfImAdmin = "http://mysite.lidordigital.co.il/Quertets/php/db/checkIfAdmin.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
@@ -296,7 +295,7 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
             parms.put("user_id",String.valueOf(curentUser.getUserID()));
             JSONParser json = new JSONParser();
             try {
-                JSONObject response = json.makeHttpRequest(checkIfImAdmin, "POST", parms);
+                JSONObject response = json.makeHttpRequest(ServerUtils.checkIfImAdmin, "POST", parms);
 
                 if (response.getInt("succsses")== 1) {
                     if(response.getInt("result")==1)
@@ -342,8 +341,8 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
     }
 
     public class checkIfGameIsActive extends AsyncTask<String, Void, Boolean> {
-        String checkIfGameIsActive = "http://10.0.2.2/final_project/db/checkIfGameIsActive.php";
-        // String checkIfGameIsActive = "http://mysite.lidordigital.co.il/Quertets/db/checkIfGameIsActive.php";
+        //String checkIfGameIsActive = "http://10.0.2.2/final_project/db/checkIfGameIsActive.php";
+         //String checkIfGameIsActive = "http://mysite.lidordigital.co.il/Quertets/php/db/checkIfGameIsActive.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
@@ -351,7 +350,7 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
             parms.put("game_id", params[0]);
             JSONParser json = new JSONParser();
             try {
-                JSONObject response = json.makeHttpRequest(checkIfGameIsActive, "POST", parms);
+                JSONObject response = json.makeHttpRequest(ServerUtils.checkIfGameIsActive, "POST", parms);
 
                 if (response.getInt("succsses")== 1) {
                     if(response.getJSONObject("result").getInt("is_active")==1) {
@@ -434,8 +433,8 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
     }
 
     public class checkIfRoomNameAvilabale extends AsyncTask<String, User, Integer> {
-        String checkIfRoomNameAvailable = "http://10.0.2.2/final_project/db/cheekIfRoomNameAvailable.php";
-        // String checkIfRoomNameAvailable="http://mysite.lidordigital.co.il/Quertets/db/cheekIfRoomNameAvailable.php";
+        //String checkIfRoomNameAvailable = "http://10.0.2.2/final_project/db/cheekIfRoomNameAvailable.php";
+       //  String checkIfRoomNameAvailable="http://mysite.lidordigital.co.il/Quertets/php/db/cheekIfRoomNameAvailable.php";
         LinkedHashMap parms = new LinkedHashMap<>();
         String roomName;
         @Override
@@ -445,7 +444,7 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
             // parms.put("current_user",currentPlayer);
             JSONParser json = new JSONParser();
             try {
-                JSONObject response = json.makeHttpRequest(checkIfRoomNameAvailable, "POST", parms);
+                JSONObject response = json.makeHttpRequest(ServerUtils.checkIfRoomNameAvailable, "POST", parms);
 
                 if (response.getInt("room_status") == 1) {
                     game.setGame_name(roomName);
@@ -508,8 +507,8 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
     }
 
     public class setGameToInactive extends AsyncTask<String, Void, Boolean> {
-        String setGameToInactive = "http://10.0.2.2/final_project/db/setGameToInactive.php";
-        //String setGameToInactive = "http://mysite.lidordigital.co.il/Quertets/db/setGameToInactive.php";
+        //String setGameToInactive = "http://10.0.2.2/final_project/db/setGameToInactive.php";
+        //String setGameToInactive = "http://mysite.lidordigital.co.il/Quertets/php/db/setGameToInactive.php";
 
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
@@ -519,7 +518,7 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
 
             JSONParser json = new JSONParser();
             try {
-                JSONObject response = json.makeHttpRequest(setGameToInactive, "POST", parms);
+                JSONObject response = json.makeHttpRequest(ServerUtils.setGameToInactive, "POST", parms);
                 if (response.getInt("successes") == 1)
                     return true;
             } catch (Exception ex) {
@@ -547,59 +546,6 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
 
     }
 
-    public class setTurnOrder extends AsyncTask<String, Void, Boolean> {
-        String setTurnOrder = "http://10.0.2.2/final_project/db/moveToNextPlayer.php";
-        // String setTurnOrder = "http://mysite.lidordigital.co.il/Quertets/db/moveToNextPlayer.php";
-        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
-
-        @Override
-        protected Boolean doInBackground(String... params) {
-            parms.put("game_id", String.valueOf(game.getGame_id()));
-            JSONParser json = new JSONParser();
-            try {
-                JSONObject response = json.makeHttpRequest(setTurnOrder, "POST", parms);
-
-                if (response.getInt("successes")== 1) {
-                    return true;
-                } else {
-                    return false;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
-            }
-        }
-        protected void onPostExecute(Boolean result) {
-            if (result) {
-                timer.cancel();
-                timerFlag = false;
-
-                Intent i = new Intent(getApplicationContext(), GameScreen.class);
-                i.putExtra("Game", game);
-                i.putExtra("currentPlayer", curentUser);
-                i.putExtra("allConnectedUsersId",allConnectedUsersId);
-                startActivity(i);
-                finish();
-                pDialog.dismiss();
-
-               /* Intent i = new Intent(getApplicationContext(), AdminChooseSeries.class);
-                game.setGame_name(game.getGame_name());
-                i.putExtra("Game",game);
-                i.putExtra("currentPlayer",curentUser);
-                //i.putExtra("isNewRoom",true);
-                i.putExtra("allConnectedUsersId",allConnectedUsersId);
-               // i.putExtra("allUsers",allUsers);
-                startActivity(i);
-                finish();*/
-
-                //pDialog.dismiss();
-            }else
-                Toast.makeText(Room.this,"There is problem no order set",Toast.LENGTH_LONG).show();
-
-        }
-
-    }
-
     public void openMainMenu(){
         timer2.cancel();
         timerFlag2 = false;
@@ -609,78 +555,5 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
         finish();
     }
 
-    public class openNewRoom extends AsyncTask<String, User, Integer> {
-        String openNewRoom = "http://10.0.2.2/final_project/db/openNewRoom.php";
-        // String openNewRoom="http://mysite.lidordigital.co.il/Quertets/db/openNewRoom.php";
-        LinkedHashMap parms = new LinkedHashMap<>();
-        String roomName;
-        @Override
-        protected Integer doInBackground(String... params) {
-            parms.put("room_name", params[0]);
-            parms.put("user_id", String.valueOf(curentUser.getUserID()));
-            // parms.put("current_user",currentPlayer);
-            JSONParser json = new JSONParser();
-            try {
-                JSONObject response = json.makeHttpRequest(openNewRoom, "POST", parms);
-
-                if (response.getInt("successes") == 1) {
-                    game.setGame_name(roomName);
-                    game.setGame_id(response.getJSONArray("game").getJSONObject(0).getInt("game_id"));
-
-                    return 1;
-                } else
-                    return 0;
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                return -1;
-            }
-
-        }
-        protected void onPostExecute(Integer result) {
-            if (result == 1) {//all good
-                //2. show progress dialog - waiting for 3 more players
-                pDialog = new ProgressDialog(Room.this);
-                pDialog.setIndeterminate(true);
-                pDialog.setCancelable(false);
-                pDialog.setMessage(getResources().getString(R.string.waiting_for_players));
-
-                pDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        timer.cancel();
-                        timerFlag = false;
-                    }
-                });
-
-                pDialog.show();
-                timer = new Timer();
-                timerFlag = true;
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        if (timerFlag) {
-                            new GetAllConnectedPlayers().execute();
-                            // new Room.waitForOtherPlayer().execute(roomName);
-                            //new GetRoomStatus().execute(roomName);
-                        }
-                    }
-                }, 2000);
-
-                //new GetAllConnectedPlayers().execute();
-            } else if (result == 0) {//room name already in use
-                Toast.makeText(Room.this
-                        , getResources().getString(R.string.room_name_in_use),
-                        Toast.LENGTH_LONG).show();
-
-            } else if (result == -1) {//connection problem
-                Toast.makeText(Room.this
-                        , getResources().getString(R.string.connection_error),
-                        Toast.LENGTH_LONG).show();
-            }
-
-        }
-
-    }
 
 }

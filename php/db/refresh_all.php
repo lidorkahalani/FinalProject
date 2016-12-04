@@ -20,6 +20,7 @@ if(mysqli_num_rows($result) >0 )  {
 	}
 
  $response["isMyturn"]=isMyTurn($userId,$game_id);
+ 
  $seriseIdList=getIdOfAllFullSeries($userId,$game_id);
  if($seriseIdList!=null){
 	 $response["SeriesIds"]=$seriseIdList;
@@ -75,9 +76,9 @@ function getAllMyCard($cardId){
 	
 } 
 function getIdOfAllFullSeries($user_id,$game_id){
-	require('Connection.php');
+	require('connection.php');
 	$game_id=$_POST['game_id'];
-	$sth = $con->prepare("SELECT category_id FROM games_cards WHERE user_id='$user_id' AND game_id='$game_id' GROUP BY category_id HAVING COUNT(category_id)=4");
+	$sth = $con->prepare("SELECT category_id FROM games_cards WHERE user_id='$user_id' AND game_id='$game_id' AND series_complete=0 GROUP BY category_id HAVING COUNT(category_id)=4");
 	$sth->execute();
 	$result = $sth->fetchAll(PDO::FETCH_ASSOC);
 	if($result){

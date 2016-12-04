@@ -47,23 +47,23 @@ import java.util.TimerTask;
 
 public class AdminChooseSeries extends AppCompatActivity implements AdapterView.OnItemClickListener {
     static HashSet<Series> series =new HashSet();
-    ListView lv;
-    MyClassAdapter adapter;
-    CheckBox checkBoxIndicator;
+    private ListView lv;
+    private MyClassAdapter adapter;
+    private CheckBox checkBoxIndicator;
     private ListView category_list;
     private User currentPlayer;
     private boolean isSomoneDisconected=false;
-    ArrayList<User> allUsers =new ArrayList();
-    String allConnectedUsersId[]=new String[4];
-    Game game;
-    User curentUser;
+    private ArrayList<User> allUsers =new ArrayList();
+    private String allConnectedUsersId[]=new String[4];
+    private Game game;
+    private User curentUser;
     int i=1;
     boolean []chosenList;
-    Boolean setBoolenList=false;
-    Boolean adminChose=false;
+    private Boolean setBoolenList=false;
+    private Boolean adminChose=false;
     private Timer timer = new Timer();
     boolean timerFlag;
-    Timer myTimer = new Timer("MyTimer", true);
+    private  Timer myTimer = new Timer("MyTimer", true);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,8 +143,8 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
     }
 
     public class GetMySeries extends AsyncTask<String, Void, Boolean> {
-        String GetMySeries = "http://10.0.2.2/final_project/db/getMySeries.php";
-        //String GetMySeries = "http://mysite.lidordigital.co.il/Quertets/db/getMySeries.php";
+        //String GetMySeries = "http://10.0.2.2/final_project/db/getMySeries.php";
+        //String GetMySeries = "http://mysite.lidordigital.co.il/Quertets/php/db/getMySeries.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
 
@@ -155,7 +155,7 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
             JSONParser json = new JSONParser();
             Series temp_categorys=new Series();
             try {
-                JSONObject response = json.makeHttpRequest(GetMySeries, "GET", parms);
+                JSONObject response = json.makeHttpRequest(ServerUtils.GetMySeries, "GET", parms);
                 if (response.getInt("succsses") == 1) {
                     JSONArray jsonArray = response.getJSONArray("myCards");
                     for (int i = 0; i < jsonArray.length(); i+=4) {
@@ -201,8 +201,8 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
     }
 
     public class GetDefultSeries extends AsyncTask<String, Void, Boolean> {
-        String GetMySeries = "http://10.0.2.2/final_project/db/getMySeries.php";
-        //String GetMySeries = "http://mysite.lidordigital.co.il/Quertets/db/getMySeries.php";
+        //String GetMySeries = "http://10.0.2.2/final_project/db/getMySeries.php";
+        String GetMySeries = "http://mysite.lidordigital.co.il/Quertets/php/db/getMySeries.php";
 
 
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
@@ -213,7 +213,7 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
             JSONParser json = new JSONParser();
             Series temp_categorys=new Series();;
             try {
-                JSONObject response = json.makeHttpRequest(GetMySeries, "GET", parms);
+                JSONObject response = json.makeHttpRequest(ServerUtils.GetMySeries, "GET", parms);
                 if (response.getInt("succsses") == 1) {
                     JSONArray jsonArray = response.getJSONArray("myCards");
                     for (int i = 0; i < jsonArray.length(); i+=4) {
@@ -269,8 +269,8 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
     }
 
     public class sendActiveSerie extends AsyncTask<String, Void, Boolean> {
-        String sendActiveSerie = "http://10.0.2.2/final_project/db/sendActiveSerie.php";
-        //String sendActiveSerie = "http://mysite.lidordigital.co.il/Quertets/db/sendActiveSerie.php";
+        //String sendActiveSerie = "http://10.0.2.2/final_project/db/sendActiveSerie.php";
+        //String sendActiveSerie = "http://mysite.lidordigital.co.il/Quertets/php/db/sendActiveSerie.php";
 
 
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
@@ -313,7 +313,7 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
 
             JSONParser jsonPars = new JSONParser();
             try {
-                JSONObject response = jsonPars.makeHttpRequest(sendActiveSerie, "POST", parms);
+                JSONObject response = jsonPars.makeHttpRequest(ServerUtils.sendActiveSerie, "POST", parms);
 
                 if (response.getInt("successes")== 1) {
                     return true;
@@ -335,8 +335,8 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
     }
 
     public class setGameToActive extends AsyncTask<String, Void, Boolean> {
-        String setGameToActive = "http://10.0.2.2/final_project/db/setGameToActive.php";
-        // String setGameToActive = "http://mysite.lidordigital.co.il/Quertets/db/setGameToActive.php";
+        //String setGameToActive = "http://10.0.2.2/final_project/db/setGameToActive.php";
+         //String setGameToActive = "http://mysite.lidordigital.co.il/Quertets/php/db/setGameToActive.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
@@ -346,7 +346,7 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
 
             JSONParser json = new JSONParser();
             try {
-                JSONObject response = json.makeHttpRequest(setGameToActive, "POST", parms);
+                JSONObject response = json.makeHttpRequest(ServerUtils.setGameToActive, "POST", parms);
 
                 if (response.getInt("succsses")== 1) {
                     return true;
@@ -368,8 +368,8 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
     }
 
     public class setTurnOrder extends AsyncTask<String, Void, Boolean> {
-        String setTurnOrder = "http://10.0.2.2/final_project/db/moveToNextPlayer.php";
-        // String setTurnOrder = "http://mysite.lidordigital.co.il/Quertets/db/moveToNextPlayer.php";
+        //String setTurnOrder = "http://10.0.2.2/final_project/db/moveToNextPlayer.php";
+        //String setTurnOrder = "http://mysite.lidordigital.co.il/Quertets/php/db/moveToNextPlayer.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
@@ -377,7 +377,7 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
             parms.put("game_id", String.valueOf(game.getGame_id()));
             JSONParser json = new JSONParser();
             try {
-                JSONObject response = json.makeHttpRequest(setTurnOrder, "POST", parms);
+                JSONObject response = json.makeHttpRequest(ServerUtils.setTurnOrder, "POST", parms);
 
                 if (response.getInt("successes") == 1) {
                     return true;
@@ -407,8 +407,8 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
     }
 
     public class setGameToInactive extends AsyncTask<String, Void, Boolean> {
-        String setGameToInactive = "http://10.0.2.2/final_project/db/setGameToInactive.php";
-        //String setGameToInactive = "http://mysite.lidordigital.co.il/Quertets/db/setGameToInactive.php";
+        //String setGameToInactive = "http://10.0.2.2/final_project/db/setGameToInactive.php";
+        //String setGameToInactive = "http://mysite.lidordigital.co.il/Quertets/php/db/setGameToInactive.php";
 
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
@@ -418,7 +418,7 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
 
             JSONParser json = new JSONParser();
             try {
-                JSONObject response = json.makeHttpRequest(setGameToInactive, "POST", parms);
+                JSONObject response = json.makeHttpRequest(ServerUtils.setGameToInactive, "POST", parms);
                 if (response.getInt("successes") == 1)
                     return true;
             } catch (Exception ex) {
@@ -440,8 +440,8 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
     }
 
     public class checkIfGameIsActive extends AsyncTask<String, Void, Boolean> {
-        String checkIfGameIsActive = "http://10.0.2.2/final_project/db/checkIfGameIsActive.php";
-        // String checkIfGameIsActive = "http://mysite.lidordigital.co.il/Quertets/db/checkIfGameIsActive.php";
+        //String checkIfGameIsActive = "http://10.0.2.2/final_project/db/checkIfGameIsActive.php";
+        // String checkIfGameIsActive = "http://mysite.lidordigital.co.il/Quertets/php/db/checkIfGameIsActive.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
@@ -449,7 +449,7 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
             parms.put("game_id", params[0]);
             JSONParser json = new JSONParser();
             try {
-                JSONObject response = json.makeHttpRequest(checkIfGameIsActive, "POST", parms);
+                JSONObject response = json.makeHttpRequest(ServerUtils.checkIfGameIsActive, "POST", parms);
 
                 if (response.getInt("succsses")== 1) {
                     if(response.getJSONObject("result").getInt("is_active")==0)
@@ -519,8 +519,8 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
     }
 
     public class checkIfSomoneDisconected extends AsyncTask<String, Void, Boolean> {
-        String GetMySeries = "http://10.0.2.2/final_project/db/getMySeries.php";
-        //String GetMySeries = "http://mysite.lidordigital.co.il/Quertets/db/getMySeries.php";
+        //String GetMySeries = "http://10.0.2.2/final_project/db/getMySeries.php";
+        //String GetMySeries = "http://mysite.lidordigital.co.il/Quertets/php/db/getMySeries.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
 
@@ -531,7 +531,7 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
             JSONParser json = new JSONParser();
             Series temp_categorys = new Series();
             try {
-                JSONObject response = json.makeHttpRequest(GetMySeries, "GET", parms);
+                JSONObject response = json.makeHttpRequest(ServerUtils.GetMySeries, "GET", parms);
                 if (response.getInt("succsses") == 1) {
                     JSONArray jsonArray = response.getJSONArray("myCards");
                     for (int i = 0; i < jsonArray.length(); i += 4) {

@@ -54,10 +54,10 @@ public class MainMenu extends AppCompatActivity {
     private Button btn5;
     private TextView title;
 
-    String roomName;
-    LoginButton facebookButton;
-    Button logOut;
-    Game newGame = new Game();
+    private String roomName;
+    private LoginButton facebookButton;
+    private Button logOut;
+    private Game newGame = new Game();
     final int MY_PERMISSIONS_REQUEST_WRITE_STORAGE =1;
 
 
@@ -177,6 +177,16 @@ public class MainMenu extends AppCompatActivity {
                     // contacts-related task you need to do.
 
                 } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setMessage(getResources().getString(R.string.must_permission))
+                            .setCancelable(false)
+                            .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    checkPermission();
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
 
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
@@ -401,9 +411,7 @@ public class MainMenu extends AppCompatActivity {
         alert.show();
     }
 
-    public void ShowMyCards(View v) {
-       /* Intent myIntent = new Intent(this, ShowMyCards.class);
-        startActivity(myIntent); */
+    public void ShowMySerie(View v) {
          Intent myIntent = new Intent(this,ShowMySerie.class);
         startActivity(myIntent);
     }

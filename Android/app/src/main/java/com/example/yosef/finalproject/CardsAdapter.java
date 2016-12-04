@@ -15,11 +15,11 @@ import java.util.List;
 
 public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.MyViewHolder> {
 
-    List<Card> cards;
-    Context conext;
+    private List<Card> cards;
+    private Context conext;
 
-    final String imageRelativePat = "http://10.0.2.2/final_project/images/";
-    //final String imageRelativePat = "http://mysite.lidordigital.co.il/Quertets/images/";
+    //final String imageRelativePat = "http://10.0.2.2/final_project/images/";
+    //final String imageRelativePat = "http://mysite.lidordigital.co.il/Quertets/php/images/";
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
         public TextView category;
@@ -81,7 +81,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.MyViewHolder
         holder.card2.setText(card.getItemsArray()[1]);
         holder.card3.setText(card.getItemsArray()[2]);
         holder.card4.setText(card.getItemsArray()[3]);
-        fullPath = imageRelativePat + card.getImageName();
+        fullPath = ServerUtils.imageRelativePat + card.getImageName();
         ImageLoader imageLoader = new ImageLoader(conext);
         imageLoader.DisplayImage(fullPath, R.mipmap.ic_launcher, holder.image);
 

@@ -22,10 +22,10 @@ import org.json.JSONObject;
 import java.util.LinkedHashMap;
 
 public class SignUp extends AppCompatActivity {
-    EditText userName;
-    EditText password;
-    EditText repassword;
-    UsersDBHandler dbHandler;
+    private EditText userName;
+    private EditText password;
+    private EditText repassword;
+    private UsersDBHandler dbHandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,8 +45,8 @@ public class SignUp extends AppCompatActivity {
     }
 
     public class signUp  extends AsyncTask<String, Void, Boolean>{
-      //  String reg_url = "http://mysite.lidordigital.co.il/Quertets/db/register.php";
-        String reg_url = "http://10.0.2.2/final_project/db/register.php";
+        //String reg_url = "http://mysite.lidordigital.co.il/Quertets/php/db/register.php";
+        //String reg_url = "http://10.0.2.2/final_project/db/register.php";
 
         LinkedHashMap<String,String> parms=new LinkedHashMap<>();
         String uName=userName.getText().toString();
@@ -63,7 +63,7 @@ public class SignUp extends AppCompatActivity {
 
             JSONParser json=new JSONParser();
             try {
-                JSONObject response=json.makeHttpRequest(reg_url,"POST",parms);
+                JSONObject response=json.makeHttpRequest(ServerUtils.reg_url,"POST",parms);
 
 
                 if(response.getInt("sucsses")==1){

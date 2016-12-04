@@ -26,10 +26,10 @@ import java.util.LinkedHashMap;
 import java.util.TreeMap;
 
 public class SplashActivity extends AppCompatActivity {
-    ProgressBar circleProgresBar;
-    TextView Precent;
-    TextView noConnectionMassage;
-    ArrayList<Card> deck = new ArrayList<>();
+    private ProgressBar circleProgresBar;
+    private TextView Precent;
+    private TextView noConnectionMassage;
+    private ArrayList<Card> deck = new ArrayList<>();
      static int counter=0;
 
 

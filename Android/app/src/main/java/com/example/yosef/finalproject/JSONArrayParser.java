@@ -22,14 +22,14 @@ import java.util.HashMap;
  * Created by Lidor on 14/09/2016.
  */
 public class JSONArrayParser {
-    String charset = "UTF-8";
-    HttpURLConnection conn;
-    DataOutputStream wr;
-    StringBuilder result;
-    URL urlObj;
-    JSONArray jObj = null;
-    StringBuilder sbParams;
-    String paramsString;
+    private  String charset = "UTF-8";
+    private HttpURLConnection conn;
+    private DataOutputStream wr;
+    private StringBuilder result;
+    private URL urlObj;
+    private  JSONArray jObj = null;
+    private  StringBuilder sbParams;
+    private String paramsString;
 
     public JSONArray makeHttpRequest(String url, String method,
                                      HashMap<String, String> params) {

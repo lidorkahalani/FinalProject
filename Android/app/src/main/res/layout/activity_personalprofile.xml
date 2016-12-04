@@ -60,7 +60,7 @@
         <Button
             android:textSize="18dip"
             android:textStyle="bold"
-            android:onClick="ShowMyCards"
+            android:onClick="ShowMySerie"
             android:layout_width="185dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"

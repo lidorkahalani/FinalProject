@@ -59,8 +59,8 @@ public class MainActivity extends AppCompatActivity {
     private ProfileTracker profileTracker;
     private AccessTokenTracker accsessTokenTracker;
     private Profile profile;
-    Button btn1;
-    Button btn2;
+    private Button btn1;
+    private Button btn2;
 
 
 
@@ -252,8 +252,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     public class logIn extends AsyncTask<String, Void, Boolean> {
-        String login_url = "http://10.0.2.2/final_project/db/login.php";
-       // String login_url = "http://mysite.lidordigital.co.il/Quertets/db/login.php";
+        //String login_url = "http://10.0.2.2/final_project/db/login.php";
+        //String login_url = "http://mysite.lidordigital.co.il/Quertets/php/db/login.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         //MySQLiteHelper dbHelper = new MySQLiteHelper(MainActivity.this, UserDBConstants.DBName, null, UserDBConstants.User_DB_VESRSION);
@@ -271,7 +271,7 @@ public class MainActivity extends AppCompatActivity {
             parms.put("password", inputPassword);
             parms.put("username", inputUserName);
             try {
-                JSONObject response = json.makeHttpRequest(login_url, "POST", parms);
+                JSONObject response = json.makeHttpRequest(ServerUtils.login_url, "POST", parms);
                 if (response.getInt("succsses") == 1) {
                     JSONArray jsonArray = response.getJSONArray("User");
                     if (jsonArray.getJSONObject(0).getString("user_name").equals(inputUserName) &&
@@ -318,8 +318,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public class signUp  extends AsyncTask<String, Void, Boolean>{
-       // String reg_url = "http://mysite.lidordigital.co.il/Quertets/db/register.php";
-        String reg_url = "http://10.0.2.2/final_project/db/register.php";
+        //String reg_url = "http://mysite.lidordigital.co.il/Quertets/php/db/register.php";
+        //String reg_url = "http://10.0.2.2/final_project/db/register.php";
         LinkedHashMap<String,String> parms=new LinkedHashMap<>();
         String userName;
         String password;
@@ -337,7 +337,7 @@ public class MainActivity extends AppCompatActivity {
             parms.put("username",userName);
             JSONParser json=new JSONParser();
             try {
-                JSONObject response=json.makeHttpRequest(reg_url,"GET",parms);
+                JSONObject response=json.makeHttpRequest(ServerUtils.reg_url,"GET",parms);
 
 
                 if(response.getInt("sucsses")==1){

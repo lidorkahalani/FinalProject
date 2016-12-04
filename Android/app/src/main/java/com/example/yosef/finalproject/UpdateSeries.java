@@ -56,12 +56,12 @@ public class UpdateSeries extends AppCompatActivity implements View.OnClickListe
     private Button buttonChooseCard3;
     private Button buttonChooseCard4;
 
-    Boolean isbuttonChooseCard1;
-    Boolean isbuttonChooseCard2;
-    Boolean isbuttonChooseCard3;
-    Boolean isbuttonChooseCard4;
+    private Boolean isbuttonChooseCard1;
+    private Boolean isbuttonChooseCard2;
+    private  Boolean isbuttonChooseCard3;
+    private Boolean isbuttonChooseCard4;
 
-    Boolean imageCoosen;
+    private Boolean imageCoosen;
     private int PICK_IMAGE_REQUEST = 1;
 
     private Button buttonUpdateSeries;
@@ -82,7 +82,7 @@ public class UpdateSeries extends AppCompatActivity implements View.OnClickListe
     private File imageFile;
     private Bitmap bitmap;
 
-    final String imageRelativePat = "http://10.0.2.2/final_project/images/";
+    //final String imageRelativePat = "http://10.0.2.2/final_project/images/";
 
 
     Series selctedSeries;
@@ -123,10 +123,10 @@ public class UpdateSeries extends AppCompatActivity implements View.OnClickListe
 
         ImageLoader imageLoader = new ImageLoader(this);
 
-        imageLoader.DisplayImage((imageRelativePat + selctedSeries.getImage1()), R.mipmap.ic_launcher, imageViewCard1);
-        imageLoader.DisplayImage((imageRelativePat + selctedSeries.getImage2()), R.mipmap.ic_launcher, imageViewCard2);
-        imageLoader.DisplayImage((imageRelativePat + selctedSeries.getImage3()), R.mipmap.ic_launcher, imageViewCard3);
-        imageLoader.DisplayImage((imageRelativePat + selctedSeries.getImage4()), R.mipmap.ic_launcher, imageViewCard4);
+        imageLoader.DisplayImage((ServerUtils.imageRelativePat + selctedSeries.getImage1()), R.mipmap.ic_launcher, imageViewCard1);
+        imageLoader.DisplayImage((ServerUtils.imageRelativePat + selctedSeries.getImage2()), R.mipmap.ic_launcher, imageViewCard2);
+        imageLoader.DisplayImage((ServerUtils.imageRelativePat + selctedSeries.getImage3()), R.mipmap.ic_launcher, imageViewCard3);
+        imageLoader.DisplayImage((ServerUtils.imageRelativePat + selctedSeries.getImage4()), R.mipmap.ic_launcher, imageViewCard4);
 
         imageName1=selctedSeries.getImage1();
         imageName2=selctedSeries.getImage2();
@@ -268,8 +268,8 @@ public class UpdateSeries extends AppCompatActivity implements View.OnClickListe
     }
 
     public class UpdateSeriesTask  extends AsyncTask<String, Void, Boolean> {
-       // String UpdateSeriesTask = "http://mysite.lidordigital.co.il/Quertets/db/UpdateSeries.php";
-        String UpdateSeriesTask = "http://10.0.2.2/final_project/db/UpdateSeries.php";
+        String UpdateSeriesTask = "http://mysite.lidordigital.co.il/Quertets/php/db/UpdateSeries.php";
+        //String UpdateSeriesTask = "http://10.0.2.2/final_project/db/UpdateSeries.php";
 
         LinkedHashMap<String,String> parms=new LinkedHashMap<>();
         @Override

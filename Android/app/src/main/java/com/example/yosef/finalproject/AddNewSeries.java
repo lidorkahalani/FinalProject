@@ -53,7 +53,7 @@ import org.apache.http.util.EntityUtilsHC4;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
+import com.example.yosef.finalproject.ServerUtils;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -70,10 +70,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 public class AddNewSeries extends AppCompatActivity implements View.OnClickListener {
-    //public static final String UPLOAD_URL = "http://mysite.lidordigital.co.il/Quertets/db/add_image.php";
-    //public static final String UPLOAD_URL = "http://10.0.2.2/final_project/db/add_image.php";
-
-
 
     public static final String UPLOAD_KEY = "image";
     public static final String TAG = "MY MESSAGE";
@@ -93,15 +89,15 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
     private ImageView imageViewCard3;
     private ImageView imageViewCard4;
 
-    Button buttonChooseCard1;
-    Button buttonChooseCard2;
-    Button buttonChooseCard3;
-    Button buttonChooseCard4;
+    private Button buttonChooseCard1;
+    private Button buttonChooseCard2;
+    private Button buttonChooseCard3;
+    private Button buttonChooseCard4;
 
-    Boolean isbuttonChooseCard1;
-    Boolean isbuttonChooseCard2;
-    Boolean isbuttonChooseCard3;
-    Boolean isbuttonChooseCard4;
+    private Boolean isbuttonChooseCard1;
+    private Boolean isbuttonChooseCard2;
+    private Boolean isbuttonChooseCard3;
+    private Boolean isbuttonChooseCard4;
 
     private EditText category;
     private EditText card1;
@@ -110,7 +106,7 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
     private EditText card4;
     private Boolean upload_image_status;
     private String cardName;
-    TextView categoryName;
+    private TextView categoryName;
     private int picCnt=0;
 
     static private ArrayList<Card>newSeries=new ArrayList<>();
@@ -130,14 +126,14 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
     private String imageName3;
     private String imageName4;
 
-    String charset = "UTF-8";
-    HttpURLConnection conn;
-    DataOutputStream wr;
-    StringBuilder result;
-    URL urlObj;
-    JSONObject jObj = null;
-    StringBuilder sbParams;
-    String paramsString;
+    private String charset = "UTF-8";
+    private HttpURLConnection conn;
+    private DataOutputStream wr;
+    private StringBuilder result;
+    private URL urlObj;
+    private JSONObject jObj = null;
+    private StringBuilder sbParams;
+    private String paramsString;
 
 
 
@@ -258,14 +254,12 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
     private void getMaxCategoryId() {
         final int[] maxId = {0};
         class GetMaxCategoryId extends AsyncTask<String, Void, Integer> {
-            String getMaxCategoryId_url="http://10.0.2.2/final_project/db/getMaxCategoryId.php";
-           // String getMaxCategoryId_url="http://mysite.lidordigital.co.il/Quertets/db/getMaxCategoryId.php";
             LinkedHashMap<String, String> parms = new LinkedHashMap<>();
             @Override
             protected Integer doInBackground(String... params) {
                 JSONParser json = new JSONParser();
                 try {
-                    JSONObject response = json.makeHttpRequest(getMaxCategoryId_url, "GET", parms);
+                    JSONObject response = json.makeHttpRequest( ServerUtils.getMaxCategoryId_url, "GET", parms);
                     if(response.getInt("succsses")==1)
                     return response.getInt("max_category_id");
                 } catch (Exception ex) {
@@ -286,8 +280,8 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
 
     private void uploadImage(){
         class UploadImage extends AsyncTask<Bitmap,Void,Boolean>{
-            //public static final String UPLOAD_URL = "http://mysite.lidordigital.co.il/Quertets/db/AddCard.php";
-            public static final String UPLOAD_URL = "http://10.0.2.2/final_project/db/AddCard.php";
+            public static final String UPLOAD_URL = "http://mysite.lidordigital.co.il/Quertets/db/php/AddCard.php";
+           // public static final String UPLOAD_URL = "http://10.0.2.2/final_project/db/AddCard.php";
             ProgressDialog loading;
             RequestHandler rh = new RequestHandler();
 
@@ -329,7 +323,7 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
                 //data.put("uploaded_file", imageFile);
                 JSONParser json = new JSONParser();
                 //String result = rh.sendPostRequest(UPLOAD_URL,data);
-                JSONObject response = json.makeHttpRequest(UPLOAD_URL, "POST", data);
+                JSONObject response = json.makeHttpRequest(ServerUtils.UPLOAD_URL, "POST", data);
                 try {
                     if (response.getInt("succsses") == 1) {
                         return true;
@@ -521,14 +515,14 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
     }
 
     public class sendSeriesToServer extends AsyncTask<String, Void, Boolean> {
-        String upload_series = "http://10.0.2.2/final_project/db/upload_series.php";
-        // String upload_series = "http://mysite.lidordigital.co.il/Quertets/db/upload_series.php";
+        // upload_series = "http://10.0.2.2/final_project/db/upload_series.php";
+         String upload_series = "http://mysite.lidordigital.co.il/Quertets/php/db/upload_series.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
         protected Boolean doInBackground(String... params) {
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(upload_series);
+            HttpPost httppost = new HttpPost(ServerUtils.upload_series);
 
             MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
             entityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
@@ -579,8 +573,8 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
     }
 
     public class setGameToInactive extends AsyncTask<String, Void, Boolean> {
-        String setGameToInactive = "http://10.0.2.2/final_project/db/setGameToInactive.php";
-        //String setGameToInactive = "http://mysite.lidordigital.co.il/Quertets/db/setGameToInactive.php";
+       // String setGameToInactive = "http://10.0.2.2/final_project/db/setGameToInactive.php";
+        String setGameToInactive = "http://mysite.lidordigital.co.il/Quertets/php/db/setGameToInactive.php";
 
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
@@ -590,7 +584,7 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
 
             JSONParser json = new JSONParser();
             try {
-                JSONObject response = json.makeHttpRequest(setGameToInactive, "POST", parms);
+                JSONObject response = json.makeHttpRequest(ServerUtils.setGameToInactive, "POST", parms);
                 if (response.getInt("successes") == 1)
                     return true;
             } catch (Exception ex) {

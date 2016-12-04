@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -46,8 +47,8 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     private RelativeLayout right_layout;
     private RelativeLayout activePlayer;
     private TextView point;
-    private int currentPoint=0;
-    private ArrayList<Integer> finishSeriesList=new ArrayList<>();
+    static private int currentPoint=0;
+    private ArrayList<Integer> finishSeriesList=new ArrayList<Integer>();
 
 
     private RecyclerView myListView;
@@ -64,7 +65,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     private Boolean deckIsOver=false;
     private Boolean gameIsActive=true;
     private Boolean isMyTurnStatus;
-    Timer myTimer = new Timer("MyTimer", true);
+    private Timer myTimer = new Timer("MyTimer", true);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -233,8 +234,8 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     }
 
     public class startPlay extends AsyncTask<String, Void, Boolean> {
-        String get4Cards = "http://10.0.2.2/final_project/db/giveMe4Cards.php";
-       //  String get4Cards = "http://mysite.lidordigital.co.il/Quertets/db/giveMe4Cards.php";
+        //String get4Cards = "http://10.0.2.2/final_project/db/giveMe4Cards.php";
+        //String get4Cards = "http://mysite.lidordigital.co.il/Quertets/php/db/giveMe4Cards.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
@@ -244,7 +245,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
             JSONParser json = new JSONParser();
             try {
-                JSONObject response = json.makeHttpRequest(get4Cards, "POST", parms);
+                JSONObject response = json.makeHttpRequest(ServerUtils.get4Cards, "POST", parms);
                 if (response.getInt("succsses") == 1) {
                     deck.clear();
                     JSONArray jsonArray = response.getJSONArray("AllCards");
@@ -287,8 +288,8 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     }
 
     public class sendSelectedCard extends AsyncTask<String,Void,Boolean>{
-        String sendSelctedCard="http://10.0.2.2/final_project/db/sendSelctedCard.php";
-        //String sendSelctedCard="http://mysite.lidordigital.co.il/Quertets/db/sendSelctedCard.php";
+        //String sendSelctedCard="http://10.0.2.2/final_project/db/sendSelctedCard.php";
+        //String sendSelctedCard="http://mysite.lidordigital.co.il/Quertets/php/db/sendSelctedCard.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
         @Override
         protected Boolean doInBackground(String... params) {
@@ -296,7 +297,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
             parms.put("card_id",params[0]);
             JSONParser json = new JSONParser();
             try {
-                JSONObject response = json.makeHttpRequest(sendSelctedCard, "POST", parms);
+                JSONObject response = json.makeHttpRequest(ServerUtils.sendSelctedCard, "POST", parms);
                 if(response.getInt("successes")==1)
                     return true;
             }catch (Exception e){
@@ -315,8 +316,8 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     }
 
     public class takeOneCardFromDeck extends AsyncTask<String, Void, Boolean> {
-       String takeOneCardFromDeck = "http://10.0.2.2/final_project/db/takeOneCardFromDeck.php";
-        //String takeOneCardFromDeck = "http://mysite.lidordigital.co.il/Quertets/db/takeOneCardFromDeck.php";
+       //String takeOneCardFromDeck = "http://10.0.2.2/final_project/db/takeOneCardFromDeck.php";
+        //String takeOneCardFromDeck = "http://mysite.lidordigital.co.il/Quertets/php/db/takeOneCardFromDeck.php";
 
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
@@ -327,7 +328,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
             JSONParser json = new JSONParser();
             try {
-                JSONObject response = json.makeHttpRequest(takeOneCardFromDeck, "POST", parms);
+                JSONObject response = json.makeHttpRequest(ServerUtils.takeOneCardFromDeck, "POST", parms);
                 if (response.getInt("succsses") == 1) {
                     JSONArray jsonArray = response.getJSONArray("AllCards");
                     for (int i = 0; i < jsonArray.length(); i++) {
@@ -374,8 +375,8 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     }
 
     public class moveToNextPlayer extends AsyncTask<String, Void, Boolean> {
-        String setTurnOrder = "http://10.0.2.2/final_project/db/moveToNextPlayer.php";
-         //String setTurnOrder = "http://mysite.lidordigital.co.il/Quertets/db/moveToNextPlayer.php";
+        //String setTurnOrder = "http://10.0.2.2/final_project/db/moveToNextPlayer.php";
+        // String setTurnOrder = "http://mysite.lidordigital.co.il/Quertets/php/db/moveToNextPlayer.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
@@ -383,7 +384,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
             parms.put("game_id", String.valueOf(newGame.getGame_id()));
             JSONParser json = new JSONParser();
             try {
-                JSONObject response = json.makeHttpRequest(setTurnOrder, "POST", parms);
+                JSONObject response = json.makeHttpRequest(ServerUtils.setTurnOrder, "POST", parms);
 
                 if (response.getInt("successes")== 1) {
                     isMyTurnStatus=false;
@@ -411,8 +412,8 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     }
 
     public class isMyTurn extends AsyncTask<String, Void, Boolean> {
-        String isMyTurn = "http://10.0.2.2/final_project/db/isMyTurn.php";
-        //String isMyTurn = "http://mysite.lidordigital.co.il/Quertets/db/isMyTurn.php";
+        //String isMyTurn = "http://10.0.2.2/final_project/db/isMyTurn.php";
+        //String isMyTurn = "http://mysite.lidordigital.co.il/Quertets/php/db/isMyTurn.php";
 
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
@@ -423,7 +424,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
             JSONParser json = new JSONParser();
             try {
-                JSONObject response = json.makeHttpRequest(isMyTurn, "POST", parms);
+                JSONObject response = json.makeHttpRequest(ServerUtils.isMyTurn, "POST", parms);
                 if (response.getInt("successes") == 1) {
                     isMyTurnStatus =true;
                 } else if(response.getInt("successes") == 0) {
@@ -454,8 +455,8 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
     public class refresh extends AsyncTask<String, Void, Boolean> {
         /*need to add check if all player stil in the game*/
-        String refresh_all = "http://10.0.2.2/final_project/db/refresh_all.php";
-         //String refresh_all = "http://mysite.lidordigital.co.il/Quertets/db/refresh_all.php";
+        //String refresh_all = "http://10.0.2.2/final_project/db/refresh_all.php";
+         //String refresh_all = "http://mysite.lidordigital.co.il/Quertets/php/db/refresh_all.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
@@ -465,7 +466,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
             JSONParser json = new JSONParser();
             try {
-                JSONObject response = json.makeHttpRequest(refresh_all, "POST", parms);
+                JSONObject response = json.makeHttpRequest(ServerUtils.refresh_all, "POST", parms);
                 if (response.getInt("succsses") == 1) {
                     tempDeck=deck;
                     deck.clear();
@@ -493,8 +494,8 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                     else
                        isMyTurnStatus =false;
 
+                    finishSeriesList.clear();
                     if(response.getInt("finishSeries")==1) {
-                        finishSeriesList.clear();
                         jsonArray = response.getJSONArray("SeriesIds");
                         for (int i = 0; i < jsonArray.length(); i++) {
                             finishSeriesList.add(jsonArray.getJSONObject(i).getInt("category_id"));
@@ -516,18 +517,9 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         protected void onPostExecute(Boolean result) {
             if (result) {
                 if(!finishSeriesList.isEmpty()) {
-                    Toast.makeText(GameScreen.this,"fulll sereis!",Toast.LENGTH_SHORT).show();
+                    new UpdateFinishSeries().execute();
+                   // Toast.makeText(GameScreen.this,"fulll sereis!",Toast.LENGTH_SHORT).show();
                 }
-                 /*   for (int i = 0; i < fullSereiesId.size(); i++) {
-                        for (Card c : deck) {
-                            if (c.getCategoryId() == fullSereiesId.get(i))
-                                    deck.remove(i);
-                        }
-                        point.setText(++currentPoint);
-                    }
-                }*/
-
-
                     setCardsList();
                     if (isMyTurnStatus) {
                         activePlayer.setBackgroundColor(Color.GREEN);
@@ -540,16 +532,82 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
     }
 
+    public class UpdateFinishSeries extends AsyncTask<String, Void, Boolean> {
+        //String UpdateFinishSeries = "http://10.0.2.2/final_project/db/UpdateFinishSeries.php";
+        //String UpdateFinishSeries = "http://mysite.lidordigital.co.il/Quertets/php/db/UpdateFinishSeries.php";
+
+        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            JSONArray jsonArr = new JSONArray();
+            JSONObject jsonOb = new JSONObject();
+            int index=0;
+            for (int i = 0; i < finishSeriesList.size(); i++) {
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject.put("category_id"+index, finishSeriesList.get(i));
+                        index++;
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    jsonArr.put(jsonObject);
+
+            }
+
+            try {
+                jsonOb.put("finish_categorys_id",jsonArr);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            parms.put("user_id", String.valueOf(currentPlayer.getUserID()));
+            parms.put("game_id", String.valueOf(newGame.getGame_id()));
+            parms.put("finish_category",jsonOb.toString());
+
+            JSONParser json = new JSONParser();
+            try {
+                JSONObject response = json.makeHttpRequest(ServerUtils.UpdateFinishSeries, "POST", parms);
+                if (response.getInt("successes") == 1)
+                    return true;
+                else
+                    return false;
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return false;
+            }
+        }
+
+        protected void onPostExecute(Boolean result) {
+
+            if (result) {
+                addPoint();
+            } else
+                Toast.makeText(GameScreen.this, "Update finish series failed", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void addPoint(){
+     /*   for(int j=0;j<finishSeriesList.size();j++) {
+            for (int i = 0; i < deck.size(); i++)
+                if (deck.get(i).getCategoryId() ==finishSeriesList.get(j))
+                    deck.remove(i);
+        }*/
+        new refresh().execute();
+        point.setText(getResources().getString(R.string.points)+": "+(++currentPoint));
+    }
+
+
     public class getAllCards extends AsyncTask<String, Void, Boolean> {
-        String get_all_card_url = "http://10.0.2.2/final_project/db/getAllCard.php";
-         //String get_all_card_url = "http://mysite.lidordigital.co.il/Quertets/db/getAllCard.php";
+        //String get_all_card_url = "http://10.0.2.2/final_project/db/getAllCard.php";
+         //String get_all_card_url = "http://mysite.lidordigital.co.il/Quertets/php/db/getAllCard.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
         protected Boolean doInBackground(String... params) {
             JSONParser json = new JSONParser();
             try {
-                JSONObject response = json.makeHttpRequest(get_all_card_url, "GET", parms);
+                JSONObject response = json.makeHttpRequest(ServerUtils.get_all_card_url, "GET", parms);
                 if (response.getInt("succsses") == 1) {
                     JSONArray jsonArray = response.getJSONArray("AllCards");
                     for (int i = 0; i < jsonArray.length(); i++) {
@@ -588,8 +646,8 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     }
 
     public class setGameToInactive extends AsyncTask<String, Void, Boolean> {
-        String setGameToInactive = "http://10.0.2.2/final_project/db/setGameToInactive.php";
-        //String setGameToInactive = "http://mysite.lidordigital.co.il/Quertets/db/setGameToInactive.php";
+        //String setGameToInactive = "http://10.0.2.2/final_project/db/setGameToInactive.php";
+        //String setGameToInactive = "http://mysite.lidordigital.co.il/Quertets/php/db/setGameToInactive.php";
 
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
@@ -599,7 +657,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
             JSONParser json = new JSONParser();
             try {
-                JSONObject response = json.makeHttpRequest(setGameToInactive, "POST", parms);
+                JSONObject response = json.makeHttpRequest(ServerUtils.setGameToInactive, "POST", parms);
                 if (response.getInt("successes") == 1)
                   return true;
             } catch (Exception ex) {

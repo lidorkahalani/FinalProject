@@ -37,16 +37,13 @@ import java.util.List;
 public class ShowMySerie extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     private ListView category_list;
-    final String imageRelativePat = "http://10.0.2.2/final_project/images/";
-
-    ListView lv;
-    MyClassAdapter adapter;
+    private ListView lv;
+    private MyClassAdapter adapter;
     public static int MENU_ID = 0;
     private static final int SERIES_CLICK_MENU = 1;
     private static final int UPDATE_SERIES_REQUEST = 2;
-    ArrayList<Card> allMyCard =new ArrayList<Card>();
-   // ArrayList<String> series=new ArrayList();
-    ArrayList<Series> series =new ArrayList();
+    private ArrayList<Card> allMyCard =new ArrayList<Card>();
+    private ArrayList<Series> series =new ArrayList();
     private Series selectedSeries;
     int position;
     int myId;
@@ -100,12 +97,9 @@ public class ShowMySerie extends AppCompatActivity implements AdapterView.OnItem
         final int menuItemIndex = item.getItemId();
         MENU_ID = SERIES_CLICK_MENU;
         /*localhost*/
-        final String delete_series = "http://10.0.2.2/final_project/db/deleteSeries.php";
-        final String update_card_url = "http://10.0.2.2/final_project/db/UpdateCard.php";
+        //final String delete_series = "http://10.0.2.2/final_project/db/deleteSeries.php";
+        //final String delete_series = "http://mysite.lidordigital.co.il/Quertets/php/db/deleteSeries.php";
 
-        /*server*/
-        //String delete_card = "http://mysite.lidordigital.co.il/Quertets/db/deleteSeries.php";
-        //final String update_card_url="http://mysite.lidordigital.co.il/Quertets/db/UpdateCard.php";
 
         if (MENU_ID == SERIES_CLICK_MENU) {
             String[] menuItems = getResources().getStringArray(R.array.my_card);
@@ -117,7 +111,7 @@ public class ShowMySerie extends AppCompatActivity implements AdapterView.OnItem
                         .setCancelable(false)
                         .setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                new deleteSeries().execute(delete_series, String.valueOf(series.get(position).getCategory_id()));
+                                new deleteSeries().execute(ServerUtils.delete_series, String.valueOf(series.get(position).getCategory_id()));
                             }
                         })
                         .setNegativeButton(getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
@@ -165,8 +159,8 @@ public class ShowMySerie extends AppCompatActivity implements AdapterView.OnItem
     }
 
     public class GetMySeries extends AsyncTask<String, Void, Boolean> {
-        String GetMySeries = "http://10.0.2.2/final_project/db/getMySeries.php";
-        //String GetMySeries = "http://mysite.lidordigital.co.il/Quertets/db/getMySeries.php";
+        //String GetMySeries = "http://10.0.2.2/final_project/db/getMySeries.php";
+        //String GetMySeries = "http://mysite.lidordigital.co.il/Quertets/php/db/getMySeries.php";
 
 
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
@@ -177,7 +171,7 @@ public class ShowMySerie extends AppCompatActivity implements AdapterView.OnItem
             JSONParser json = new JSONParser();
             Series temp_categorys=new Series();;
             try {
-                JSONObject response = json.makeHttpRequest(GetMySeries, "GET", parms);
+                JSONObject response = json.makeHttpRequest(ServerUtils.GetMySeries, "GET", parms);
                 if (response.getInt("succsses") == 1) {
                     JSONArray jsonArray = response.getJSONArray("myCards");
                     for (int i = 0; i < jsonArray.length(); i+=4) {
@@ -283,13 +277,13 @@ public class ShowMySerie extends AppCompatActivity implements AdapterView.OnItem
 
            // fullPath = imageRelativePat + series.getImage1();
             ImageLoader imageLoader = new ImageLoader(getContext());
-            imageLoader.DisplayImage((imageRelativePat + series.getImage1()), R.mipmap.ic_launcher, image1);
+            imageLoader.DisplayImage((ServerUtils.imageRelativePat + series.getImage1()), R.mipmap.ic_launcher, image1);
 
-            imageLoader.DisplayImage(imageRelativePat + series.getImage2(), R.mipmap.ic_launcher, image2);
+            imageLoader.DisplayImage(ServerUtils.imageRelativePat + series.getImage2(), R.mipmap.ic_launcher, image2);
 
-            imageLoader.DisplayImage(imageRelativePat + series.getImage3(), R.mipmap.ic_launcher, image3);
+            imageLoader.DisplayImage(ServerUtils.imageRelativePat + series.getImage3(), R.mipmap.ic_launcher, image3);
 
-            imageLoader.DisplayImage(imageRelativePat + series.getImage4(), R.mipmap.ic_launcher, image4);
+            imageLoader.DisplayImage(ServerUtils.imageRelativePat + series.getImage4(), R.mipmap.ic_launcher, image4);
 
             categoryName.setText(series.getCategory_name());
 

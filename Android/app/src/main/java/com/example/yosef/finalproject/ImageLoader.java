@@ -30,10 +30,10 @@ import android.widget.ImageView;
 public class ImageLoader {
 
     private Map<AlertDialog, String> al = Collections.synchronizedMap(new WeakHashMap<AlertDialog, String>());
-    MemoryCache memoryCache = new MemoryCache();
-    FileCache fileCache;
+    private MemoryCache memoryCache = new MemoryCache();
+    private FileCache fileCache;
     private Map<ImageView, String> imageViews = Collections.synchronizedMap(new WeakHashMap<ImageView, String>());
-    ExecutorService executorService;
+    private ExecutorService executorService;
 
     public ImageLoader(Context context) {
         fileCache = new FileCache(context);

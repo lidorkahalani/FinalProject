@@ -20,13 +20,13 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class UpdateCard extends AppCompatActivity {
-    Card card;
-    EditText category;
-    EditText card_name;
-    ImageView image;
-    Button choseImage;
-    Button updateCard;
-    //public static final String UPLOAD_URL = "http://mysite.lidordigital.co.il/Quertets/upload_image.php";
+    private Card card;
+    private EditText category;
+    private  EditText card_name;
+    private ImageView image;
+    private Button choseImage;
+    private Button updateCard;
+    //public static final String UPLOAD_URL = "http://mysite.lidordigital.co.il/Quertets/php/upload_image.php";
     public static final String UPLOAD_URL = "http://10.0.2.2/Quertets/upload_image.php";
     public static final String UPLOAD_KEY = "image";
     public static final String TAG = "MY MESSAGE";
@@ -87,7 +87,7 @@ public class UpdateCard extends AppCompatActivity {
         if(v == buttonUpload){
             if(imageCoosen)
                 UpdateCard();
-                //  new UpdateCard().execute("http://mysite.lidordigital.co.il/Quertets/db/UpdateCard", newCategory, newItem, String.valueOf(cardId));
+                //  new UpdateCard().execute("http://mysite.lidordigital.co.il/Quertets/php/db/UpdateCard", newCategory, newItem, String.valueOf(cardId));
             else
                 Toast.makeText(UpdateCard.this, "please choose image", Toast.LENGTH_SHORT).show();
         }
