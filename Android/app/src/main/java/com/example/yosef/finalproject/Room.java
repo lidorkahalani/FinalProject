@@ -533,9 +533,10 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                 timer.cancel();
                 timerFlag = false;
                 pDialog.dismiss();
-
-                timer2.cancel();
-                timerFlag2 = false;
+                if(timerFlag2) {
+                    timer2.cancel();
+                    timerFlag2 = false;
+                }
 
                 Intent myIntent = new Intent(Room.this, MainMenu.class);
                 startActivity(myIntent);

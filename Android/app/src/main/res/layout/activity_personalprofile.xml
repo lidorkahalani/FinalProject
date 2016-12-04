@@ -11,7 +11,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-
         android:id="@+id/linearLayout"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true">
@@ -104,15 +103,20 @@
                     android:text="@string/set_person"
                     android:id="@+id/button10"
                     android:layout_gravity="center_horizontal" />
-
-                <Button
-                    android:onClick="getAllPerson"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/get_All_person"
-                    android:id="@+id/button11"
-                    android:layout_gravity="center_horizontal" />
         -->
+                <Button
+                    android:textSize="18dip"
+                    android:textStyle="bold"
+                    android:onClick="RecordTable"
+                    android:layout_width="185dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/high_scores"
+                    android:layout_marginTop="15dp"
+                    android:id="@+id/button11"
+                    android:background="@android:drawable/dialog_holo_light_frame"
+                    android:layout_gravity="center_horizontal"
+                    />
+
                 <com.facebook.login.widget.LoginButton
                     xmlns:facebook="http://schemas.android.com/apk/res-auto"
                     android:layout_width="wrap_content"
@@ -138,6 +142,6 @@
         android:visibility="visible"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_marginTop="31dp" />
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

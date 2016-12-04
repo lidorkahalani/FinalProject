@@ -326,6 +326,7 @@ public class MainMenu extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
+                finish();
             }
         });
 
@@ -434,6 +435,11 @@ public class MainMenu extends AppCompatActivity {
         Intent intent=new Intent(MainMenu.this,GameScreen.class);
         intent.putExtra("debug",true);
         startActivity(intent);
+    }
+
+    public void RecordTable(View v){
+        Intent myIntent = new Intent(this,AllRecords.class);
+        startActivity(myIntent);
     }
 
 

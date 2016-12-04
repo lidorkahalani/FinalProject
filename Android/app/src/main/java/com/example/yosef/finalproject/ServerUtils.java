@@ -33,6 +33,7 @@ public class ServerUtils {
     public static final String sendActiveSerie = "http://10.0.2.2/final_project/db/sendActiveSerie.php";
     public static final String getPlayerLIst="http://10.0.2.2/final_project/db/getListNameOfThePLayerInRoom.php";
     public static final String joinToRoom = "http://10.0.2.2/final_project/db/joinToRoom.php";
+    public static final String getAllUserList="http://10.0.2.2/final_project/db/getAllUserList.php";
 
 
 
@@ -63,6 +64,7 @@ public class ServerUtils {
     public static final String sendActiveSerie = "http://mysite.lidordigital.co.il/Quertets/php/db/sendActiveSerie.php";
     public static final String getPlayerLIst="http://mysite.lidordigital.co.il/Quertets/php/db/getListNameOfThePLayerInRoom.php";
     public static final String joinToRoom = "http://mysite.lidordigital.co.il/Quertets/php/db/joinToRoom.php";
+    public static final String getAllUserList="http://mysite.lidordigital.co.il/Quertets/php/db/getAllUserList.php";
 
 */
 

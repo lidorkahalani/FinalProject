@@ -73,7 +73,6 @@ public class ShowMySerie extends AppCompatActivity implements AdapterView.OnItem
 
     public void onCreateContextMenu(ContextMenu menu, View view,
                                     ContextMenu.ContextMenuInfo menuInfo) {
-        //selectedSeries= series.get(getBaseContext()position);
 
         String menuItems[];
         switch (view.getId()) {

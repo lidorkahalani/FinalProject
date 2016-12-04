@@ -91,6 +91,7 @@
     <string name="no_internet">No internet connection try again later</string>
     <string name="must_permission">permission neccery</string>
     <string name="points">Points</string>
+    <string name="high_scores">High scores</string>
 
     <string-array name="card_click_menu">
         <item>send card</item>
