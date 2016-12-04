@@ -102,4 +102,9 @@
     <string name="please_choose_image">אנא בחר תמונה</string>
     <string name="room_empty">חדר ריק</string>
     <string name="upload_image_success">העלאת תמונה הצליחה</string>
+    <string name="add_new_series">צור סדרה חדשה</string>
+    <string name="facebook_app_id">597616363744470</string>
+    <string name="high_scores">טבלת שיאים</string>
+    <string name="must_permission">הרשאה נדרשת</string>
+    <string name="points">נקודות</string>
 </resources>

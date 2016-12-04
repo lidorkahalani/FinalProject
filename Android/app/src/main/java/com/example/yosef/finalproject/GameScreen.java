@@ -116,8 +116,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     }
 
     public void onBackPressed() {
-        // TODO Auto-generated method stub
-        // TODO Auto-generated method stub
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getResources().getString(R.string.exitWarning))
                 .setCancelable(false)
@@ -174,6 +173,16 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                     }
                 })
         );
+    }
+
+    public void addPoint(){
+     /*   for(int j=0;j<finishSeriesList.size();j++) {
+            for (int i = 0; i < deck.size(); i++)
+                if (deck.get(i).getCategoryId() ==finishSeriesList.get(j))
+                    deck.remove(i);
+        }*/
+        new refresh().execute();
+        point.setText(getResources().getString(R.string.points)+": "+(++currentPoint));
     }
 
     @Override
@@ -348,7 +357,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                         card.setItemsArray(cardLabels);
                         deck.add(card);
                     }
-                } else{// if(response.getInt("succsses") ==-1){
+                } else if(response.getInt("succsses") ==-1){
                     deckIsOver=true;
                 }
                 return true;
@@ -363,11 +372,10 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                 setCardsList();
                 if(!deckIsOver)
                  new moveToNextPlayer().execute();
-                else
-                    Toast.makeText(GameScreen.this,"deck end game over!", Toast.LENGTH_SHORT).show();
-                    //goCheckWhoWin
-                //new checkQuartets().execute();
-                //new isTheGameOver().execute();
+                else {
+                    new gameOver().execute();
+                    Toast.makeText(GameScreen.this, "deck end game over!", Toast.LENGTH_SHORT).show();
+                }
             } else
                 Toast.makeText(GameScreen.this, "Take one card failed", Toast.LENGTH_SHORT).show();
         }
@@ -587,17 +595,6 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         }
     }
 
-    public void addPoint(){
-     /*   for(int j=0;j<finishSeriesList.size();j++) {
-            for (int i = 0; i < deck.size(); i++)
-                if (deck.get(i).getCategoryId() ==finishSeriesList.get(j))
-                    deck.remove(i);
-        }*/
-        new refresh().execute();
-        point.setText(getResources().getString(R.string.points)+": "+(++currentPoint));
-    }
-
-
     public class getAllCards extends AsyncTask<String, Void, Boolean> {
         //String get_all_card_url = "http://10.0.2.2/final_project/db/getAllCard.php";
          //String get_all_card_url = "http://mysite.lidordigital.co.il/Quertets/php/db/getAllCard.php";
@@ -677,6 +674,34 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         }
 
     }
+
+    public class gameOver extends AsyncTask<String, Void, Boolean> {
+        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
+        @Override
+        protected Boolean doInBackground(String... params) {
+            JSONParser json = new JSONParser();
+            try {
+                JSONObject response = json.makeHttpRequest(ServerUtils.gameOver, "POST", parms);
+                if (response.getInt("succsses") == 1) {
+
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            return false;
+        }
+
+        protected void onPostExecute(Boolean result) {
+            if (result) {
+                //who is the winner
+                Intent myIntent = new Intent(GameScreen.this, MainActivity.class);
+                startActivity(myIntent);
+            } else
+                Toast.makeText(GameScreen.this, "There was problem during gameOver execute", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
 
     public void passCardByNFC() {
 
