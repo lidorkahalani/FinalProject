@@ -49,7 +49,7 @@ public class ImageLoader {
         if (bitmap != null)
             imageView.setImageBitmap(bitmap);
         else {
-            clearCache();
+            //clearCache();
             queuePhoto(url, imageView);
             imageView.setImageResource(loader);
         }

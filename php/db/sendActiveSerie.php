@@ -7,18 +7,7 @@ $json=$_POST['json'];
 $cardsId["seriseCards"]=array();
 $obj = json_decode($json,true);
 //var_dump($obj[0]);
-//echo count($obj['seriesIds']);
-//echo json_encode($obj['seriesIds'][0]["series"+"0"]);
-//echo json_encode($obj['seriesIds'][0]["seriesId0"]);
-//echo json_encode(count($json));
- /*for($i=0;$i<count($obj['seriesIds']);$i++){
-	  $category_id = $obj['seriesIds'][$i]["series$i"];
-	  $cardsId["seriseCards"]=getCardID($category_id);
-	  for($j=0;$j<4;$j++){
-		$card_id = $cardsId["seriseCards"][$j]["card_id"];
-		echo json_encode($card_id[0]);
-	  }
- }*/
+
 if($obj!=null){
 	    for($i=0;$i<count($obj['seriesIds']);$i++){
 			$category_id = $obj['seriesIds'][$i]["seriesId$i"];

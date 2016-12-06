@@ -92,10 +92,13 @@
     <string name="must_permission">permission neccery</string>
     <string name="points">Points</string>
     <string name="high_scores">High scores</string>
+    <string name="cannot_send_card">you cannot send card on your turn</string>
+    <string name="game_over">Game over</string>
+    <string name="win">Won</string>
+    <string name="no_one_win">There is no winner</string>
 
     <string-array name="card_click_menu">
         <item>send card</item>
-        <item>receive card</item>
     </string-array>
 
     <string-array name="my_card">

@@ -30,8 +30,10 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.MyViewHolder
         public TextView card4;
         private boolean isClicked = false;
 
-        public MyViewHolder(View view) {
+        public MyViewHolder(View view, int width) {
             super(view);
+
+            view.setLayoutParams(new ViewGroup.LayoutParams(width, ViewGroup.LayoutParams.WRAP_CONTENT));
             view.setOnCreateContextMenuListener(this);
             category = (TextView) view.findViewById(R.id.series);
             image = (ImageView) view.findViewById(R.id.card_image);
@@ -47,21 +49,25 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.MyViewHolder
         }
     }
 
-    public CardsAdapter(List<Card> cards) {
+    int width;
+
+    public CardsAdapter(List<Card> cards, int width) {
         this.cards = cards;
+        this.width = width;
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         conext = parent.getContext();
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.singelcard, parent, false);
-        return new MyViewHolder(itemView);
+        return new MyViewHolder(itemView, width);
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Card card = getItem(position);
         String fullPath;
+
         holder.category.setText(card.getCategoryName());
         //holder.image.setImageDrawable(card.getItemPicture());
        // holder.image.setImageURI(card.getImageName()););

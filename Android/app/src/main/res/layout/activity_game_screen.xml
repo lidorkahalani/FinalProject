@@ -3,44 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/backgroun"
     tools:context="com.example.yosef.finalproject.GameScreen">
-    <FrameLayout
-        android:id="@+id/bottom_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
-
-        <RelativeLayout
-            android:id="@+id/myPlayerBackground"
-            android:layout_width="wrap_content"
-            android:layout_height="230dp"
-            android:layout_gravity="bottom"
-            android:background="@android:color/transparent">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/listcards"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true">
-            </android.support.v7.widget.RecyclerView>
-
-            <RelativeLayout
-                android:id="@+id/activePlayer"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:layout_gravity="top"
-                android:background="@android:color/transparent"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"></RelativeLayout>
-
-
-        </RelativeLayout>
-    </FrameLayout>
 
     <RelativeLayout
         android:id="@+id/ac"
@@ -71,30 +37,13 @@
         android:layout_below="@+id/top_layout"
         android:background="#FFEB3B"></RelativeLayout>
 
-    <ImageButton
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/plaers_cards_en"
-        android:id="@+id/imageButton2"
-        android:background="@android:color/transparent"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        android:textSize="18dip"
-        android:onClick="refresh"
-        android:layout_width="185dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/open_room"
-        android:id="@+id/refreshBtn"
-        android:textStyle="bold"
-        android:text="@string/refresh"
-        android:layout_toLeftOf="@+id/right_layout"
+        android:id="@+id/pointField"
         android:layout_below="@+id/top_layout"
-        android:layout_toRightOf="@+id/imageButton2"
-        android:layout_toStartOf="@+id/imageButton2" />
-
-
+        android:layout_toLeftOf="@+id/ac"
+        android:layout_toStartOf="@+id/ac" />
 
     <ImageButton
         android:onClick="takeCard"
@@ -107,9 +56,51 @@
         android:adjustViewBounds="false"
         android:background="@android:color/transparent"
         android:layout_alignTop="@+id/imageButton3"
-        android:layout_alignLeft="@+id/imageButton2"
-        android:layout_alignEnd="@+id/imageButton2"
-        android:layout_alignRight="@+id/imageButton2" />
+        android:layout_centerHorizontal="true" />
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/plaers_cards_en"
+        android:id="@+id/imageButton2"
+        android:background="@android:color/transparent"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <FrameLayout
+        android:id="@+id/bottom_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <RelativeLayout
+            android:id="@+id/myPlayerBackground"
+            android:layout_width="wrap_content"
+            android:layout_height="230dp"
+            android:layout_gravity="bottom"
+            android:background="@android:color/transparent">
+
+            <RelativeLayout
+                android:id="@+id/activePlayer"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_gravity="top"
+                android:background="@android:color/transparent"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"></RelativeLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/listcards"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </android.support.v7.widget.RecyclerView>
+
+        </RelativeLayout>
+
+
+    </FrameLayout>
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -117,10 +108,10 @@
         app:srcCompat="@drawable/plaers_cards_en2"
         android:id="@+id/imageButton4"
         android:background="@android:color/transparent"
-        android:layout_alignTop="@+id/imageButton"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true" />
+        android:layout_marginTop="62dp"
+        android:layout_below="@+id/imageButton2"
+        android:layout_toRightOf="@+id/left_layout"
+        />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -128,19 +119,23 @@
         app:srcCompat="@drawable/plaers_cards_en1"
         android:id="@+id/imageButton3"
         android:background="@android:color/transparent"
-        android:layout_below="@+id/imageButton2"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="44dp"
-        android:layout_alignParentRight="true" />
+        android:layout_alignTop="@+id/imageButton4"
+        android:layout_alignRight="@+id/pointField"
+        />
 
-    <TextView
-        android:layout_width="wrap_content"
+    <Button
+        android:textSize="18dip"
+        android:onClick="refresh"
+        android:layout_width="185dp"
         android:layout_height="wrap_content"
-        android:id="@+id/pointField"
+        android:background="@drawable/open_room"
+        android:id="@+id/refreshBtn"
+        android:textStyle="bold"
+        android:text="@string/refresh"
         android:layout_below="@+id/top_layout"
-        android:layout_toLeftOf="@+id/ac"
-        android:layout_toStartOf="@+id/ac" />
+        android:layout_toRightOf="@+id/left_layout"
+        android:layout_alignRight="@+id/imageButton4"
+    />
 
 
 </RelativeLayout>

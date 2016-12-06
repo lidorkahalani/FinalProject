@@ -1,39 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/card_container"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:gravity="center"
     android:padding="8dp"
     android:background="@drawable/card_background"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:weightSum="10">
 
     <TextView
         android:id="@+id/series"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="2"
         android:layout_alignParentTop="true"
         android:layout_gravity="top"
         android:padding="5dp"
         android:text="Medium"
-
         android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <ImageView
         android:id="@+id/card_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
         android:layout_gravity="center_horizontal"
-        android:padding="2.5dp"
-        android:src="@drawable/car" />
+        android:src="@drawable/car"
+        android:scaleType="fitCenter" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="bottom"
         android:orientation="vertical"
-        android:padding="8dp">
+        android:padding="8dp"
+        android:layout_weight="4">
+
 
         <TextView
             android:id="@+id/card_name1"
@@ -41,7 +45,6 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/card_name2"
             android:text="Medium Text"
-            android:textSize="11dp"
             android:textAlignment="center"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -51,7 +54,6 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/card_name3"
             android:text="Medium Text"
-            android:textSize="11dp"
             android:textAlignment="center"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -61,7 +63,6 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/card_name4"
             android:text="Medium Text"
-            android:textSize="11dp"
             android:textAlignment="center"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -70,7 +71,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Medium Text"
-            android:textSize="11dp"
             android:textAlignment="center"
             android:textAppearance="?android:attr/textAppearanceMedium" />
     </LinearLayout>

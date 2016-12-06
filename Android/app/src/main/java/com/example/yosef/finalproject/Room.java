@@ -198,8 +198,6 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
     }
 
     public class GetAllConnectedPlayers extends AsyncTask<String, Void, Boolean> {
-       // String getPlayerLIst="http://10.0.2.2/final_project/db/getListNameOfThePLayerInRoom.php";
-       // String getPlayerLIst="http://mysite.lidordigital.co.il/Quertets/php/db/getListNameOfThePLayerInRoom.php";
         @Override
         protected Boolean doInBackground(String... params) {
             LinkedHashMap<String, String> parms = new LinkedHashMap<>();

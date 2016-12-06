@@ -4,14 +4,17 @@ package com.example.yosef.finalproject;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,6 +52,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     private TextView point;
     static private int currentPoint=0;
     private ArrayList<Integer> finishSeriesList=new ArrayList<Integer>();
+    private Boolean reloadData=false;
 
 
     private RecyclerView myListView;
@@ -66,6 +70,9 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     private Boolean gameIsActive=true;
     private Boolean isMyTurnStatus;
     private Timer myTimer = new Timer("MyTimer", true);
+    private String winnerName="";
+
+    User winerUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,8 +109,9 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         public void run(){
             if(!gameIsActive)
                 openMainMenu();
-           // else
-           //    new refresh().execute();
+            else if(!debugStatus)
+              new refresh().execute();
+
         }
 
     }
@@ -152,20 +160,30 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     }
 
     private void setCardsList() {
-        cardsAdapter = new CardsAdapter(deck);
+
+        Display dis = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        dis.getSize(size);
+        int width = size.x / 3;
+
+
+        cardsAdapter = new CardsAdapter(deck, width);
         myListView.setAdapter(cardsAdapter);
         registerForContextMenu(myListView);
         myListView.addOnItemTouchListener(
                 new RecyclerItemClickListener(GameScreen.this, myListView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        cardView=view;
-                       // position=myListView.getChildPosition(view);
-                        MENU_ID = CARDS_CLICK_MENU;
-                        openContextMenu(view);
-                        LinearLayout cardContainer = (LinearLayout) view.findViewById(R.id.card_container);
-                        cardContainer.setBackgroundColor(getResources().getColor(R.color.light_green));
-                    }
+                    //    if(!reloadData) {
+                            cardView = view;
+                            // position=myListView.getChildPosition(view);
+                            MENU_ID = CARDS_CLICK_MENU;
+                            openContextMenu(view);
+                            LinearLayout cardContainer = (LinearLayout) view.findViewById(R.id.card_container);
+                            cardContainer.setBackgroundColor(getResources().getColor(R.color.light_green));
+                        }
+                  //      Toast.makeText(GameScreen.this,"Colacting data",Toast.LENGTH_SHORT).show();
+                 //   }
 
                     @Override
                     public void onLongItemClick(View view, int position) {
@@ -176,11 +194,6 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     }
 
     public void addPoint(){
-     /*   for(int j=0;j<finishSeriesList.size();j++) {
-            for (int i = 0; i < deck.size(); i++)
-                if (deck.get(i).getCategoryId() ==finishSeriesList.get(j))
-                    deck.remove(i);
-        }*/
         new refresh().execute();
         point.setText(getResources().getString(R.string.points)+": "+(++currentPoint));
     }
@@ -209,24 +222,20 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     public boolean onContextItemSelected(MenuItem item) {
         int menuItemIndex = item.getItemId();
         if (MENU_ID == CARDS_CLICK_MENU) {
-
             String[] menuItems = getResources().getStringArray(R.array.card_click_menu);
             String menuItemName = menuItems[menuItemIndex];
             if (menuItemName.equals(menuItems[0])) {//שלח קלף
-                if(!isMyTurnStatus)
+                if(!isMyTurnStatus&&!debugStatus)
                     new sendSelectedCard().execute(String.valueOf(this.deck.get(myListView.getChildPosition(cardView)).getCard_id()));
-               else Toast.makeText(GameScreen.this,"you cannot send card on your turn",
-                        Toast.LENGTH_LONG).show();
+               else Toast.makeText(GameScreen.this,getResources().getString(R.string.cannot_send_card),
+                        Toast.LENGTH_SHORT).show();
                 setCardBackgroundTransparent = false;
-
-
-            } else if (menuItemName.equals(menuItems[1])) {//קבל קלף
+            }/* else if (menuItemName.equals(menuItems[1])) {//קבל קלף
                 Toast.makeText(GameScreen.this,
                         menuItemName,
                         Toast.LENGTH_LONG).show();
 
-            }
-
+            }*/
 
         }
 
@@ -373,8 +382,8 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                 if(!deckIsOver)
                  new moveToNextPlayer().execute();
                 else {
-                    new gameOver().execute();
-                    Toast.makeText(GameScreen.this, "deck end game over!", Toast.LENGTH_SHORT).show();
+                    new setGameOverStatus().execute("3",String.valueOf(newGame.getGame_id()));
+                    //Toast.makeText(GameScreen.this, "deck end game over!", Toast.LENGTH_SHORT).show();
                 }
             } else
                 Toast.makeText(GameScreen.this, "Take one card failed", Toast.LENGTH_SHORT).show();
@@ -469,6 +478,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
         @Override
         protected Boolean doInBackground(String... params) {
+            reloadData=true;
             parms.put("game_id",String.valueOf(newGame.getGame_id()));
             parms.put("user_id",String.valueOf(currentPlayer.getUserID()));
 
@@ -536,6 +546,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
             } else
                 Toast.makeText(GameScreen.this, "refresh failed !", Toast.LENGTH_SHORT).show();
+            reloadData=false;
         }
 
     }
@@ -675,33 +686,136 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
     }
 
-    public class gameOver extends AsyncTask<String, Void, Boolean> {
+    public class GetWinnerName extends AsyncTask<String, Void, Boolean> {
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
         @Override
         protected Boolean doInBackground(String... params) {
+            parms.put("game_id",String.valueOf(newGame.getGame_id()));
+
             JSONParser json = new JSONParser();
             try {
-                JSONObject response = json.makeHttpRequest(ServerUtils.gameOver, "POST", parms);
-                if (response.getInt("succsses") == 1) {
+                JSONObject response = json.makeHttpRequest(ServerUtils.GetWinnerName, "POST", parms);
+                JSONArray res=response.getJSONArray("winner");
 
+                if (response.getInt("succsses") == 1) {
+                    for (int i = 0; i < res.length(); i++) {
+                        JSONObject jo = res.getJSONObject(i);
+                        winerUser= new User(jo.getString("user_name"), jo.getString("user_id"), Integer.parseInt(jo.getString("user_password")));
+                        winnerName = winerUser.getUserName();
+                    }
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
             return false;
         }
-
         protected void onPostExecute(Boolean result) {
             if (result) {
                 //who is the winner
-                Intent myIntent = new Intent(GameScreen.this, MainActivity.class);
-                startActivity(myIntent);
+                if(winnerName.equals("")){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(GameScreen.this);
+                    builder.setTitle(getResources().getString(R.string.game_over));
+                    builder.setMessage(getResources().getString(R.string.no_one_win))
+                            .setCancelable(false)
+                            .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    Intent myIntent = new Intent(GameScreen.this, MainActivity.class);
+                                    startActivity(myIntent);
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                }else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(GameScreen.this);
+                    builder.setTitle(getResources().getString(R.string.game_over));
+                    builder.setMessage(winnerName + " " + getResources().getString(R.string.win))
+                            .setCancelable(false)
+                            .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    if(currentPlayer.getUserID()==winerUser.getUserID())
+                                        new UpdateScore().execute(String.valueOf(currentPoint),String.valueOf(winerUser.getUserID()));
+                                    else {
+                                        Intent myIntent = new Intent(GameScreen.this, MainActivity.class);
+                                        startActivity(myIntent);
+                                    }
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                }
+
+
             } else
                 Toast.makeText(GameScreen.this, "There was problem during gameOver execute", Toast.LENGTH_SHORT).show();
         }
 
     }
 
+    public class setGameOverStatus extends AsyncTask<String, Void, Boolean> {
+        //String setGameToActive = "http://10.0.2.2/final_project/db/setGameToActive.php";
+        //String setGameToActive = "http://mysite.lidordigital.co.il/Quertets/php/db/setGameToActive.php";
+        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            parms.put("opertion",params[0]);
+            parms.put("game_id",params[1]);
+
+            JSONParser json = new JSONParser();
+            try {
+                JSONObject response = json.makeHttpRequest(ServerUtils.setGameToActive, "POST", parms);
+
+                if (response.getInt("succsses")== 1) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        protected void onPostExecute(Boolean result) {
+            if(result)
+                new GetWinnerName().execute();
+            else
+                Toast.makeText(GameScreen.this,"Cant set game Over",Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    public class UpdateScore extends AsyncTask<String, Void, Boolean> {
+        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            parms.put("score",params[0]);
+            parms.put("user_id",params[1]);
+
+            JSONParser json = new JSONParser();
+            try {
+                JSONObject response = json.makeHttpRequest(ServerUtils.UpdateScore, "POST", parms);
+
+                if (response.getInt("succsses")== 1) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        protected void onPostExecute(Boolean result) {
+            if(result) {
+                Intent myIntent = new Intent(GameScreen.this, MainActivity.class);
+                startActivity(myIntent);
+            }
+            else
+                Toast.makeText(GameScreen.this,"Cant set game Over",Toast.LENGTH_LONG).show();
+        }
+
+    }
 
     public void passCardByNFC() {
 

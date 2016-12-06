@@ -6,7 +6,7 @@ if (mysqli_connect_errno($con))
    echo '{"query_result":"ERROR"}';
 }
 mysqli_set_charset($con,"utf8");
-$sql_query= "select user_name,user_password,score from users as a,score_tabel as b where a.user_id=b.user_id order by Score desc  LIMIT 10";
+$sql_query= "select user_name,user_password,score from users as a,score_tabel as b where a.user_id=b.user_id order by Score desc ";
 $result = mysqli_query($con,$sql_query);  
 if(mysqli_num_rows($result) >0 )  
 {
