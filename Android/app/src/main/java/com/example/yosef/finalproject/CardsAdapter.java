@@ -1,6 +1,8 @@
 package com.example.yosef.finalproject;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
@@ -10,6 +12,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 
@@ -17,8 +22,11 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.MyViewHolder
 
     private List<Card> cards;
     private Context conext;
+    private FileCache fileCache;
+    private MemoryCache memoryCache = new MemoryCache();
 
-    //final String imageRelativePat = "http://10.0.2.2/final_project/images/";
+
+//final String imageRelativePat = "http://10.0.2.2/final_project/images/";
     //final String imageRelativePat = "http://mysite.lidordigital.co.il/Quertets/php/images/";
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
@@ -89,7 +97,20 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.MyViewHolder
         holder.card4.setText(card.getItemsArray()[3]);
         fullPath = ServerUtils.imageRelativePat + card.getImageName();
         ImageLoader imageLoader = new ImageLoader(conext);
-        imageLoader.DisplayImage(fullPath, R.mipmap.ic_launcher, holder.image);
+
+        fileCache = new FileCache(conext);
+
+        File f = fileCache.getFile(fullPath);
+
+        //from SD cache
+        Bitmap b = decodeFile(f);
+        if (b != null)
+            imageLoader.DisplayImage(fullPath, b, holder.image);
+        else {
+            imageLoader.DisplayImage(fullPath, R.mipmap.ic_launcher, holder.image);
+        }
+        //imageLoader.DisplayImage(fullPath, R.mipmap.ic_launcher, holder.image);
+       // imageLoader.DisplayImage(fullPath, R.mipmap.ic_launcher, holder.image);
 
 
     }
@@ -106,6 +127,43 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.MyViewHolder
     @Override
     public int getItemViewType(int position) {
         return position;
+    }
+
+    public List<Card> getCards() {
+        return cards;
+    }
+
+    public void setCards(List<Card> cards) {
+        this.cards = cards;
+    }
+
+    private Bitmap decodeFile(File f) {
+        try {
+            //decode image size
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(new FileInputStream(f), null, o);
+
+            //Find the correct scale value. It should be the power of 2.
+            final int REQUIRED_SIZE = 70;
+            int width_tmp = o.outWidth, height_tmp = o.outHeight;
+            int scale = 1;
+            while (true) {
+                if (width_tmp / 2 < REQUIRED_SIZE || height_tmp / 2 < REQUIRED_SIZE)
+                    break;
+                width_tmp /= 2;
+                height_tmp /= 2;
+                scale *= 2;
+            }
+
+            //decode with inSampleSize
+            BitmapFactory.Options o2 = new BitmapFactory.Options();
+            // o2.inSampleSize=scale;
+            return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

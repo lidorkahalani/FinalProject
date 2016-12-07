@@ -13,7 +13,7 @@ $sql_query = "select card_id from games_cards where user_id='$userId' AND game_i
  
 $result = mysqli_query($con,$sql_query);  
 $response["myCards"]=array();
-if(mysqli_num_rows($result) >0 )  {
+if(mysqli_num_rows($result) >=0 )  {
 	while($row=mysqli_fetch_array($result)){
 		$card=getAllMyCard($row['card_id']);
 		array_push($response["myCards"],$card);

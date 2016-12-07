@@ -61,6 +61,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -94,12 +95,12 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
     private Button buttonChooseCard3;
     private Button buttonChooseCard4;
 
-    private Boolean isbuttonChooseCard1;
-    private Boolean isbuttonChooseCard2;
-    private Boolean isbuttonChooseCard3;
-    private Boolean isbuttonChooseCard4;
+    private Boolean isbuttonChooseCard1=false;
+    private Boolean isbuttonChooseCard2=false;
+    private Boolean isbuttonChooseCard3=false;
+    private Boolean isbuttonChooseCard4=false;
 
-    private EditText category;
+    private TextView category;
     private EditText card1;
     private EditText card2;
     private EditText card3;
@@ -108,6 +109,11 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
     private String cardName;
     private TextView categoryName;
     private int picCnt=0;
+
+    Bitmap bitmapResize1;
+    Bitmap bitmapResize2;
+    Bitmap bitmapResize3;
+    Bitmap bitmapResize4;
 
     static private ArrayList<Card>newSeries=new ArrayList<>();
 
@@ -151,7 +157,7 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
 
         buttonUpload = (Button) findViewById(R.id.buttonUpload);
         //buttonUploadSeries=(Button) findViewById(R.id.buttonUploadSeries);
-        category=(EditText)findViewById(R.id.series);
+        category=(TextView)findViewById(R.id.series);
         card1=(EditText)findViewById(R.id.card1);
         card2=(EditText)findViewById(R.id.card2);
         card3=(EditText)findViewById(R.id.card3);
@@ -208,14 +214,16 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
                 rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-                if(isbuttonChooseCard1) {
-                    imageName1=getRealPathFromURI_BelowAPI11(getBaseContext(),filePath);
-                     file1= new File(Environment.getExternalStorageDirectory().getAbsolutePath(),imageFile.getPath());
 
+                if(isbuttonChooseCard1) {
+                    bitmapResize1=Bitmap.createScaledBitmap(rotatedBitmap,200,200,true);
+                    imageName1=getRealPathFromURI_BelowAPI11(getBaseContext(),filePath);
+                    file1= new File(Environment.getExternalStorageDirectory().getAbsolutePath(),imageFile.getPath());
                     imageViewCard1.setImageBitmap(rotatedBitmap);
                     isbuttonChooseCard1=false;
                 }
                 else if(isbuttonChooseCard2) {
+                    bitmapResize2=Bitmap.createScaledBitmap(rotatedBitmap,200,200,true);
                     imageName2=getRealPathFromURI_BelowAPI11(getBaseContext(),filePath);
                     file2= new File(Environment.getExternalStorageDirectory().getAbsolutePath(),imageFile.getPath());
 
@@ -223,6 +231,7 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
                     isbuttonChooseCard2=false;
                 }
                 else if(isbuttonChooseCard3) {
+                    bitmapResize3=Bitmap.createScaledBitmap(rotatedBitmap,200,200,true);
                     imageName3=getRealPathFromURI_BelowAPI11(getBaseContext(),filePath);
                     file3= new File(Environment.getExternalStorageDirectory().getAbsolutePath(),imageFile.getPath());
 
@@ -230,6 +239,7 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
                     isbuttonChooseCard3=false;
                 }
                 else if(isbuttonChooseCard4) {
+                    bitmapResize4=Bitmap.createScaledBitmap(rotatedBitmap,200,200,true);
                     imageName4=getRealPathFromURI_BelowAPI11(getBaseContext(),filePath);
                     file4= new File(Environment.getExternalStorageDirectory().getAbsolutePath(),imageFile.getPath());
                     imageViewCard4.setImageBitmap(rotatedBitmap);
@@ -518,6 +528,19 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
         // upload_series = "http://10.0.2.2/final_project/db/upload_series.php";
          String upload_series = "http://mysite.lidordigital.co.il/Quertets/php/db/upload_series.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
+        File imageFile1;
+        File imageFile2;
+        File imageFile3;
+        File imageFile4;
+        protected void onPreExecute(){
+            super.onPreExecute();
+            imageFile1=convertBitmapToFile(bitmapResize1,imageName1);
+            imageFile2=convertBitmapToFile(bitmapResize2,imageName2);
+            imageFile3=convertBitmapToFile(bitmapResize3,imageName3);
+            imageFile4=convertBitmapToFile(bitmapResize4,imageName4);
+
+
+        }
 
         @Override
         protected Boolean doInBackground(String... params) {
@@ -534,10 +557,10 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
             entityBuilder.addTextBody("card2", params[2]);
             entityBuilder.addTextBody("card3", params[3]);
             entityBuilder.addTextBody("card4", params[4]);
-            entityBuilder.addPart("image1",new FileBody(new File(imageName1)));
-            entityBuilder.addPart("image2",new FileBody(new File(imageName2)));
-            entityBuilder.addPart("image3",new FileBody(new File(imageName3)));
-            entityBuilder.addPart("image4",new FileBody(new File(imageName4)));
+            entityBuilder.addPart("image1",new FileBody(imageFile1));
+            entityBuilder.addPart("image2",new FileBody(imageFile2));
+            entityBuilder.addPart("image3",new FileBody(imageFile3));
+            entityBuilder.addPart("image4",new FileBody(imageFile4));
             httppost.setEntity(entityBuilder.build());
 
             try {
@@ -605,5 +628,35 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    public File convertBitmapToFile(Bitmap bitmap,String imageName){
+        File f = new File(imageName);
+        try {
+            f.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+//Convert bitmap to byte array
+
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos);
+        byte[] bitmapdata = bos.toByteArray();
+
+//write the bytes in file
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(f);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            fos.write(bitmapdata);
+            fos.flush();
+            fos.close();
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return  f;
+    }
 }

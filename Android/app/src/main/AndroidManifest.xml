@@ -51,10 +51,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/NoTitle" />
         <activity
-            android:name=".UpdateCard"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoTitle" />
-        <activity
             android:name=".ShowMySerie"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitle" />

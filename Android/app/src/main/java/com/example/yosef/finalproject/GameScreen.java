@@ -71,6 +71,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     private Boolean isMyTurnStatus;
     private Timer myTimer = new Timer("MyTimer", true);
     private String winnerName="";
+    private Card currentSelectedCard;
 
     User winerUser;
     @Override
@@ -166,15 +167,15 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         dis.getSize(size);
         int width = size.x / 3;
 
-
-        cardsAdapter = new CardsAdapter(deck, width);
-        myListView.setAdapter(cardsAdapter);
-        registerForContextMenu(myListView);
-        myListView.addOnItemTouchListener(
-                new RecyclerItemClickListener(GameScreen.this, myListView, new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                    //    if(!reloadData) {
+        if (cardsAdapter == null){
+            cardsAdapter = new CardsAdapter(deck, width);
+            myListView.setAdapter(cardsAdapter);
+            registerForContextMenu(myListView);
+            myListView.addOnItemTouchListener(
+                    new RecyclerItemClickListener(GameScreen.this, myListView, new RecyclerItemClickListener.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(View view, int position) {
+                            //    if(!reloadData) {
                             cardView = view;
                             // position=myListView.getChildPosition(view);
                             MENU_ID = CARDS_CLICK_MENU;
@@ -182,18 +183,26 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                             LinearLayout cardContainer = (LinearLayout) view.findViewById(R.id.card_container);
                             cardContainer.setBackgroundColor(getResources().getColor(R.color.light_green));
                         }
-                  //      Toast.makeText(GameScreen.this,"Colacting data",Toast.LENGTH_SHORT).show();
-                 //   }
+                        //      Toast.makeText(GameScreen.this,"Colacting data",Toast.LENGTH_SHORT).show();
+                        //   }
 
-                    @Override
-                    public void onLongItemClick(View view, int position) {
+                        @Override
+                        public void onLongItemClick(View view, int position) {
 
-                    }
-                })
-        );
+                        }
+                    })
+            );
+         }
+        else {
+            cardsAdapter.setCards(deck);
+            cardsAdapter.notifyDataSetChanged();
+        }
+
+
     }
 
     public void addPoint(){
+        Toast.makeText(this,"Series Complete! card remove from screen",Toast.LENGTH_SHORT).show();
         new refresh().execute();
         point.setText(getResources().getString(R.string.points)+": "+(++currentPoint));
     }
@@ -208,6 +217,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                 AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
                 menuItems = getResources().getStringArray(R.array.card_click_menu);
                 menu.setHeaderTitle(getResources().getString(R.string.choose));
+                currentSelectedCard=deck.get(myListView.getChildPosition(cardView));
                 break;
             default:
                 return;
@@ -225,8 +235,9 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
             String[] menuItems = getResources().getStringArray(R.array.card_click_menu);
             String menuItemName = menuItems[menuItemIndex];
             if (menuItemName.equals(menuItems[0])) {//שלח קלף
-                if(!isMyTurnStatus&&!debugStatus)
-                    new sendSelectedCard().execute(String.valueOf(this.deck.get(myListView.getChildPosition(cardView)).getCard_id()));
+                if(!isMyTurnStatus&&!debugStatus) {
+                    new sendSelectedCard().execute(String.valueOf(this.currentSelectedCard.getCard_id()));
+                }
                else Toast.makeText(GameScreen.this,getResources().getString(R.string.cannot_send_card),
                         Toast.LENGTH_SHORT).show();
                 setCardBackgroundTransparent = false;
@@ -742,7 +753,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                             });
                     AlertDialog alert = builder.create();
                     alert.show();
-                }
+                }//need to add equal alert
 
 
             } else
