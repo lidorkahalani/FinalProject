@@ -130,7 +130,8 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
             adminChose=true;
             //new sendActiveSerie().execute();
             //List<Series> list = new ArrayList<Series>(series);
-            new setGameToActive().execute("2",String.valueOf(game.getGame_id()));
+            new setGameToActive().execute("4",String.valueOf(game.getGame_id()));
+          //  new setGameToActive().execute("2",String.valueOf(game.getGame_id()));
         }else
             Toast.makeText(this,"please select minimum 7 series",Toast.LENGTH_SHORT).show();
 

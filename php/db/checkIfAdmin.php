@@ -10,8 +10,10 @@ $sth = $con->prepare("SELECT * FROM game WHERE game_id='$game_id' AND admin_user
 				$response["result"]=1;
 				$response["succsses"]=1;
 			}
-			else	
+			else{
+				$response["result"]=0;
 				$response["succsses"]=0;
+			}
 			
 echo json_encode($response);
 

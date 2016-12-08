@@ -46,9 +46,11 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
     private ArrayList<User> allUsers =new ArrayList();
     private  ProgressDialog pDialog;
     private Timer timer;
+    private Timer timerStartGame;
+    boolean timerStartGameFlag = false;
     boolean timerFlag = false;
     private Boolean isGameActive=false;
-    private Boolean isAdmin;
+    private Boolean isAdmin=false;
     private Boolean startGame=false;
     boolean isAdminOpenTheRoomAndCloseIt=false;
 
@@ -179,7 +181,7 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                             new GetAllConnectedPlayers().execute();
                         }
                     }
-                }, 3000);
+                }, 2500);
             } else {
                 new AlertDialog.Builder(Room.this)
                         .setTitle(getResources().getString(R.string.Warning))
@@ -209,7 +211,7 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                 allUsers.clear();
                 for (int i = 0; i < res.length(); i++) {
                     JSONObject jo = res.getJSONObject(i);
-                    User u = new User(jo.getString("user_name"), jo.getString("user_id"),Integer.parseInt(jo.getString("user_password")));
+                    User u = new User(jo.getString("user_name"),jo.getString("user_password"),jo.getInt("user_id"));
                     allUsers.add(u);
 
                 }
@@ -295,20 +297,21 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
             try {
                 JSONObject response = json.makeHttpRequest(ServerUtils.checkIfImAdmin, "POST", parms);
 
-                if (response.getInt("succsses")== 1) {
+                if (response.getInt("succsses")== 1)
                     if(response.getInt("result")==1)
                         isAdmin=true;
                     else
                         isAdmin=false;
 
-                    return true;
+              /*      return true;
                 } else {
                     return false;
-                }
+                }*/
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
             }
+            return true;
         }
         protected void onPostExecute(Boolean result) {
             if (result) {
@@ -326,12 +329,26 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                     startActivity(i);
                     finish();
                 }else {
+                    //timer.cancel();
+                  //  timerFlag = false;
                     pDialog.setMessage(getResources().getString(R.string.wait_for_admin_chose));
                     new checkIfGameIsActive().execute(String.valueOf(game.getGame_id()));
+
+                   /* timerStartGame = new Timer();
+                    timerStartGameFlag = true;
+                    timer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            if (timerStartGameFlag) {
+                                new checkIfGameIsActive().execute(String.valueOf(game.getGame_id()));
+                            }
+                        }
+                    }, 3000);*/
+                    //new checkIfGameIsActive().execute(String.valueOf(game.getGame_id()));
                 }
             }else {
-                pDialog.setMessage(getResources().getString(R.string.wait_for_admin_chose));
-                new checkIfGameIsActive().execute(String.valueOf(game.getGame_id()));
+                pDialog.setMessage("check admin was failed");
+                //new checkIfGameIsActive().execute(String.valueOf(game.getGame_id()));
             }
 
         }
@@ -350,23 +367,23 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
             try {
                 JSONObject response = json.makeHttpRequest(ServerUtils.checkIfGameIsActive, "POST", parms);
 
-                if (response.getInt("succsses")== 1) {
-                    if(response.getJSONObject("result").getInt("is_active")==1) {
+                if (response.getInt("succsses") == 1) {
+                    if (response.getJSONObject("result").getInt("is_active") == 1)
                         isGameActive = true;
-                        return true;
-                    }else if(response.getJSONObject("result").getInt("is_active")==2) {
+                    else if (response.getJSONObject("result").getInt("is_active") == 4)
+                        //}else if(response.getJSONObject("result").getInt("is_active")==2) {
                         startGame = true;
-                        return true;
-                    }
-                    return true;
-                } else {
+                    else
+                        return false;
+
+                }
+                }catch(Exception e){
+                    e.printStackTrace();
                     return false;
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
+                return true;
             }
-        }
+
         protected void onPostExecute(Boolean result) {
             if (result) {
                 if (isGameActive && isAdminOpenTheRoomAndCloseIt) {
@@ -393,7 +410,7 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                                 new checkIfGameIsActive().execute(String.valueOf(game.getGame_id()));
                             }
                         }
-                    }, 2000);
+                    }, 3000);
                 }
                 if (!isGameActive) {//somone is disconected go back to mainMenu
                     isAdminOpenTheRoomAndCloseIt = true;
@@ -408,6 +425,9 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                         }
                     }, 2000);
                 }else if(startGame){
+                    /*timerStartGame.cancel();
+                    timerStartGameFlag=false;*/
+
                     timer.cancel();
                     timerFlag = false;
                     pDialog.dismiss();
@@ -423,7 +443,7 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                     finish();
                 }
             }else
-                Toast.makeText(Room.this,"internet Connection problem",Toast.LENGTH_SHORT).show();
+                Toast.makeText(Room.this,"internet Connection problem GameIsActive",Toast.LENGTH_SHORT).show();
 
 
         }
@@ -486,7 +506,7 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                             //new GetRoomStatus().execute(roomName);
                         }
                     }
-                }, 2000);
+                }, 3000);
 
                 //new GetAllConnectedPlayers().execute();
             } else if (result == 0) {//room name already in use

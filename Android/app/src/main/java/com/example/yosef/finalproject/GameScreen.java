@@ -69,6 +69,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     private Boolean deckIsOver=false;
     private Boolean gameIsActive=true;
     private Boolean isMyTurnStatus;
+    private Boolean newHighScore=false;
     private Timer myTimer = new Timer("MyTimer", true);
     private String winnerName="";
     private Card currentSelectedCard;
@@ -102,7 +103,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         myListView.setLayoutManager(lm);
         myListView.setItemAnimator(new DefaultItemAnimator());
 
-        myTimer.scheduleAtFixedRate(new MyTask(), 10000, 3000);
+        myTimer.scheduleAtFixedRate(new MyTask(), 6000, 3000);
     }
 
     private class MyTask extends TimerTask {
@@ -202,7 +203,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     }
 
     public void addPoint(){
-        Toast.makeText(this,"Series Complete! card remove from screen",Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,"Series Complete! card remove from screen",Toast.LENGTH_LONG).show();
         new refresh().execute();
         point.setText(getResources().getString(R.string.points)+": "+(++currentPoint));
     }
@@ -391,8 +392,9 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
             if (result) {
                 setCardsList();
                 if(!deckIsOver)
-                 new moveToNextPlayer().execute();
+                new moveToNextPlayer().execute();
                 else {
+                    //new moveToNextPlayer().execute();
                     new setGameOverStatus().execute("3",String.valueOf(newGame.getGame_id()));
                     //Toast.makeText(GameScreen.this, "deck end game over!", Toast.LENGTH_SHORT).show();
                 }
@@ -545,15 +547,19 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
         protected void onPostExecute(Boolean result) {
             if (result) {
-                if(!finishSeriesList.isEmpty()) {
-                    new UpdateFinishSeries().execute();
-                   // Toast.makeText(GameScreen.this,"fulll sereis!",Toast.LENGTH_SHORT).show();
-                }
+                    if(!finishSeriesList.isEmpty()) {
+                        new UpdateFinishSeries().execute();
+                       // Toast.makeText(GameScreen.this,"fulll sereis!",Toast.LENGTH_SHORT).show();
+                    }
                     setCardsList();
                     if (isMyTurnStatus) {
                         activePlayer.setBackgroundColor(Color.GREEN);
                     } else
                         activePlayer.setBackgroundColor(Color.TRANSPARENT);
+
+                    if(!gameIsActive)
+                        new GetWinnerName().execute();
+
 
             } else
                 Toast.makeText(GameScreen.this, "refresh failed !", Toast.LENGTH_SHORT).show();
@@ -708,20 +714,25 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                 JSONObject response = json.makeHttpRequest(ServerUtils.GetWinnerName, "POST", parms);
                 JSONArray res=response.getJSONArray("winner");
 
-                if (response.getInt("succsses") == 1) {
+               // if (response.getInt("successes") == 1) {
                     for (int i = 0; i < res.length(); i++) {
                         JSONObject jo = res.getJSONObject(i);
-                        winerUser= new User(jo.getString("user_name"), jo.getString("user_id"), Integer.parseInt(jo.getString("user_password")));
+                        winerUser= new User(jo.getString("user_name"),jo.getString("user_password"),jo.getInt("user_id"));
                         winnerName = winerUser.getUserName();
-                    }
+               //     }
+
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
+                return false;
             }
-            return false;
+            return true;
         }
         protected void onPostExecute(Boolean result) {
             if (result) {
+                //stop all timers
+                myTimer.cancel();
+
                 //who is the winner
                 if(winnerName.equals("")){
                     AlertDialog.Builder builder = new AlertDialog.Builder(GameScreen.this);
@@ -807,18 +818,25 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
             try {
                 JSONObject response = json.makeHttpRequest(ServerUtils.UpdateScore, "POST", parms);
 
-                if (response.getInt("succsses")== 1) {
-                    return true;
-                } else {
+                if (response.getInt("succsses")== 1)
+                    newHighScore=true;
+                else if(response.getInt("succsses")== 0)
+                    newHighScore=false;
+                else
                     return false;
-                }
+
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
             }
+            return true;
         }
         protected void onPostExecute(Boolean result) {
             if(result) {
+                if(newHighScore)
+                Toast.makeText(GameScreen.this,"You got new high score!",Toast.LENGTH_LONG).show();
+                else
+                    Toast.makeText(GameScreen.this,"You have been a higher score!",Toast.LENGTH_LONG).show();
                 Intent myIntent = new Intent(GameScreen.this, MainActivity.class);
                 startActivity(myIntent);
             }

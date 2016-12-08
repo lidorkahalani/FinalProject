@@ -29,7 +29,9 @@ if(mysqli_num_rows($result) >=0 )  {
 	$response["finishSeries"]=0;
 
   $response["isAllPlayersConnected"]=isAllPlayersConnected($game_id);//1-all connected 0-one or more logut
-  if(getStatusGame($game_id)!=0)
+  
+	$status=getStatusGame($game_id);
+   if($status!=0&&$status!=3)
 	$response['is_active']=1;
   else
 	$response['is_active']=0;
