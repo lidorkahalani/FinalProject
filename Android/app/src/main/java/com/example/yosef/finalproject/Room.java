@@ -443,7 +443,8 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                     finish();
                 }
             }else
-                Toast.makeText(Room.this,"internet Connection problem GameIsActive",Toast.LENGTH_SHORT).show();
+                new checkIfGameIsActive().execute(String.valueOf(game.getGame_id()));
+               // Toast.makeText(Room.this,"internet Connection problem GameIsActive",Toast.LENGTH_SHORT).show();
 
 
         }
