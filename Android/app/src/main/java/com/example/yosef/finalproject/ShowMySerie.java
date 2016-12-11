@@ -125,7 +125,7 @@ public class ShowMySerie extends AppCompatActivity implements AdapterView.OnItem
                     intent.putExtra("SelectedSeries", series.get(position));
                     intent.putExtra("user_id",myId);
                     startActivity(intent);
-                    finish();
+                    //finish();
             }
 
 

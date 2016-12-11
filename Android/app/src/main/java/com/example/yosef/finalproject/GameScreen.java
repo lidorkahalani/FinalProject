@@ -44,10 +44,10 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
     private Random randomGenerator;
 
-    private RelativeLayout bottomLayout;
+    /*private RelativeLayout bottomLayout;
     private RelativeLayout left_layout;
     private RelativeLayout top_layout;
-    private RelativeLayout right_layout;
+    private RelativeLayout right_layout;*/
     private RelativeLayout activePlayer;
     private TextView point;
     static private int currentPoint=0;
@@ -74,7 +74,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     private String winnerName="";
     private Card currentSelectedCard;
 
-    User winerUser;
+    private User winerUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,10 +93,12 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
         playerList.add(currentPlayer);
         activePlayer=(RelativeLayout) findViewById(R.id.activePlayer);
-        bottomLayout = (RelativeLayout) findViewById(R.id.myPlayerBackground);
+
+        /*bottomLayout = (RelativeLayout) findViewById(R.id.myPlayerBackground);
         left_layout = (RelativeLayout) findViewById(R.id.myPlayerBackground);
         top_layout = (RelativeLayout) findViewById(R.id.myPlayerBackground);
-        right_layout = (RelativeLayout) findViewById(R.id.myPlayerBackground);
+        right_layout = (RelativeLayout) findViewById(R.id.myPlayerBackground);*/
+
         myListView = (RecyclerView) findViewById(R.id.listcards);
 
         RecyclerView.LayoutManager lm = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -126,7 +128,6 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     }
 
     public void onBackPressed() {
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getResources().getString(R.string.exitWarning))
                 .setCancelable(false)
@@ -144,10 +145,6 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         alert.show();
     }
 
-    public void refresh(View v) {
-        new refresh().execute();
-    }
-
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -162,7 +159,6 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     }
 
     private void setCardsList() {
-
         Display dis = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         dis.getSize(size);
@@ -176,16 +172,13 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                     new RecyclerItemClickListener(GameScreen.this, myListView, new RecyclerItemClickListener.OnItemClickListener() {
                         @Override
                         public void onItemClick(View view, int position) {
-                            //    if(!reloadData) {
                             cardView = view;
-                            // position=myListView.getChildPosition(view);
                             MENU_ID = CARDS_CLICK_MENU;
                             openContextMenu(view);
                             LinearLayout cardContainer = (LinearLayout) view.findViewById(R.id.card_container);
-                            cardContainer.setBackgroundColor(getResources().getColor(R.color.light_green));
+                           // cardContainer.setBackgroundColor(getResources().getColor(R.color.light_green));
                         }
-                        //      Toast.makeText(GameScreen.this,"Colacting data",Toast.LENGTH_SHORT).show();
-                        //   }
+
 
                         @Override
                         public void onLongItemClick(View view, int position) {
@@ -198,12 +191,10 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
             cardsAdapter.setCards(deck);
             cardsAdapter.notifyDataSetChanged();
         }
-
-
     }
 
     public void addPoint(){
-        Toast.makeText(this,"Series Complete! card remove from screen",Toast.LENGTH_LONG).show();
+        Toast.makeText(this,"Series Complete! cards remove from screen",Toast.LENGTH_LONG).show();
         new refresh().execute();
         point.setText(getResources().getString(R.string.points)+": "+(++currentPoint));
     }
@@ -242,12 +233,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                else Toast.makeText(GameScreen.this,getResources().getString(R.string.cannot_send_card),
                         Toast.LENGTH_SHORT).show();
                 setCardBackgroundTransparent = false;
-            }/* else if (menuItemName.equals(menuItems[1])) {//קבל קלף
-                Toast.makeText(GameScreen.this,
-                        menuItemName,
-                        Toast.LENGTH_LONG).show();
-
-            }*/
+            }
 
         }
 
@@ -257,10 +243,11 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     @Override
     public void onContextMenuClosed(Menu menu) {
         if (selectedCard != null && setCardBackgroundTransparent) {
-            selectedCard.findViewById(R.id.card_container).setBackgroundColor(Color.TRANSPARENT);
-            selectedCard.findViewById(R.id.card_container).setBackgroundDrawable(getResources().getDrawable(R.drawable.card_background));
-        }
+           // selectedCard.findViewById(R.id.card_container).setBackgroundColor(Color.TRANSPARENT);
 
+            //this makes the unmatche size of card
+           // selectedCard.findViewById(R.id.card_container).setBackgroundDrawable((getResources().getDrawable(R.drawable.card_background)));
+        }
     }
 
     public class startPlay extends AsyncTask<String, Void, Boolean> {
@@ -551,7 +538,12 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                         new UpdateFinishSeries().execute();
                        // Toast.makeText(GameScreen.this,"fulll sereis!",Toast.LENGTH_SHORT).show();
                     }
-                    setCardsList();
+                if(tempDeck.size()<deck.size())
+                    Toast.makeText(GameScreen.this,"New Card recived",Toast.LENGTH_SHORT).show();
+                else if(tempDeck.size()>deck.size())
+                    Toast.makeText(GameScreen.this,"Card send",Toast.LENGTH_SHORT).show();
+
+                setCardsList();
                     if (isMyTurnStatus) {
                         activePlayer.setBackgroundColor(Color.GREEN);
                     } else
@@ -730,8 +722,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         }
         protected void onPostExecute(Boolean result) {
             if (result) {
-                //stop all timers
-                myTimer.cancel();
+
 
                 //who is the winner
                 if(winnerName.equals("")){
@@ -759,6 +750,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                                     else {
                                         Intent myIntent = new Intent(GameScreen.this, MainActivity.class);
                                         startActivity(myIntent);
+                                        finish();
                                     }
                                 }
                             });
@@ -769,6 +761,9 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
             } else
                 Toast.makeText(GameScreen.this, "There was problem during gameOver execute", Toast.LENGTH_SHORT).show();
+
+            //stop all timers
+            myTimer.cancel();
         }
 
     }
@@ -839,6 +834,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                     Toast.makeText(GameScreen.this,"You have been a higher score!",Toast.LENGTH_LONG).show();
                 Intent myIntent = new Intent(GameScreen.this, MainActivity.class);
                 startActivity(myIntent);
+                finish();
             }
             else
                 Toast.makeText(GameScreen.this,"Cant set game Over",Toast.LENGTH_LONG).show();

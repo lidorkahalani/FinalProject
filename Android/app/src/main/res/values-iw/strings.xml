@@ -79,7 +79,7 @@
     <string name="refresh">רענן</string>
     <string name="enter_categry_name">הכנס קטגוריה חדשה</string>
     <string name="card_load">טעינת קלפים הצליחה</string>
-    <string name="update_series">טעינת סדרות הצליחה</string>
+    <string name="update_series">עדכן סדרה</string>
     <string name="wait_for_admin_chose">מחכה לבחירת סדרות על ידי האדמין</string>
     <string name="show_my_series">הסדרות שלי</string>
     <string name="no_internet">לא נמצא חיבור לאינטרנט</string>

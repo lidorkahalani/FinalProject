@@ -211,19 +211,22 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
 
             Matrix matrix = new Matrix();
             matrix.postRotate(180);
+
             try {
-                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                bitmap=Bitmap.createScaledBitmap(MediaStore.Images.Media.getBitmap(getContentResolver(), filePath),200,200,true);
                 rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
 
                 if(isbuttonChooseCard1) {
-                    bitmapResize1=Bitmap.createScaledBitmap(rotatedBitmap,200,200,true);
+                  //  bitmapResize1=Bitmap.createScaledBitmap(rotatedBitmap,200,200,true);
+                    bitmapResize1=bitmap;
                     imageName1=getRealPathFromURI_BelowAPI11(getBaseContext(),filePath);
                     file1= new File(Environment.getExternalStorageDirectory().getAbsolutePath(),imageFile.getPath());
                     imageViewCard1.setImageBitmap(rotatedBitmap);
                     isbuttonChooseCard1=false;
                 }
                 else if(isbuttonChooseCard2) {
-                    bitmapResize2=Bitmap.createScaledBitmap(rotatedBitmap,200,200,true);
+                  //  bitmapResize2=Bitmap.createScaledBitmap(rotatedBitmap,200,200,true);
+                    bitmapResize2=bitmap;
                     imageName2=getRealPathFromURI_BelowAPI11(getBaseContext(),filePath);
                     file2= new File(Environment.getExternalStorageDirectory().getAbsolutePath(),imageFile.getPath());
 
@@ -231,7 +234,8 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
                     isbuttonChooseCard2=false;
                 }
                 else if(isbuttonChooseCard3) {
-                    bitmapResize3=Bitmap.createScaledBitmap(rotatedBitmap,200,200,true);
+                 //   bitmapResize3=Bitmap.createScaledBitmap(rotatedBitmap,200,200,true);
+                    bitmapResize3=bitmap;
                     imageName3=getRealPathFromURI_BelowAPI11(getBaseContext(),filePath);
                     file3= new File(Environment.getExternalStorageDirectory().getAbsolutePath(),imageFile.getPath());
 
@@ -239,7 +243,8 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
                     isbuttonChooseCard3=false;
                 }
                 else if(isbuttonChooseCard4) {
-                    bitmapResize4=Bitmap.createScaledBitmap(rotatedBitmap,200,200,true);
+                    //bitmapResize4=Bitmap.createScaledBitmap(rotatedBitmap,200,200,true);
+                    bitmapResize4=bitmap;
                     imageName4=getRealPathFromURI_BelowAPI11(getBaseContext(),filePath);
                     file4= new File(Environment.getExternalStorageDirectory().getAbsolutePath(),imageFile.getPath());
                     imageViewCard4.setImageBitmap(rotatedBitmap);

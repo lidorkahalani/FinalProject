@@ -1,6 +1,7 @@
 package com.example.yosef.finalproject;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -15,6 +16,7 @@ import android.preference.PreferenceManager;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
@@ -66,10 +68,10 @@ public class UpdateSeries extends AppCompatActivity implements View.OnClickListe
 
     private Button buttonUpdateSeries;
 
-    private String imageName1;
-    private String imageName2;
-    private String imageName3;
-    private String imageName4;
+    private String imageName1="";
+    private String imageName2="";
+    private String imageName3="";
+    private String imageName4="";
 
     private TextView category_name;
     private EditText category;
@@ -81,8 +83,6 @@ public class UpdateSeries extends AppCompatActivity implements View.OnClickListe
     private Uri filePath;
     private File imageFile;
     private Bitmap bitmap;
-
-    //final String imageRelativePat = "http://10.0.2.2/final_project/images/";
 
 
     Series selctedSeries;
@@ -144,6 +144,24 @@ public class UpdateSeries extends AppCompatActivity implements View.OnClickListe
         imageViewCard4.setOnClickListener(this);
         buttonUpdateSeries.setOnClickListener(this);
 
+    }
+
+    public void onBackPressed() {
+        // TODO Auto-generated method stub
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getResources().getString(R.string.back_Main_Menu))
+                .setCancelable(false)
+                .setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    finish();                    }
+                })
+                .setNegativeButton(getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     private void showFileChooser() {
@@ -251,11 +269,17 @@ public class UpdateSeries extends AppCompatActivity implements View.OnClickListe
             isbuttonChooseCard4=true;
             showFileChooser();
         }else if(v==buttonUpdateSeries){
-            new UpdateSeriesTask().execute(category_name.getText().toString(),
-                                            card1.getText().toString(),
-                                            card2.getText().toString(),
-                                            card3.getText().toString(),
-                                            card4.getText().toString());
+                if(chekIfAllParmInit()) {
+                        new UpdateSeriesTask().execute(category_name.getText().toString(),
+                                card1.getText().toString(),
+                                card2.getText().toString(),
+                                card3.getText().toString(),
+                                card4.getText().toString());
+
+                }else
+                    Toast.makeText(UpdateSeries.this,
+                            getResources().getString(R.string.empty_field),
+                            Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -268,14 +292,12 @@ public class UpdateSeries extends AppCompatActivity implements View.OnClickListe
     }
 
     public class UpdateSeriesTask  extends AsyncTask<String, Void, Boolean> {
-        String UpdateSeriesTask = "http://mysite.lidordigital.co.il/Quertets/php/db/UpdateSeries.php";
-        //String UpdateSeriesTask = "http://10.0.2.2/final_project/db/UpdateSeries.php";
 
         LinkedHashMap<String,String> parms=new LinkedHashMap<>();
         @Override
         protected Boolean doInBackground(String... params) {
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(UpdateSeriesTask);
+            HttpPost httppost = new HttpPost(ServerUtils.UpdateSeries);
 
             MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
             entityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
@@ -328,5 +350,24 @@ public class UpdateSeries extends AppCompatActivity implements View.OnClickListe
 
 
         }
+    }
+
+    private Boolean chekIfAllParmInit(){
+        if(card1.getText().toString()==""||
+                card2.getText().toString()==""||
+                card3.getText().toString()==""||
+                card4.getText().toString()=="")
+            return false;
+
+
+        if(imageViewCard1.getDrawable()==null||
+                imageViewCard2.getDrawable()==null||
+                imageViewCard3.getDrawable()==null||
+                imageViewCard4.getDrawable()==null)
+            return false;
+
+
+        return true;
+
     }
 }

@@ -3,50 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/background_game"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.yosef.finalproject.GameScreen">
-
-    <RelativeLayout
-        android:id="@+id/ac"
-        android:layout_width="20dp"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/bottom_layout"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/top_layout"
-        android:background="#FF9800">
-    </RelativeLayout>
-
-
-    <RelativeLayout
-        android:id="@+id/top_layout"
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:layout_alignParentTop="true"
-        android:layout_gravity="top"
-        android:background="#F44336">
-    </RelativeLayout>
-
-
-
-    <RelativeLayout
-        android:id="@+id/left_layout"
-        android:layout_width="20dp"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/bottom_layout"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/top_layout"
-        android:background="#FFEB3B">
-    </RelativeLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/pointField"
-        android:text="@string/points"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:layout_below="@+id/top_layout" />
 
     <FrameLayout
         android:id="@+id/bottom_layout"
@@ -83,21 +42,6 @@
 
 
     </FrameLayout>
-<!--
-    <Button
-        android:textSize="18dip"
-        android:onClick="refresh"
-        android:layout_width="185dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/open_room"
-        android:id="@+id/refreshBtn"
-        android:textStyle="bold"
-        android:text="@string/refresh"
-        android:layout_below="@+id/top_layout"
-        android:layout_toRightOf="@+id/left_layout"
-        android:layout_alignRight="@+id/imageButton4"
-    />
-    -->
 
     <ImageButton
         android:onClick="takeCard"
@@ -107,7 +51,70 @@
         android:id="@+id/imageButton"
         android:background="@android:color/transparent"
         android:layout_centerInParent="true"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pointField"
+        android:text="@string/points"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"/>
+
+    <!--
+       <RelativeLayout
+           android:id="@+id/ac"
+           android:layout_width="20dp"
+           android:layout_height="match_parent"
+           android:layout_above="@+id/bottom_layout"
+           android:layout_alignParentRight="true"
+           android:layout_below="@+id/top_layout"
+           android:background="#FF9800">
+       </RelativeLayout>
+
+
+       <RelativeLayout
+           android:id="@+id/top_layout"
+           android:layout_width="match_parent"
+           android:layout_height="20dp"
+           android:layout_alignParentTop="true"
+           android:layout_gravity="top"
+           android:background="#F44336">
+       </RelativeLayout>
+
+
+
+       <RelativeLayout
+           android:id="@+id/left_layout"
+           android:layout_width="20dp"
+           android:layout_height="match_parent"
+           android:layout_above="@+id/bottom_layout"
+           android:layout_alignParentLeft="true"
+           android:layout_below="@+id/top_layout"
+           android:background="#FFEB3B">
+       </RelativeLayout>
+       -->
+
+
+   <!--
+       <Button
+           android:textSize="18dip"
+           android:onClick="refresh"
+           android:layout_width="185dp"
+           android:layout_height="wrap_content"
+           android:background="@drawable/open_room"
+           android:id="@+id/refreshBtn"
+           android:textStyle="bold"
+           android:text="@string/refresh"
+           android:layout_below="@+id/top_layout"
+           android:layout_toRightOf="@+id/left_layout"
+           android:layout_alignRight="@+id/imageButton4"
        />
+       -->
+
+
 
 
     <!--

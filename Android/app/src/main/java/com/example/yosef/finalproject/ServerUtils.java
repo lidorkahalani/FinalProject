@@ -7,19 +7,17 @@ package com.example.yosef.finalproject;
 public class ServerUtils {
 
 
-   // public static String server ="http://10.0.2.2/final_project/db/";
-   // public static String imageLoadServer="http://10.0.2.2/final_project/";
+    public static String server ="http://10.0.2.2/final_project/db/";
+    public static String imageLoadServer="http://10.0.2.2/final_project/";
 
-    public static String server="http://mysite.lidordigital.co.il/Quertets/php/db/";
-   public static String imageLoadServer="http://mysite.lidordigital.co.il/Quertets/php/";
+    //public static String server="http://mysite.lidordigital.co.il/Quertets/php/db/";
+   // public static String imageLoadServer="http://mysite.lidordigital.co.il/Quertets/php/";
 
 
 
     /*localhost*/
 
     public static final String imageRelativePat = imageLoadServer+"images/";
-
-
     public static final String getMaxCategoryId_url= server+"getMaxCategoryId.php";
     public static final String UPLOAD_URL = server +"AddCard.php";
     public static final String upload_series = server +"upload_series.php";
@@ -47,5 +45,6 @@ public class ServerUtils {
     public static final String getAllUserList= server +"getAllUserList.php";
     public static final String GetWinnerName = server +"GetWinnerName.php";
     public static final String UpdateScore = server +"UpdateScore.php";
- 
+    public static final String UpdateSeries=server+"Update_series.php";
+
 }
