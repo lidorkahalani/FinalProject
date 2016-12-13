@@ -7,10 +7,13 @@ package com.example.yosef.finalproject;
 public class ServerUtils {
 
 
-    public static String server ="http://10.0.2.2/final_project/db/";
-    public static String imageLoadServer="http://10.0.2.2/final_project/";
+    public static String server ="http://192.168.1.20/final_project/db/";
+     public static String imageLoadServer="http://192.168.1.20/final_project/";
 
-    //public static String server="http://mysite.lidordigital.co.il/Quertets/php/db/";
+    //public static String server ="http://10.0.2.2/final_project/db/";
+   // public static String imageLoadServer="http://10.0.2.2/final_project/";
+
+   // public static String server="http://mysite.lidordigital.co.il/Quertets/php/db/";
    // public static String imageLoadServer="http://mysite.lidordigital.co.il/Quertets/php/";
 
 

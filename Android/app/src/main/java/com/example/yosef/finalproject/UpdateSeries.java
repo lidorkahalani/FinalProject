@@ -20,7 +20,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -280,7 +282,19 @@ public class UpdateSeries extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(UpdateSeries.this,
                             getResources().getString(R.string.empty_field),
                             Toast.LENGTH_SHORT).show();
-        }
+        }else if(v==imageViewCard1){
+                ImageView image = (ImageView)findViewById(R.id.uimageViewCard1);
+                showImageInDialog(image);
+            }else if(v==imageViewCard2){
+                ImageView image = (ImageView)findViewById(R.id.uimageViewCard2);
+                showImageInDialog(image);
+            }else if(v==imageViewCard3){
+                ImageView image = (ImageView)findViewById(R.id.uimageViewCard3);
+                showImageInDialog(image);
+            }else if(v==imageViewCard4){
+                ImageView image = (ImageView)findViewById(R.id.uimageViewCard4);
+                showImageInDialog(image);
+            }
     }
 
     public String getStringImage(Bitmap bmp){
@@ -370,4 +384,29 @@ public class UpdateSeries extends AppCompatActivity implements View.OnClickListe
         return true;
 
     }
+
+    public void showImageInDialog(ImageView imageView){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        final AlertDialog dialog = builder.create();
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogLayout = inflater.inflate(R.layout.zoom_image_layout, null);
+
+        ImageView imageDialog = (ImageView) dialogLayout.findViewById(R.id.dialogImage);
+        Bitmap icon = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
+
+        imageDialog.setImageBitmap(icon);
+
+
+
+        dialog.setView(dialogLayout);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        dialog.show();
+    }
+
 }

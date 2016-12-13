@@ -1,16 +1,19 @@
 package com.example.yosef.finalproject;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -20,6 +23,8 @@ import android.provider.ContactsContract;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -140,6 +145,7 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
     private JSONObject jObj = null;
     private StringBuilder sbParams;
     private String paramsString;
+    final int MY_PERMISSIONS_REQUEST_READ_STORAGE =1;
 
 
 
@@ -189,6 +195,7 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
         imageViewCard2.setOnClickListener(this);
         imageViewCard3.setOnClickListener(this);
         imageViewCard4.setOnClickListener(this);
+
     }
 
     private void showFileChooser() {
@@ -208,9 +215,17 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
             filePath = data.getData();
             imageFile=new File(filePath.getPath());
             Bitmap rotatedBitmap=null;
-
             Matrix matrix = new Matrix();
-            matrix.postRotate(180);
+
+            //deteect the oriention and resize degree
+            ExifInterface ei = null;
+            try {
+                ei = new ExifInterface(imageFile.getAbsolutePath());
+                matrix.postRotate(setOriention(ei));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
 
             try {
                 bitmap=Bitmap.createScaledBitmap(MediaStore.Images.Media.getBitmap(getContentResolver(), filePath),200,200,true);
@@ -388,32 +403,17 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
             isbuttonChooseCard4=true;
             showFileChooser();
         }else if(v==imageViewCard1){
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                }
-            });
-            final AlertDialog dialog = builder.create();
-            LayoutInflater inflater = getLayoutInflater();
-            View dialogLayout = inflater.inflate(R.layout.zoom_image_layout, null);
-            dialog.setView(dialogLayout);
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-            dialog.show();
-
-            dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-                @Override
-                public void onShow(DialogInterface d) {
-                    ImageView image = (ImageView) dialog.findViewById(R.id.goProDialogImage);
-                    Bitmap icon = ((BitmapDrawable)image.getDrawable()).getBitmap();
-                    float imageWidthInPX = (float)image.getWidth();
-
-                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(Math.round(imageWidthInPX),
-                            Math.round(imageWidthInPX * (float)icon.getHeight() / (float)icon.getWidth()));
-                    image.setLayoutParams(layoutParams);
-                }
-            });
+            ImageView image = (ImageView)findViewById(R.id.imageViewCard1);
+            showImageInDialog(image);
+        }else if(v==imageViewCard2){
+            ImageView image = (ImageView)findViewById(R.id.imageViewCard2);
+            showImageInDialog(image);
+        }else if(v==imageViewCard3){
+            ImageView image = (ImageView)findViewById(R.id.imageViewCard3);
+            showImageInDialog(image);
+        }else if(v==imageViewCard4){
+            ImageView image = (ImageView)findViewById(R.id.imageViewCard4);
+            showImageInDialog(image);
         }
 
 
@@ -664,4 +664,50 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
 
         return  f;
     }
+
+    public void showImageInDialog(ImageView imageView){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        final AlertDialog dialog = builder.create();
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogLayout = inflater.inflate(R.layout.zoom_image_layout, null);
+
+        ImageView imageDialog = (ImageView) dialogLayout.findViewById(R.id.dialogImage);
+        Bitmap icon = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
+
+        imageDialog.setImageBitmap(icon);
+
+
+
+        dialog.setView(dialogLayout);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        dialog.show();
+    }
+
+    public int setOriention(ExifInterface ei){
+
+        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_UNDEFINED);
+
+        switch(orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                return 90;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                return 180;
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                return 270;
+            case ExifInterface.ORIENTATION_NORMAL:
+              return 1;
+            default:
+                break;
+        }
+        return 0;
+    }
+
+
 }
