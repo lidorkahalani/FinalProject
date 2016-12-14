@@ -80,6 +80,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     private Timer myTimer = new Timer("MyTimer", true);
     private Timer timer ;
     private Boolean timerFlag=false;
+    private Boolean showTurnButon=false;
 
     private String winnerName = "";
     private Card currentSelectedCard;
@@ -578,6 +579,23 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                     new UpdateFinishSeries().execute();
                     // Toast.makeText(GameScreen.this,"fulll sereis!",Toast.LENGTH_SHORT).show();
                 }
+                if(deckIsOver&&!showTurnButon) {
+                    showTurnButon=true;
+                    deckImage.setVisibility(View.INVISIBLE);
+                    moveToNextTurn.setVisibility(View.VISIBLE);
+
+                    timer = new Timer();
+                    timerFlag = true;
+                    timer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            if (timerFlag) {
+                                new checkIfAllseriesComplete().execute();
+                            }
+                        }
+                    }, 2500);
+                }
+
 
                 if (newCarRecive) {
                     Toast.makeText(GameScreen.this, "New Card recived", Toast.LENGTH_SHORT).show();
@@ -924,6 +942,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
             if (result) {
                 if (finisheGame) {
+                    myTimer.cancel();
                     timer.cancel();
                     timerFlag=false;
                     new setGameOverStatus().execute("3", String.valueOf(newGame.getGame_id()));
