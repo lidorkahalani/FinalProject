@@ -19,6 +19,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -53,10 +55,12 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     static private int currentPoint = 0;
     private ArrayList<Integer> finishSeriesList = new ArrayList<Integer>();
     private Boolean reloadData = false;
+    Button moveToNextTurn;
 
 
     private RecyclerView myListView;
     private CardsAdapter cardsAdapter;
+    private ImageButton deckImage;
 
     public static int MENU_ID = 0;
     private static final int CARDS_CLICK_MENU = 1;
@@ -71,8 +75,12 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     private Boolean isMyTurnStatus;
     private Boolean newHighScore = false;
     private Boolean newCarRecive = false;
+    private Boolean finisheGame = false;
     private Boolean cardSend = false;
     private Timer myTimer = new Timer("MyTimer", true);
+    private Timer timer ;
+    private Boolean timerFlag=false;
+
     private String winnerName = "";
     private Card currentSelectedCard;
 
@@ -85,6 +93,10 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         point = (TextView) findViewById(R.id.pointField);
         newGame = (Game) getIntent().getSerializableExtra("Game");
         Intent i = getIntent();
+
+        deckImage=(ImageButton)findViewById(R.id.ImageDeck);
+        moveToNextTurn=(Button)findViewById(R.id.nextTurn);
+
         currentPlayer = (User) i.getSerializableExtra("currentPlayer");
         debugStatus = getIntent().getExtras().getBoolean("debug");
         if (debugStatus)
@@ -159,6 +171,10 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         else
             Toast.makeText(this, "you cannot take card", Toast.LENGTH_SHORT).show();
         // new tryTakeOneCardFromDeck().execute();
+    }
+
+    public void moveToNextTurn(View view){
+        new moveToNextPlayer().execute();
     }
 
     private void setCardsList() {
@@ -338,9 +354,6 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     }
 
     public class takeOneCardFromDeck extends AsyncTask<String, Void, Boolean> {
-        //String takeOneCardFromDeck = "http://10.0.2.2/final_project/db/takeOneCardFromDeck.php";
-        //String takeOneCardFromDeck = "http://mysite.lidordigital.co.il/Quertets/php/db/takeOneCardFromDeck.php";
-
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
@@ -386,8 +399,22 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                 if (!deckIsOver)
                     new moveToNextPlayer().execute();
                 else {
+                    deckImage.setVisibility(View.INVISIBLE);
+                    moveToNextTurn.setVisibility(View.VISIBLE);
+
+                    timer = new Timer();
+                    timerFlag = true;
+                    timer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            if (timerFlag) {
+                                new checkIfAllseriesComplete().execute();
+                            }
+                        }
+                    }, 2500);
+
                     //new moveToNextPlayer().execute();
-                    new setGameOverStatus().execute("3", String.valueOf(newGame.getGame_id()));
+                    //new setGameOverStatus().execute("3", String.valueOf(newGame.getGame_id()));
                     //Toast.makeText(GameScreen.this, "deck end game over!", Toast.LENGTH_SHORT).show();
                 }
             } else
@@ -731,7 +758,6 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                     winerUser = new User(jo.getString("user_name"), jo.getString("user_password"), jo.getInt("user_id"));
                     winnerName = winerUser.getUserName();
                     //     }
-
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -869,6 +895,42 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                 Toast.makeText(GameScreen.this, "Cant set game Over", Toast.LENGTH_LONG).show();
         }
 
+    }
+
+    public class checkIfAllseriesComplete extends AsyncTask<String, Void, Boolean> {
+        //String isMyTurn = "http://10.0.2.2/final_project/db/isMyTurn.php";
+        //String isMyTurn = "http://mysite.lidordigital.co.il/Quertets/php/db/isMyTurn.php";
+
+        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            parms.put("game_id", String.valueOf(newGame.getGame_id()));
+
+            JSONParser json = new JSONParser();
+            try {
+                JSONObject response = json.makeHttpRequest(ServerUtils.checkIfAllseriesComplite, "POST", parms);
+                if (response.getInt("successes") == 1) {
+                    finisheGame = true;
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return false;
+            }
+            return true;
+        }
+
+        protected void onPostExecute(Boolean result) {
+
+            if (result) {
+                if (finisheGame) {
+                    timer.cancel();
+                    timerFlag=false;
+                    new setGameOverStatus().execute("3", String.valueOf(newGame.getGame_id()));
+                }
+            } else
+                Toast.makeText(GameScreen.this, "check if al sereis full failed", Toast.LENGTH_LONG).show();
+        }
     }
 
     public void passCardByNFC() {
