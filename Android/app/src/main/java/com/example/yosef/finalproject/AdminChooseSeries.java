@@ -401,7 +401,7 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
                 startActivity(i);
                 finish();
             } else
-                Log.d("setTurrnBag", "There is problem no order set");
+               Toast.makeText(AdminChooseSeries.this,"There is problem no order set",Toast.LENGTH_SHORT).show();
 
         }
 

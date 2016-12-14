@@ -26,12 +26,13 @@
 			}
 		}
 		$response["succsses"]=1;
+		mysqli_close($conn);
 	}
 	else
 		$response["succsses"]=3;
 	
 	echo json_encode($response);
-	mysqli_close($conn);
+	
 	
 	function getGameId($roomName){
 	include('connection.php');

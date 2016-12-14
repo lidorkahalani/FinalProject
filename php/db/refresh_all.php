@@ -30,6 +30,9 @@ if(mysqli_num_rows($result) >=0 )  {
 	$response["finishSeries"]=0;
 
 	$response["isDeckIsOver"]=isDeckIsOver($game_id);
+	
+	
+	$response["isAllSereisComplete"]=checkIfAllSereisComplete($game_id);
 
   $response["isAllPlayersConnected"]=isAllPlayersConnected($game_id);//1-all connected 0-one or more logut
   
@@ -185,5 +188,15 @@ function isDeckIsOver($game_id){
 		return 0;
 	}
 	
+}
+function checkIfAllSereisComplete($game_id){
+require('connection.php');
+$sth = $con->prepare("SELECT games_cards.series_complete from games_cards where games_cards.series_complete=0 AND game_id='$game_id'");
+	$sth->execute();
+	$result = $sth->fetch(PDO::FETCH_ASSOC);
+if($result)
+	return 0;
+else
+	return 1;
 }
 ?>

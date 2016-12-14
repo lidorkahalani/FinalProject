@@ -176,7 +176,10 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     }
 
     public void moveToNextTurn(View view){
-        new moveToNextPlayer().execute();
+        if(isMyTurnStatus)
+            new moveToNextPlayer().execute();
+        else
+            Toast.makeText(this, "wait to your turn", Toast.LENGTH_SHORT).show();
     }
 
     private void setCardsList() {
@@ -569,7 +572,9 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                         showTurnButon=true;
                     }
 
-
+                    if(response.getInt("isAllSereisComplete")==1){
+                        finisheGame=true;
+                    }
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -583,23 +588,12 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
             if (result) {
                 if (!finishSeriesList.isEmpty()) {
                     new UpdateFinishSeries().execute();
-                    // Toast.makeText(GameScreen.this,"fulll sereis!",Toast.LENGTH_SHORT).show();
+
                 }
                 if(showTurnButon&&!doJustOnTime) {
                     doJustOnTime=true;
                     deckImage.setVisibility(View.INVISIBLE);
                     moveToNextTurn.setVisibility(View.VISIBLE);
-
-                    timer = new Timer();
-                    timerFlag = true;
-                    timer.schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            if (timerFlag) {
-                                new checkIfAllseriesComplete().execute();
-                            }
-                        }
-                    }, 2500);
                 }
 
 
@@ -618,12 +612,15 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                     activePlayer.setBackgroundColor(Color.TRANSPARENT);
 
                 if (!gameIsActive)
-                    new GetWinnerName().execute();
+                     openMainMenu();
 
+                if(finisheGame) {
+                    myTimer.cancel();
+                    new setGameOverStatus().execute("3", String.valueOf(newGame.getGame_id()));
+                }
 
             } else
                 Toast.makeText(GameScreen.this, "refresh failed !", Toast.LENGTH_SHORT).show();
-            reloadData = false;
         }
 
     }
@@ -755,9 +752,9 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
         protected void onPostExecute(Boolean result) {
             if (result) {
-                Intent myIntent = new Intent(GameScreen.this, MainMenu.class);
+                /*Intent myIntent = new Intent(GameScreen.this, MainMenu.class);
                 startActivity(myIntent);
-                finish();
+                finish();*/
             } else
                 Toast.makeText(GameScreen.this, "There was problem on log out", Toast.LENGTH_SHORT).show();
         }
@@ -847,8 +844,6 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     }
 
     public class setGameOverStatus extends AsyncTask<String, Void, Boolean> {
-        //String setGameToActive = "http://10.0.2.2/final_project/db/setGameToActive.php";
-        //String setGameToActive = "http://mysite.lidordigital.co.il/Quertets/php/db/setGameToActive.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
@@ -921,52 +916,12 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
     }
 
-    public class checkIfAllseriesComplete extends AsyncTask<String, Void, Boolean> {
-        //String isMyTurn = "http://10.0.2.2/final_project/db/isMyTurn.php";
-        //String isMyTurn = "http://mysite.lidordigital.co.il/Quertets/php/db/isMyTurn.php";
-
+    public class setdeckIsOver extends AsyncTask<String, Void, Boolean> {
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
         protected Boolean doInBackground(String... params) {
             parms.put("game_id", String.valueOf(newGame.getGame_id()));
-
-            JSONParser json = new JSONParser();
-            try {
-                JSONObject response = json.makeHttpRequest(ServerUtils.checkIfAllseriesComplite, "POST", parms);
-                if (response.getInt("successes") == 1) {
-                    finisheGame = true;
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                return false;
-            }
-            return true;
-        }
-
-        protected void onPostExecute(Boolean result) {
-
-            if (result) {
-                if (finisheGame) {
-                    myTimer.cancel();
-                    timer.cancel();
-                    timerFlag=false;
-                    new setGameOverStatus().execute("3", String.valueOf(newGame.getGame_id()));
-                }
-            } else
-                Toast.makeText(GameScreen.this, "check if al sereis full failed", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    public class setdeckIsOver extends AsyncTask<String, Void, Boolean> {
-        //String setGameToInactive = "http://10.0.2.2/final_project/db/setGameToInactive.php";
-        //String setGameToInactive = "http://mysite.lidordigital.co.il/Quertets/php/db/setGameToInactive.php";
-
-        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
-
-        @Override
-        protected Boolean doInBackground(String... params) {
-            parms.put("game_id", params[0]);
 
             JSONParser json = new JSONParser();
             try {
