@@ -81,6 +81,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     private Timer timer ;
     private Boolean timerFlag=false;
     private Boolean showTurnButon=false;
+    private Boolean doJustOnTime=false;
 
     private String winnerName = "";
     private Card currentSelectedCard;
@@ -400,7 +401,8 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                 if (!deckIsOver)
                     new moveToNextPlayer().execute();
                 else {
-                    deckImage.setVisibility(View.INVISIBLE);
+                    new setdeckIsOver().execute();
+                   /* deckImage.setVisibility(View.INVISIBLE);
                     moveToNextTurn.setVisibility(View.VISIBLE);
 
                     timer = new Timer();
@@ -412,7 +414,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                                 new checkIfAllseriesComplete().execute();
                             }
                         }
-                    }, 2500);
+                    }, 2500);*/
 
                     //new moveToNextPlayer().execute();
                     //new setGameOverStatus().execute("3", String.valueOf(newGame.getGame_id()));
@@ -563,6 +565,10 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                         gameIsActive = false;
                     }
 
+                    if(response.getInt("isDeckIsOver")==1){
+                        showTurnButon=true;
+                    }
+
 
                 }
             } catch (Exception ex) {
@@ -579,8 +585,8 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                     new UpdateFinishSeries().execute();
                     // Toast.makeText(GameScreen.this,"fulll sereis!",Toast.LENGTH_SHORT).show();
                 }
-                if(deckIsOver&&!showTurnButon) {
-                    showTurnButon=true;
+                if(showTurnButon&&!doJustOnTime) {
+                    doJustOnTime=true;
                     deckImage.setVisibility(View.INVISIBLE);
                     moveToNextTurn.setVisibility(View.VISIBLE);
 
@@ -950,6 +956,37 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
             } else
                 Toast.makeText(GameScreen.this, "check if al sereis full failed", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public class setdeckIsOver extends AsyncTask<String, Void, Boolean> {
+        //String setGameToInactive = "http://10.0.2.2/final_project/db/setGameToInactive.php";
+        //String setGameToInactive = "http://mysite.lidordigital.co.il/Quertets/php/db/setGameToInactive.php";
+
+        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            parms.put("game_id", params[0]);
+
+            JSONParser json = new JSONParser();
+            try {
+                JSONObject response = json.makeHttpRequest(ServerUtils.setdeckIsOver, "POST", parms);
+                if (response.getInt("successes") == 1)
+                    return true;
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return false;
+            }
+            return false;
+        }
+
+        protected void onPostExecute(Boolean result) {
+            if (result) {
+                new moveToNextPlayer().execute();
+            } else
+                Toast.makeText(GameScreen.this, "There was problem on set Deck is over", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     public void passCardByNFC() {

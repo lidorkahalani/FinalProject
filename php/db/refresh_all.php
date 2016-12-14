@@ -1,5 +1,6 @@
 <?php
 include('connection.php');
+
 $con=mysqli_connect("localhost","root","","quartetsdb");
 $response=array();
 $seriseIdList=array();
@@ -27,6 +28,8 @@ if(mysqli_num_rows($result) >=0 )  {
 	 $response["finishSeries"]=1;
  }else
 	$response["finishSeries"]=0;
+
+	$response["isDeckIsOver"]=isDeckIsOver($game_id);
 
   $response["isAllPlayersConnected"]=isAllPlayersConnected($game_id);//1-all connected 0-one or more logut
   
@@ -170,5 +173,17 @@ function getStatusGame($game_id){
 	}else{
 		return null;
 	}
+}
+function isDeckIsOver($game_id){
+	require('Connection.php');
+	$sth = $con->prepare("SELECT `game`.`is_deck_over` FROM `game` WHERE game_id='$game_id'");
+	$sth->execute();
+	$result = $sth->fetch(PDO::FETCH_ASSOC);
+	if($result){
+		return $result['is_deck_over'];
+	}else{
+		return 0;
+	}
+	
 }
 ?>

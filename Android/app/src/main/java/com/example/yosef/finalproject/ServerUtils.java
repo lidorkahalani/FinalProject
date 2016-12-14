@@ -49,7 +49,7 @@ public class ServerUtils {
     public static final String GetWinnerName = server +"GetWinnerName.php";
     public static final String UpdateScore = server +"UpdateScore.php";
     public static final String UpdateSeries=server+"Update_series.php";
-
     public static final String checkIfAllseriesComplite=server+"checkIfAllseriesComplite.php";
+    public static final String setdeckIsOver=server+"setdeckIsOver.php";
 
 }
