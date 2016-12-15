@@ -19,6 +19,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,6 +46,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 
@@ -60,10 +62,10 @@ public class UpdateSeries extends AppCompatActivity implements View.OnClickListe
     private Button buttonChooseCard3;
     private Button buttonChooseCard4;
 
-    private Boolean isbuttonChooseCard1;
-    private Boolean isbuttonChooseCard2;
-    private  Boolean isbuttonChooseCard3;
-    private Boolean isbuttonChooseCard4;
+    private Boolean isbuttonChooseCard1=false;
+    private Boolean isbuttonChooseCard2=false;
+    private Boolean isbuttonChooseCard3=false;
+    private Boolean isbuttonChooseCard4=false;
 
     private Boolean imageCoosen;
     private int PICK_IMAGE_REQUEST = 1;
@@ -130,10 +132,10 @@ public class UpdateSeries extends AppCompatActivity implements View.OnClickListe
         imageLoader.DisplayImage((ServerUtils.imageRelativePat + selctedSeries.getImage3()), R.mipmap.ic_launcher, imageViewCard3);
         imageLoader.DisplayImage((ServerUtils.imageRelativePat + selctedSeries.getImage4()), R.mipmap.ic_launcher, imageViewCard4);
 
-        imageName1=selctedSeries.getImage1();
+        /*imageName1=selctedSeries.getImage1();
         imageName2=selctedSeries.getImage2();
         imageName3=selctedSeries.getImage3();
-        imageName4=selctedSeries.getImage4();
+        imageName4=selctedSeries.getImage4();*/
 
 
         buttonChooseCard1.setOnClickListener(this);
@@ -145,6 +147,8 @@ public class UpdateSeries extends AppCompatActivity implements View.OnClickListe
         imageViewCard3.setOnClickListener(this);
         imageViewCard4.setOnClickListener(this);
         buttonUpdateSeries.setOnClickListener(this);
+
+
 
     }
 
@@ -323,10 +327,11 @@ public class UpdateSeries extends AppCompatActivity implements View.OnClickListe
             entityBuilder.addTextBody("card2", params[2]);
             entityBuilder.addTextBody("card3", params[3]);
             entityBuilder.addTextBody("card4", params[4]);
-            entityBuilder.addPart("image1",new FileBody(new File(imageName1)));
-            entityBuilder.addPart("image2",new FileBody(new File(imageName2)));
-            entityBuilder.addPart("image3",new FileBody(new File(imageName3)));
-            entityBuilder.addPart("image4",new FileBody(new File(imageName4)));
+
+            entityBuilder.addPart("image1",new FileBody(new File(imageName1.equals("")?getEmptyFile():imageName1)));
+            entityBuilder.addPart("image2",new FileBody(new File(imageName2.equals("")?getEmptyFile():imageName2)));
+            entityBuilder.addPart("image3",new FileBody(new File(imageName3.equals("")?getEmptyFile():imageName3)));
+            entityBuilder.addPart("image4",new FileBody(new File(imageName4.equals("")?getEmptyFile():imageName4)));
             httppost.setEntity(entityBuilder.build());
             try {
                 HttpResponse response = httpclient.execute(httppost);
@@ -407,6 +412,28 @@ public class UpdateSeries extends AppCompatActivity implements View.OnClickListe
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         dialog.show();
+    }
+
+    public String getEmptyFile(){
+        try {
+            String  h = DateFormat.format("MM-dd-yyyyy-h-mmssaa", System.currentTimeMillis()).toString();
+            // this will create a new name everytime and unique
+            File root = new File(Environment.getExternalStorageDirectory(), "Notes");
+            // if external memory exists and folder with name Notes
+            if (!root.exists()) {
+                root.mkdirs(); // this will create folder.
+            }
+            File filepath = new File(root, h + ".txt");  // file path to save
+            FileWriter writer = new FileWriter(filepath);
+            writer.flush();
+            writer.close();
+            String m = "File generated with name " + h + ".txt";
+            return h+=".txt";
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "";
+        }
+
     }
 
 }

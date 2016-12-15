@@ -97,6 +97,7 @@
     <string name="win">Won</string>
     <string name="no_one_win">There is no winner</string>
     <string name="move_to_next_turn">Next turn</string>
+    <string name="you_turn">You turn</string>
 
     <string-array name="card_click_menu">
         <item>send card</item>

@@ -300,10 +300,11 @@ public class MainActivity extends AppCompatActivity {
                 editor.putString("password", inputPassword);
                 editor.putInt("score", score);
                 editor.putInt("user_id",userId);
-
                 editor.commit();
+                User currentPlayer = new User(inputUserName, inputPassword, score, userId);
 
                 Intent myIntent = new Intent(MainActivity.this, MainMenu.class);
+                myIntent.putExtra("User",currentPlayer);
                 startActivity(myIntent);
                 finish();
 

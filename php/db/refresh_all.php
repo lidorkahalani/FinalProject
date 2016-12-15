@@ -33,6 +33,8 @@ if(mysqli_num_rows($result) >=0 )  {
 	
 	
 	$response["isAllSereisComplete"]=checkIfAllSereisComplete($game_id);
+	
+	$response["getActivePlayerName"]=getActivePlayerName($game_id);
 
   $response["isAllPlayersConnected"]=isAllPlayersConnected($game_id);//1-all connected 0-one or more logut
   
@@ -198,5 +200,18 @@ if($result)
 	return 0;
 else
 	return 1;
+}
+function getActivePlayerName($game_id){
+	require('Connection.php');
+	$sth = $con->prepare("SELECT user_name FROM users WHERE user_id=(SELECT my_turn_user_id FROM game WHERE game_id='$game_id')");
+	$sth->execute();
+	$result = $sth->fetch(PDO::FETCH_ASSOC);
+	if($result){
+		return $result['user_name'];
+	}else{
+		return null;
+	}
+	
+
 }
 ?>

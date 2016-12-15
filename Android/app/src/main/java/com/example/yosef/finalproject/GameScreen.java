@@ -3,10 +3,12 @@ package com.example.yosef.finalproject;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -50,11 +52,14 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     private RelativeLayout left_layout;
     private RelativeLayout top_layout;
     private RelativeLayout right_layout;*/
-    private RelativeLayout activePlayer;
+    private LinearLayout activePlayer;
     private TextView point;
+    private TextView myTurnTextView;
+    private TextView currentActivePlayerName;
     static private int currentPoint = 0;
     private ArrayList<Integer> finishSeriesList = new ArrayList<Integer>();
     private Boolean reloadData = false;
+    private Boolean updateActivePlayerName = false;
     Button moveToNextTurn;
 
 
@@ -84,6 +89,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     private Boolean doJustOnTime=false;
 
     private String winnerName = "";
+    private String activePlayerName = "";
     private Card currentSelectedCard;
 
     private User winerUser;
@@ -98,6 +104,8 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
         deckImage=(ImageButton)findViewById(R.id.ImageDeck);
         moveToNextTurn=(Button)findViewById(R.id.nextTurn);
+        myTurnTextView=(TextView)findViewById(R.id.turnStatus);
+        currentActivePlayerName=(TextView)findViewById(R.id.currentActivePlayerName);
 
         currentPlayer = (User) i.getSerializableExtra("currentPlayer");
         debugStatus = getIntent().getExtras().getBoolean("debug");
@@ -109,7 +117,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         randomGenerator = new Random();
 
         playerList.add(currentPlayer);
-        activePlayer = (RelativeLayout) findViewById(R.id.activePlayer);
+        activePlayer = (LinearLayout) findViewById(R.id.activePlayer);
 
         /*bottomLayout = (RelativeLayout) findViewById(R.id.myPlayerBackground);
         left_layout = (RelativeLayout) findViewById(R.id.myPlayerBackground);
@@ -455,10 +463,14 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
         protected void onPostExecute(Boolean result) {
             if (result) {
-                if (isMyTurnStatus)
+                if (isMyTurnStatus) {
+                    myTurnTextView.setVisibility(View.VISIBLE);
                     activePlayer.setBackgroundColor(Color.GREEN);
-                else
+                }
+                else {
+                    myTurnTextView.setVisibility(View.INVISIBLE);
                     activePlayer.setBackgroundColor(Color.TRANSPARENT);
+                }
                 //new refresh().execute();
             } else
                 Toast.makeText(GameScreen.this, "move To Next Player failed", Toast.LENGTH_LONG).show();
@@ -510,9 +522,6 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     }
 
     public class refresh extends AsyncTask<String, Void, Boolean> {
-        /*need to add check if all player stil in the game*/
-        //String refresh_all = "http://10.0.2.2/final_project/db/refresh_all.php";
-        //String refresh_all = "http://mysite.lidordigital.co.il/Quertets/php/db/refresh_all.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
@@ -575,6 +584,14 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                     if(response.getInt("isAllSereisComplete")==1){
                         finisheGame=true;
                     }
+
+                    if(response.getString("getActivePlayerName")!=null) {
+                        updateActivePlayerName = true;
+                        if(!(activePlayerName.equals(response.getString("getActivePlayerName"))))
+                             activePlayerName=response.getString("getActivePlayerName");
+                        else
+                            updateActivePlayerName = true;
+                    }
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -592,9 +609,13 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                 }
                 if(showTurnButon&&!doJustOnTime) {
                     doJustOnTime=true;
-                    deckImage.setVisibility(View.INVISIBLE);
+                    deckImage.setVisibility(View.GONE);
                     moveToNextTurn.setVisibility(View.VISIBLE);
                 }
+
+                if(updateActivePlayerName)
+                    currentActivePlayerName.setText(activePlayerName);
+
 
 
                 if (newCarRecive) {
@@ -608,14 +629,19 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                 setCardsList();
                 if (isMyTurnStatus) {
                     activePlayer.setBackgroundColor(Color.GREEN);
-                } else
+                    myTurnTextView.setVisibility(View.VISIBLE);
+                    //myTurnTextView.setText(getResources().getString(R.string.you_turn));
+                } else {
+                    //myTurnTextView.setText("");
+                    myTurnTextView.setVisibility(View.INVISIBLE);
                     activePlayer.setBackgroundColor(Color.TRANSPARENT);
+                }
 
-                if (!gameIsActive)
-                     openMainMenu();
+                /*if (!gameIsActive)
+                     openMainMenu();*/
 
                 if(finisheGame) {
-                    myTimer.cancel();
+                    //myTimer.cancel();
                     new setGameOverStatus().execute("3", String.valueOf(newGame.getGame_id()));
                 }
 
@@ -799,8 +825,10 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                             .setCancelable(false)
                             .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-                                    Intent myIntent = new Intent(GameScreen.this, MainActivity.class);
-                                    startActivity(myIntent);
+                                    openMainMenu();
+                                  /*  Intent myIntent = new Intent(GameScreen.this, MainMenu.class);
+                                    myIntent.putExtra("User",currentPlayer);
+                                    startActivity(myIntent);*/
                                 }
                             });
                     AlertDialog alert = builder.create();
@@ -813,6 +841,11 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                                 .setCancelable(false)
                                 .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
+                                        SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(GameScreen.this);
+                                        SharedPreferences.Editor editor = myPref.edit();
+                                        editor.putInt("score", currentPoint);
+                                        editor.commit();
+
                                         new UpdateScore().execute(String.valueOf(currentPoint), String.valueOf(winerUser.getUserID()));
 
                                     }
@@ -822,9 +855,11 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                                 .setCancelable(false)
                                 .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
-                                            Intent myIntent = new Intent(GameScreen.this, MainActivity.class);
+                                        openMainMenu();
+                                         /*   Intent myIntent = new Intent(GameScreen.this, MainMenu.class);
+                                            myIntent.putExtra("User",currentPlayer);
                                             startActivity(myIntent);
-                                            finish();
+                                            finish();*/
 
                                     }
                                 });
@@ -906,7 +941,8 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                 if (newHighScore)
                     Toast.makeText(GameScreen.this, "You got new high score!", Toast.LENGTH_LONG).show();
                 else
-                    Toast.makeText(GameScreen.this, "You have been a higher score!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(GameScreen.this, "You have been a higher score", Toast.LENGTH_LONG).show();
+
                 Intent myIntent = new Intent(GameScreen.this, MainActivity.class);
                 startActivity(myIntent);
                 finish();

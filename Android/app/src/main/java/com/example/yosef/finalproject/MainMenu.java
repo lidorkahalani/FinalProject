@@ -145,7 +145,13 @@ public class MainMenu extends AppCompatActivity {
         String password = myPref.getString("password", "");
         int score = myPref.getInt("score", 0);
         int userId = myPref.getInt("user_id", 0);
+
+       // currentPlayer = (User) getIntent().getSerializableExtra("User");
+
+
         currentPlayer = new User(uname, password, score, userId);
+
+
         dbHandler = new UsersDBHandler(this);
         setLayout();
         checkPermission();
@@ -219,7 +225,8 @@ public class MainMenu extends AppCompatActivity {
         String uname = myPref.getString("username", "");
         String password = myPref.getString("password", "");
         int score = myPref.getInt("score", 0);
-        t.setText(getResources().getString(R.string.wellcome) + ":  " + uname + "\n" + getResources().getString(R.string.score) + ":  " + Integer.toString(score));
+        //int score = currentPlayer.getScore();
+        t.setText(getResources().getString(R.string.wellcome) + ":  " + uname + "\n" + getResources().getString(R.string.score) + ":  " +score );
     }
 
     @Override

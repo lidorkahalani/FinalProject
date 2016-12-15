@@ -1,33 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:weightSum="2.0">
-
-        <TextView
-            android:layout_weight="1.0"
-            android:layout_width="0dp"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/userName"
-            android:text="user name"
-            android:textStyle="bold|italic"
-            android:textSize="15dp"/>
+            android:orientation="horizontal"
+            android:weightSum="50"
+            >
+                <TextView
+                    android:layout_weight="25"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/userName"
+                    android:gravity="center"
+                    android:text="user name"
+                    android:textStyle="bold|italic"
+                    android:textSize="25sp"/>
 
-        <TextView
-            android:layout_weight="1.0"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:id="@+id/score"
-            android:text="score"
-            android:textSize="15dp"
-            android:textStyle="bold|italic"/>
+                <TextView
+                    android:layout_weight="25"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/score"
+                    android:gravity="center"
+                    android:text="score"
+                    android:textSize="25sp"
+                    android:textStyle="bold|italic"/>
 
-    </LinearLayout>
+        </LinearLayout>
 
-</LinearLayout>
+
+
+
+</RelativeLayout>

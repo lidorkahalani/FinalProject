@@ -1,78 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_game"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.example.yosef.finalproject.GameScreen">
+    tools:context="com.example.yosef.finalproject.GameScreen"
+    android:orientation="vertical"
+    android:weightSum="100"
+    >
 
-    <FrameLayout
-        android:id="@+id/bottom_layout"
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_height="0dp"
+        android:layout_weight="65"
+        android:orientation="vertical"
+        android:weightSum="50"
+
+        >
+
+        <TextView
+            android:layout_weight="10"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/pointField"
+            android:text="@string/points"
+            android:textStyle="bold"
+            android:gravity="bottom|center"
+            />
+
+        <TextView
+            android:layout_weight="10"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/currentActivePlayerName"
+            android:text="@string/move_to_next_turn"
+            android:textStyle="bold"
+            android:gravity="center"
+            />
 
         <RelativeLayout
-            android:id="@+id/myPlayerBackground"
             android:layout_width="wrap_content"
-            android:layout_height="230dp"
-            android:layout_gravity="bottom"
-            android:background="@android:color/transparent">
+            android:layout_height="0dp"
+            android:gravity="bottom"
+            android:layout_weight="30"
+            >
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/listcards"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            </android.support.v7.widget.RecyclerView>
-
-            <RelativeLayout
-                android:id="@+id/activePlayer"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:layout_gravity="top"
+            <ImageButton
+                android:onClick="takeCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/deck_en"
+                android:id="@+id/ImageDeck"
                 android:background="@android:color/transparent"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true">
-            </RelativeLayout>
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"/>
+
+            <Button
+                android:onClick="moveToNextTurn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/nextTurn"
+                android:visibility="gone"
+                android:background="@drawable/next_turn"
+                android:text="@string/move_to_next_turn"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+
+                />
 
         </RelativeLayout>
 
 
-    </FrameLayout>
+    </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/pointField"
-        android:text="@string/points"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"/>
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/bottom_layout"
+        android:layout_width="match_parent"
+        android:layout_gravity="bottom"
+        android:layout_height="0dp"
+        android:layout_weight="35"
+        android:weightSum="10"
 
-    <ImageButton
-        android:onClick="takeCard"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/deck_en"
-        android:id="@+id/ImageDeck"
-        android:background="@android:color/transparent"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        >
 
-    <Button
-        android:onClick="moveToNextTurn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/nextTurn"
-        android:visibility="invisible"
-        android:background="@color/blue"
-        android:text="@string/move_to_next_turn"
-        android:layout_above="@+id/ImageDeck"
-        android:layout_centerHorizontal="true" />
+            <android.support.v7.widget.RecyclerView
+                android:layout_weight="9"
+                android:id="@+id/listcards"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                >
+            </android.support.v7.widget.RecyclerView>
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:id="@+id/activePlayer"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@android:color/transparent"
+            >
+
+                <TextView
+                    android:layout_weight="2"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:id="@+id/turnStatus"
+                    android:visibility="invisible"
+                    android:text="@string/you_turn"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    />
+
+            </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
 
     <!--
        <RelativeLayout
@@ -136,4 +184,4 @@
         </android.support.v7.widget.RecyclerView>
         -->
 
-</RelativeLayout>
+</LinearLayout>
