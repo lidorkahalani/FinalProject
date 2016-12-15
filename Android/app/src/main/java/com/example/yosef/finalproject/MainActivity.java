@@ -252,8 +252,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public class logIn extends AsyncTask<String, Void, Boolean> {
-        //String login_url = "http://10.0.2.2/final_project/db/login.php";
-        //String login_url = "http://mysite.lidordigital.co.il/Quertets/php/db/login.php";
+
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         //MySQLiteHelper dbHelper = new MySQLiteHelper(MainActivity.this, UserDBConstants.DBName, null, UserDBConstants.User_DB_VESRSION);
@@ -299,21 +298,23 @@ public class MainActivity extends AppCompatActivity {
                 editor.putString("username", inputUserName);
                 editor.putString("password", inputPassword);
                 editor.putInt("score", score);
-                editor.putInt("user_id",userId);
+                editor.putInt("user_id", userId);
                 editor.commit();
                 User currentPlayer = new User(inputUserName, inputPassword, score, userId);
 
                 Intent myIntent = new Intent(MainActivity.this, MainMenu.class);
-                myIntent.putExtra("User",currentPlayer);
+                myIntent.putExtra("User", currentPlayer);
                 startActivity(myIntent);
                 finish();
+            }
+            else {
+                 if(faceBookLogIN)  {
+                    new signUp().execute(inputUserName,inputPassword);
+                }
+                else
+                    Toast.makeText(MainActivity.this, "invalid user ! please try Again", Toast.LENGTH_LONG).show();
 
-            } else if(faceBookLogIN)
-            {
-                new signUp().execute(inputUserName,inputPassword);
-
-            }else
-                Toast.makeText(MainActivity.this, "invalid user ! please try Again", Toast.LENGTH_LONG).show();
+            }
 
         }
     }

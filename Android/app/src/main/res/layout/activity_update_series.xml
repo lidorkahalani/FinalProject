@@ -4,9 +4,16 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="match_parent"
-
     android:background="@drawable/rsz_background_menu_resize"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:weightSum="100">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:layout_weight="15">
 
     <TextView
         android:layout_width="match_parent"
@@ -19,40 +26,164 @@
         android:layout_marginBottom="10dp"
         android:id="@+id/ucategoryName"/>
 
+</LinearLayout>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:orientation="vertical"
+    android:layout_weight="75"
+    android:weightSum="100">
+
     <LinearLayout
         android:paddingTop="@dimen/activity_vertical_margin"
         android:paddingBottom="@dimen/activity_vertical_margin"
-
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp"
+        android:layout_weight="25"
+        android:weightSum="50"
+        >
 
         <Button
-            android:layout_width="57dp"
-            android:layout_height="36dp"
+            android:layout_weight="10"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:background="@android:drawable/ic_menu_camera"
             android:id="@+id/ubuttonChooseCard1"
             />
 
         <EditText
+            android:layout_weight="25"
             android:id="@+id/ucard1"
-            android:layout_width="211dp"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:textColorHint="@android:color/darker_gray"
             android:hint="@string/card1"
             android:inputType="text"
-            android:layout_margin="8dp"
             android:gravity="center"
             android:background="@drawable/edit_text"
             />
 
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="15"
             android:id="@+id/uimageViewCard1" />
     </LinearLayout>
 
+    <LinearLayout
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="25"
+        android:weightSum="50"
+        >
+
+        <Button
+            android:layout_weight="10"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@android:drawable/ic_menu_camera"
+            android:id="@+id/ubuttonChooseCard2"
+            />
+
+        <EditText
+            android:layout_weight="25"
+            android:id="@+id/ucard2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:textColorHint="@android:color/darker_gray"
+            android:hint="@string/card2"
+            android:inputType="text"
+            android:gravity="center"
+            android:background="@drawable/edit_text"
+            />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="15"
+            android:id="@+id/uimageViewCard2" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="25"
+        android:weightSum="50"
+        >
+
+        <Button
+            android:layout_weight="10"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@android:drawable/ic_menu_camera"
+            android:id="@+id/ubuttonChooseCard3"
+            />
+
+        <EditText
+            android:layout_weight="25"
+            android:id="@+id/ucard3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:textColorHint="@android:color/darker_gray"
+            android:hint="@string/card3"
+            android:inputType="text"
+            android:gravity="center"
+            android:background="@drawable/edit_text"
+            />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="15"
+            android:id="@+id/uimageViewCard3" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="25"
+        android:weightSum="50"
+        >
+
+        <Button
+            android:layout_weight="10"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@android:drawable/ic_menu_camera"
+            android:id="@+id/ubuttonChooseCard4"
+            />
+
+        <EditText
+            android:layout_weight="25"
+            android:id="@+id/ucard4"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:textColorHint="@android:color/darker_gray"
+            android:hint="@string/card1"
+            android:inputType="text"
+            android:gravity="center"
+            android:background="@drawable/edit_text"
+            />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="15"
+            android:id="@+id/uimageViewCard4" />
+    </LinearLayout>
+
+    <!--
     <LinearLayout
         android:paddingTop="@dimen/activity_vertical_margin"
         android:paddingBottom="@dimen/activity_vertical_margin"
@@ -147,20 +278,33 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-
             android:id="@+id/uimageViewCard4" />
     </LinearLayout>
+    -->
 
-    <Button
-        android:onClick=""
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/update_series"
-        android:layout_marginTop="90dp"
-        android:layout_margin="10dp"
-        android:background="@color/azure"
-        android:id="@+id/ubuttonUpdateSeries" />
+</LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_weight="10"
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        android:weightSum="10">
+        <Button
+            android:layout_weight="10"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/update_series"
+            android:layout_marginTop="90dp"
+            android:layout_margin="10dp"
+            android:background="@color/azure"
+            android:id="@+id/ubuttonUpdateSeries" />
+
+    </LinearLayout>
+
 
 
 </LinearLayout>

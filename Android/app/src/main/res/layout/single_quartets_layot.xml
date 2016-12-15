@@ -1,56 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="1">
+    android:weightSum="100">
 
-    <RelativeLayout
+    <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.09">
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="50"
+        android:weightSum="10">
 
         <TextView
             android:text="categry name"
             android:textStyle="bold"
-            android:textSize="30dp"
-            android:layout_width="wrap_content"
+            android:textSize="30sp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/category_name"
-            android:layout_weight="0.4" />
+            android:gravity="right"
+            android:layout_weight="10" />
+    </LinearLayout>
 
-        <ImageView
-            android:id="@+id/pic4"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
-
-        <ImageView
-            android:id="@+id/pic2"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@+id/pic3"
-            android:layout_toStartOf="@+id/pic3" />
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="50"
+        android:weightSum="100"
+        >
 
         <ImageView
             android:id="@+id/pic1"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@+id/pic2"
-            android:layout_toStartOf="@+id/pic2" />
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="25"/>
+        <ImageView
+            android:id="@+id/pic2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="25"/>
 
         <ImageView
             android:id="@+id/pic3"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@+id/pic4"
-            android:layout_toStartOf="@+id/pic4" />
-    </RelativeLayout>
-
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="25"/>
+        <ImageView
+            android:id="@+id/pic4"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="25"/>
+    </LinearLayout>
 
 </LinearLayout>

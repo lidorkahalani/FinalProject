@@ -125,10 +125,10 @@ if($status){
 }
 
 if($status)
-    $res="1";
+    $res=1;
 	//$response["succese"]=1;
 else
-    $res="0";
+    $res=0;
 	//$response["succese"]=0;
 	
 	 

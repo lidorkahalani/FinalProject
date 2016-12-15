@@ -356,13 +356,16 @@ public class UpdateSeries extends AppCompatActivity implements View.OnClickListe
 
             if(result) {
                 Toast.makeText(UpdateSeries.this,"Update successes",Toast.LENGTH_SHORT).show();
+                Intent intent=new Intent(UpdateSeries.this,MainMenu.class);
+                startActivity(intent);
+                finish();
                 //setResult(RESULT_OK, resultIntent);
             }
             else{
                 Toast.makeText(UpdateSeries.this,"Update failed",Toast.LENGTH_SHORT).show();
-
+                finish();
             }
-            finish();
+
 
 
 
@@ -418,17 +421,20 @@ public class UpdateSeries extends AppCompatActivity implements View.OnClickListe
         try {
             String  h = DateFormat.format("MM-dd-yyyyy-h-mmssaa", System.currentTimeMillis()).toString();
             // this will create a new name everytime and unique
-            File root = new File(Environment.getExternalStorageDirectory(), "Notes");
+            File file = new File(this.getFilesDir(), "text.txt");
+
+           /* File root = new File(Environment.getExternalStorageDirectory(), "Notes");
             // if external memory exists and folder with name Notes
             if (!root.exists()) {
                 root.mkdirs(); // this will create folder.
             }
-            File filepath = new File(root, h + ".txt");  // file path to save
-            FileWriter writer = new FileWriter(filepath);
+            File filepath = new File(root, h + ".txt");  // file path to save*/
+            FileWriter writer = new FileWriter(file);
             writer.flush();
             writer.close();
-            String m = "File generated with name " + h + ".txt";
-            return h+=".txt";
+            return file.toString();
+           // String m = "File generated with name " + h + ".txt";
+            //return h+=".txt";
         } catch (IOException e) {
             e.printStackTrace();
             return "";

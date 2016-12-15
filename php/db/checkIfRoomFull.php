@@ -5,7 +5,7 @@
 	$game_id=$_POST['game_id'];
 	$response=array();
 	$result = $con->query("SELECT COUNT(*) FROM game_users WHERE game_id='$game_id'")->fetchColumn();
-	if($result==2){
+	if($result==2){//2
 		$conn=mysqli_connect("localhost","root","","quartetsdb");
 		$response=array();
 		if (mysqli_connect_errno($conn))

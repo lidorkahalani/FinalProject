@@ -35,7 +35,7 @@
     <string name="JoinToRoom">הצטרף לחדר</string>
     <string name="EnterRoomName">הכנס את שם החדר</string>
     <string name="repassword">ודא סיסמה</string>
-    <string name="Back">Back</string>
+    <string name="Back">חזור</string>
     <string name="send">שלח קלף</string>
     <string name="receive">קבל קלף</string>
     <string name="choose">בחר</string>
@@ -83,19 +83,18 @@
     <string name="wait_for_admin_chose">מחכה לבחירת סדרות על ידי האדמין</string>
     <string name="show_my_series">הסדרות שלי</string>
     <string name="no_internet">לא נמצא חיבור לאינטרנט</string>
-
-    <string-array name="card_click_menu">
-        <item>שלח קלף</item>
-        <item>קבל קלף</item>
-    </string-array>
-
+    <string name="cannot_send_card">אינך יכול להעביר קלף בתורך</string>
+    <string name="game_over">המשחק הסתיים</string>
+    <string name="win">ניצח</string>
+    <string name="no_one_win">אין מנצח</string>
+    <string name="move_to_next_turn">העבר תור</string>
+    <string name="you_turn">תורך</string>
+    <string name="choose_at_least">בחר לפחות 5 סדרות</string>
     <string name="room_name">שם החדר</string>
     <string name="open_room_dialog_title">@string/OpenRoom</string>
     <string name="open_room_dialog_message">הכנס שם חדר</string>
-
     <string name="please_wait">אנא המתן</string>
     <string name="waiting_for_players">ממתין לשחקנים נוספים...</string>
-
     <string name="room_name_in_use">שם חדר תפוס</string>
     <string name="connection_error">אירעה שגיאה - בדוק חיבור לאינטרנט</string>
     <string name="upload_image_failed">העלאת תמונה נכשלה</string>
@@ -107,4 +106,16 @@
     <string name="high_scores">טבלת שיאים</string>
     <string name="must_permission">הרשאה נדרשת</string>
     <string name="points">נקודות</string>
+
+
+    <string-array name="card_click_menu">
+        <item>שלח קלף</item>
+    </string-array>
+
+    <string-array name="my_card">
+        <item>מחק סדרה</item>
+        <item>ערוך סדרה</item>
+    </string-array>
+
+
 </resources>

@@ -98,24 +98,24 @@
     <string name="no_one_win">There is no winner</string>
     <string name="move_to_next_turn">Next turn</string>
     <string name="you_turn">You turn</string>
+    <string name="choose_at_least">Choose at least 5 series</string>
+    <string name="room_name">Room name</string>
+    <string name="open_room_dialog_title">@string/OpenRoom</string>
+    <string name="open_room_dialog_message">Enter room name</string>
+    <string name="please_wait">Please wait</string>
+    <string name="waiting_for_players">Waiting for other players...</string>
+    <string name="room_name_in_use">Room name already in use</string>
+    <string name="connection_error">Error occurred - check internet connection</string>
+
 
     <string-array name="card_click_menu">
         <item>send card</item>
     </string-array>
 
     <string-array name="my_card">
-        <item>Delete</item>
-        <item>Edit</item>
+        <item>Delete series</item>
+        <item>Edit series</item>
     </string-array>
 
-    <string name="room_name">Room name</string>
-    <string name="open_room_dialog_title">@string/OpenRoom</string>
-    <string name="open_room_dialog_message">Enter room name</string>
-
-    <string name="please_wait">Please wait</string>
-    <string name="waiting_for_players">Waiting for other players...</string>
-
-    <string name="room_name_in_use">Room name already in use</string>
-    <string name="connection_error">Error occurred - check internet connection</string>
 
 </resources>

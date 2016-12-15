@@ -6,7 +6,7 @@ $game_id=getGameId($roomName);
 $response=array();
 //if room exist
 if($game_id!=null){
-	if(countPlayerInRoom($game_id)<2){
+	if(countPlayerInRoom($game_id)<2){//2
 		//another way to insert working
 			/*try {
 				$sql = "INSERT INTO game_users (game_id,user_id) VALUES(6,18)";
