@@ -131,8 +131,6 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
     }
 
     public class joinToRoom extends AsyncTask<String, Void, Boolean> {
-        //String joinToRoom = "http://10.0.2.2/final_project/db/joinToRoom.php";
-        //String joinToRoom = "http://mysite.lidordigital.co.il/Quertets/php/db/joinToRoom.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
         @Override
         protected Boolean doInBackground(String... params) {
@@ -492,6 +490,9 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                     public void onClick(DialogInterface dialog, int which) {
                         timer.cancel();
                         timerFlag = false;
+                        Intent myIntent = new Intent(Room.this, MainMenu.class);
+                        startActivity(myIntent);
+                        finish();
                     }
                 });
 
@@ -561,7 +562,7 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                 startActivity(myIntent);
                 finish();
             } else
-                Toast.makeText(Room.this, "There was problem on log out", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Room.this, getResources().getString(R.string.failed_to_set_game_inactive), Toast.LENGTH_SHORT).show();
         }
 
     }

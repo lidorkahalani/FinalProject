@@ -13,7 +13,7 @@
     android:orientation="vertical"
     android:layout_gravity="center"
     android:gravity="center"
-    android:layout_weight="15">
+    android:layout_weight="20">
 
     <TextView
         android:layout_width="match_parent"
@@ -32,7 +32,7 @@
     android:layout_width="match_parent"
     android:layout_height="0dp"
     android:orientation="vertical"
-    android:layout_weight="75"
+    android:layout_weight="65"
     android:weightSum="100">
 
     <LinearLayout
@@ -49,7 +49,7 @@
             android:layout_weight="10"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:background="@android:drawable/ic_menu_camera"
+            android:background="@android:drawable/ic_input_add"
             android:id="@+id/ubuttonChooseCard1"
             />
 
@@ -86,7 +86,7 @@
             android:layout_weight="10"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:background="@android:drawable/ic_menu_camera"
+            android:background="@android:drawable/ic_input_add"
             android:id="@+id/ubuttonChooseCard2"
             />
 
@@ -123,7 +123,7 @@
             android:layout_weight="10"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:background="@android:drawable/ic_menu_camera"
+            android:background="@android:drawable/ic_input_add"
             android:id="@+id/ubuttonChooseCard3"
             />
 
@@ -160,7 +160,7 @@
             android:layout_weight="10"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:background="@android:drawable/ic_menu_camera"
+            android:background="@android:drawable/ic_input_add"
             android:id="@+id/ubuttonChooseCard4"
             />
 
@@ -293,13 +293,11 @@
         android:gravity="center"
         android:weightSum="10">
         <Button
-            android:layout_weight="10"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="@string/update_series"
-            android:layout_marginTop="90dp"
-            android:layout_margin="10dp"
+            android:layout_margin="10dip"
             android:background="@color/azure"
             android:id="@+id/ubuttonUpdateSeries" />
 

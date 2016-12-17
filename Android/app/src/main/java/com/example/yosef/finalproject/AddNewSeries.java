@@ -202,6 +202,7 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
+
         startActivityForResult(Intent.createChooser(intent,getResources().getString(R.string.Select_Picture)), PICK_IMAGE_REQUEST);
     }
 
@@ -310,8 +311,6 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
 
     private void uploadImage(){
         class UploadImage extends AsyncTask<Bitmap,Void,Boolean>{
-            public static final String UPLOAD_URL = "http://mysite.lidordigital.co.il/Quertets/db/php/AddCard.php";
-           // public static final String UPLOAD_URL = "http://10.0.2.2/final_project/db/AddCard.php";
             ProgressDialog loading;
             RequestHandler rh = new RequestHandler();
 
@@ -377,7 +376,8 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
                 .setCancelable(false)
                 .setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        new setGameToInactive().execute(String.valueOf(game.getGame_id()));
+                        finish();
+                        //new setGameToInactive().execute(String.valueOf(game.getGame_id()));
                     }
                 })
                 .setNegativeButton(getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
@@ -428,12 +428,6 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
                                                                                 card3.getText().toString(),
                                                                                 card4.getText().toString());
 
-
-                /*cardName=card1.getText().toString();
-                uploadImage();
-                if(upload_image_status){
-                    addThisCardToLocalArray();
-                }*/
             }
             else
                 Toast.makeText(AddNewSeries.this,
@@ -530,8 +524,6 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
     }
 
     public class sendSeriesToServer extends AsyncTask<String, Void, Boolean> {
-        // upload_series = "http://10.0.2.2/final_project/db/upload_series.php";
-         String upload_series = "http://mysite.lidordigital.co.il/Quertets/php/db/upload_series.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
         File imageFile1;
         File imageFile2;
@@ -590,45 +582,12 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
 
         protected void onPostExecute(Boolean result) {
             if (result) {
-                Toast.makeText(AddNewSeries.this, "Series upload successfully!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddNewSeries.this,getResources().getString(R.string.sereis_uplaod_success), Toast.LENGTH_SHORT).show();
 
             } else {
-                Toast.makeText(AddNewSeries.this, "Series upload failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddNewSeries.this, getResources().getString(R.string.series_uplaod_failed), Toast.LENGTH_SHORT).show();
             }
             finish();
-        }
-
-    }
-
-    public class setGameToInactive extends AsyncTask<String, Void, Boolean> {
-       // String setGameToInactive = "http://10.0.2.2/final_project/db/setGameToInactive.php";
-        String setGameToInactive = "http://mysite.lidordigital.co.il/Quertets/php/db/setGameToInactive.php";
-
-        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
-
-        @Override
-        protected Boolean doInBackground(String... params) {
-            parms.put("game_id", params[0]);
-
-            JSONParser json = new JSONParser();
-            try {
-                JSONObject response = json.makeHttpRequest(ServerUtils.setGameToInactive, "POST", parms);
-                if (response.getInt("successes") == 1)
-                    return true;
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                return false;
-            }
-            return false;
-        }
-
-        protected void onPostExecute(Boolean result) {
-            if (result) {
-                Intent myIntent = new Intent(AddNewSeries.this, MainMenu.class);
-                startActivity(myIntent);
-                finish();
-            } else
-                Toast.makeText(AddNewSeries.this, "There was problem on log out", Toast.LENGTH_SHORT).show();
         }
 
     }

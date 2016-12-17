@@ -59,7 +59,7 @@ public class ShowMySerie extends AppCompatActivity implements AdapterView.OnItem
         if(myId!=0)
             new GetMySeries().execute(String.valueOf(myId));
         else
-            Toast.makeText(this,"user id not exist",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,getResources().getString(R.string.user_id_not_known),Toast.LENGTH_SHORT).show();
 
 
     }
@@ -68,7 +68,7 @@ public class ShowMySerie extends AppCompatActivity implements AdapterView.OnItem
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             //selectedSeries= series.get(position);
     //Toast.makeText(ShowMySerie.this,series.get(position).getCategory_name()+" was clicked ",Toast.LENGTH_SHORT).show();
-    Toast.makeText(ShowMySerie.this,"push and hold for more option",Toast.LENGTH_SHORT).show();
+    Toast.makeText(ShowMySerie.this,getResources().getString(R.string.push_hold),Toast.LENGTH_SHORT).show();
     }
 
     public void onCreateContextMenu(ContextMenu menu, View view,
@@ -132,24 +132,6 @@ public class ShowMySerie extends AppCompatActivity implements AdapterView.OnItem
         }
 
         return true;
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode == UPDATE_SERIES_REQUEST)
-        {
-            if(resultCode == RESULT_OK)
-            {
-                startActivity(getIntent());
-                Toast.makeText(ShowMySerie.this,"Update series sucssess",Toast.LENGTH_SHORT).show();
-                //ArrayList<String> hobbies = data.getStringArrayListExtra("hobbies");
-                //hobbiesText.setText(hobbies.toString());
-            }else{
-
-            }
-        }
     }
 
     @Override

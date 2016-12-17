@@ -243,11 +243,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setTitle(R.string.app_name);
 
-        // Checks the active language
-        if (newConfig.locale == Locale.ENGLISH) {
-            Toast.makeText(this, "English", Toast.LENGTH_SHORT).show();
-        } /*else if (newConfig.locale.toString() == LOCALE_IW){
-            Toast.makeText(this, "Hebrew", Toast.LENGTH_SHORT).show();*/
     }
 
 
@@ -312,7 +307,7 @@ public class MainActivity extends AppCompatActivity {
                     new signUp().execute(inputUserName,inputPassword);
                 }
                 else
-                    Toast.makeText(MainActivity.this, "invalid user ! please try Again", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, getResources().getString(R.string.invalid_user_login), Toast.LENGTH_LONG).show();
 
             }
 
@@ -320,8 +315,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public class signUp  extends AsyncTask<String, Void, Boolean>{
-        //String reg_url = "http://mysite.lidordigital.co.il/Quertets/php/db/register.php";
-        //String reg_url = "http://10.0.2.2/final_project/db/register.php";
         LinkedHashMap<String,String> parms=new LinkedHashMap<>();
         String userName;
         String password;
@@ -361,7 +354,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(Boolean result) {
             if(result) {
                 SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-                Toast.makeText(MainActivity.this, "User added succesfuly", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, getResources().getString(R.string.user_sign_up_success), Toast.LENGTH_SHORT).show();
                 Intent myIntent = new Intent(MainActivity.this, MainMenu.class);
                 startActivity(myIntent);
                 SharedPreferences.Editor editor = myPref.edit();
@@ -372,7 +365,7 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
             else
-                Toast.makeText(MainActivity.this, "User NOT added", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, getResources().getString(R.string.user_sign_up_failed), Toast.LENGTH_SHORT).show();
         }
     }
 

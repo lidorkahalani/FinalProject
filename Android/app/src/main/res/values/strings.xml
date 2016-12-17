@@ -86,7 +86,7 @@
     <string name="room_empty">There is no user in room</string>
     <string name="card_load">card load successfully</string>
     <string name="update_series">Update series</string>
-    <string name="wait_for_admin_chose">Wait for admin chose series</string>
+    <string name="wait_for_admin_chose">Please wait while the admin chooses series for game</string>
     <string name="show_my_series">Show my series</string>
     <string name="no_internet">No internet connection try again later</string>
     <string name="must_permission">permission neccery</string>
@@ -106,6 +106,37 @@
     <string name="waiting_for_players">Waiting for other players...</string>
     <string name="room_name_in_use">Room name already in use</string>
     <string name="connection_error">Error occurred - check internet connection</string>
+    <string name="sereis_uplaod_success">Series upload successfully!</string>
+    <string name="series_uplaod_failed">Series upload failed!</string>
+    <string name="failed_to_set_game_inactive">failed to set game inactive</string>
+    <string name="room_close">close the room</string>
+    <string name="no_recorde_toShow">There is no record to show</string>
+    <string name="update_finis_sereis_failed">Update finish series failed</string>
+    <string name="card_load_failed">Card load failed</string>
+    <string name="get_winner_failde">There was problem geting winner name</string>
+    <string name="Cant_set_game_Over">Cant set game Over</string>
+    <string name="new_high_score">You got new high score!</string>
+    <string name="low_score">You have been a higher score..</string>
+    <string name="set_deck_over_failed">There was problem on set Deck is over</string>
+    <string name="cant_take_card">You cannot take card wait to your turn</string>
+    <string name="wait_too_your_turn">Please wait to your turn</string>
+    <string name="sereis_comlete">Series Complete!</string>
+    <string name="send_card_failed">Card snd failed send</string>
+    <string name="take_card_failed">Take one card failed</string>
+    <string name="move_next_player_failed">move To Next Player failed</string>
+    <string name="check_if_my_turn_failed">check if is my turn failed</string>
+    <string name="new_card_recived">New Card recived</string>
+    <string name="card_send">Card send</string>
+    <string name="player_disconected">Someone is offline</string>
+    <string name="refresh_failed">Refresh failed</string>
+    <string name="invalid_user_login">invalid user ! check user name and password</string>
+    <string name="user_sign_up_success">sign up successfully</string>
+    <string name="user_sign_up_failed">sign up failed</string>
+    <string name="user_id_not_known">User id not exist</string>
+    <string name="push_hold">push and hold for more option</string>
+    <string name="password_no_match">Password no match</string>
+    <string name="finish_series_cnt">finish series:</string>
+
 
 
     <string-array name="card_click_menu">

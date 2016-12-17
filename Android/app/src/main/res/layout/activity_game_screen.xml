@@ -19,31 +19,38 @@
         android:weightSum="50"
 
         >
-
-        <TextView
-            android:layout_weight="10"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:id="@+id/pointField"
-            android:text="@string/points"
-            android:textStyle="bold"
-            android:gravity="bottom|center"
-            />
+            android:orientation="horizontal"
+            android:layout_weight="20"
+            android:weightSum="50">
+            <TextView
+                android:layout_weight="25"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/pointField"
+                android:text="@string/finish_series_cnt"
+                android:textStyle="bold"
+                android:gravity="bottom|center"
+                />
 
-        <TextView
-            android:layout_weight="10"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:id="@+id/currentActivePlayerName"
-            android:text="@string/move_to_next_turn"
-            android:textStyle="bold"
-            android:gravity="center"
-            />
+            <TextView
+                android:layout_weight="25"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:id="@+id/currentActivePlayerName"
+                android:text="@string/move_to_next_turn"
+                android:textStyle="bold"
+                android:gravity="center"
+                />
+        </LinearLayout>
+
+
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:gravity="bottom"
             android:layout_weight="30"
             >
 

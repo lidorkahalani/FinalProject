@@ -23,10 +23,7 @@
             android:id="@+id/start"
             android:textStyle="bold"
             android:text="@string/startGame"
-            android:layout_marginTop="15dp"
-            android:layout_above="@+id/button3"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_marginTop="15dp" />
 
         <Button
             android:textSize="18dip"

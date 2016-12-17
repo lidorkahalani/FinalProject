@@ -393,7 +393,7 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
 
         protected void onPostExecute(Boolean result) {
             if (result&&adminChose) {
-
+                myTimer.cancel();
                 Intent i = new Intent(getApplicationContext(), GameScreen.class);
                 i.putExtra("Game", game);
                 i.putExtra("currentPlayer", curentUser);
@@ -431,11 +431,11 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
 
         protected void onPostExecute(Boolean result) {
             if (result) {
-                Intent myIntent = new Intent(AdminChooseSeries.this, MainMenu.class);
+                /*Intent myIntent = new Intent(AdminChooseSeries.this, MainMenu.class);
                 startActivity(myIntent);
-                finish();
+                finish();*/
             } else
-                Toast.makeText(AdminChooseSeries.this, "There was problem on log out", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AdminChooseSeries.this,getResources().getString(R.string.failed_to_set_game_inactive), Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -472,7 +472,7 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
                 myTimer.cancel();
                 Intent myIntent = new Intent(AdminChooseSeries.this, MainMenu.class);
                 startActivity(myIntent);
-                Toast.makeText(AdminChooseSeries.this,"Somone Disconected",Toast.LENGTH_SHORT).show();
+                Toast.makeText(AdminChooseSeries.this,getResources().getString(R.string.room_close),Toast.LENGTH_SHORT).show();
                 finish();
 
             }
@@ -519,7 +519,7 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
         }
     }
 
-    public class checkIfSomoneDisconected extends AsyncTask<String, Void, Boolean> {
+   /* public class checkIfSomoneDisconected extends AsyncTask<String, Void, Boolean> {
         //String GetMySeries = "http://10.0.2.2/final_project/db/getMySeries.php";
         //String GetMySeries = "http://mysite.lidordigital.co.il/Quertets/php/db/getMySeries.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
@@ -586,7 +586,7 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
             }
         }
 
-    }
+    }*/
 
 
 }

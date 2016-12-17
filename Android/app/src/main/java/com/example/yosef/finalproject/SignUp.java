@@ -7,18 +7,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
-
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicResponseHandler;
-
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.LinkedHashMap;
 
 public class SignUp extends AppCompatActivity {
@@ -40,26 +31,30 @@ public class SignUp extends AppCompatActivity {
     public void goBack(View v){
         finish();
     }
+
     public void addNewUserToDB(View v){
-        new signUp().execute();
-    }
 
-    public class signUp  extends AsyncTask<String, Void, Boolean>{
-        //String reg_url = "http://mysite.lidordigital.co.il/Quertets/php/db/register.php";
-        //String reg_url = "http://10.0.2.2/final_project/db/register.php";
-
-        LinkedHashMap<String,String> parms=new LinkedHashMap<>();
         String uName=userName.getText().toString();
         String pass=password.getText().toString();
         String repass=repassword.getText().toString();
+
+            if (uName.equals("") || pass.equals(""))
+                Toast.makeText(this, getResources().getString(R.string.empty_field), Toast.LENGTH_SHORT).show();
+            else if(!(pass.equals(repass)))
+                Toast.makeText(this,getResources().getString(R.string.password_no_match),Toast.LENGTH_SHORT).show();
+            else
+                new signUp().execute(uName,pass);
+    }
+
+    public class signUp  extends AsyncTask<String, Void, Boolean>{
+        LinkedHashMap<String,String> parms=new LinkedHashMap<>();
+
         @Override
         protected Boolean doInBackground(String... params) {
             Gson gson=new Gson();
-            if(uName.equals("")||pass.equals("")||!repass.equals(pass))
-                return false;
 
-            parms.put("username",uName);
-            parms.put("password",pass);
+            parms.put("username",params[0]);
+            parms.put("password",params[1]);
 
             JSONParser json=new JSONParser();
             try {
@@ -82,11 +77,11 @@ public class SignUp extends AppCompatActivity {
         }
         protected void onPostExecute(Boolean result) {
             if(result) {
-                Toast.makeText(SignUp.this, "User added succesfuly", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SignUp.this, getResources().getString(R.string.user_sign_up_success), Toast.LENGTH_SHORT).show();
                 finish();
             }
             else
-                Toast.makeText(SignUp.this, "User NOT added", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SignUp.this, getResources().getString(R.string.user_sign_up_failed), Toast.LENGTH_SHORT).show();
 
 
 

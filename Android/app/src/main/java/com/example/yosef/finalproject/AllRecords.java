@@ -42,8 +42,6 @@ public class AllRecords extends AppCompatActivity implements AdapterView.OnItemC
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        User user = (User) parent.getItemAtPosition(position);
-        Toast.makeText(this,user.getUserName()+" Selcted",Toast.LENGTH_SHORT).show();
     }
 
    /* @Override
@@ -126,7 +124,7 @@ public class AllRecords extends AppCompatActivity implements AdapterView.OnItemC
         protected void onPostExecute(Boolean result) {
             if(result) {
                 if (uList.isEmpty()) {
-                    Toast.makeText(AllRecords.this, "no users in db", Toast.LENGTH_LONG).show();
+                    Toast.makeText(AllRecords.this,getResources().getString(R.string.no_recorde_toShow), Toast.LENGTH_LONG).show();
                     finish();
                 }
                 adapter = new MyClassAdapter(AllRecords.this, R.layout.single_user_layout, uList);

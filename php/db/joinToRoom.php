@@ -3,9 +3,11 @@ require_once('connection.php');
 $roomName=$_POST['room_name']; //game_name=room_name
 $user_id=$_POST['user_id'];
 $game_id=getGameId($roomName);
+
 $response=array();
 //if room exist
 if($game_id!=null){
+	
 	if(countPlayerInRoom($game_id)<2){//2
 		//another way to insert working
 			/*try {
@@ -24,6 +26,8 @@ if($game_id!=null){
 		  }else{
 			   $response["succsses"]=0;
 		  }
+		  if(countPlayerInRoom($game_id)==2)
+			  $response["roomIsFull"]=1;
 	}else{
 	     $response["roomIsFull"]=1;
 		 $response["succsses"]=0;
@@ -33,7 +37,7 @@ if($game_id!=null){
 echo json_encode($response);
 function getGameId($roomName){
 	require('connection.php');
-	$sth = $con->prepare("SELECT game_id FROM game where game_name='$roomName'");
+	$sth = $con->prepare("SELECT game_id FROM game where game_name='$roomName' AND my_turn_user_id=0");
 	$sth->execute();
 	$result = $sth->fetch(PDO::FETCH_ASSOC);
 	if($result){

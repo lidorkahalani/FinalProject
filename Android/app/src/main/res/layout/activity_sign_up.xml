@@ -1,115 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.example.yosef.finalproject.SignUp"
-    android:background="@drawable/rsz_background_menu_resize">
-
+    android:background="@drawable/rsz_background_menu_resize"
+    android:weightSum="100">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:gravity="center"
-            android:paddingTop="1dp"
-            android:layout_height="match_parent"
-            android:weightSum="1"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true">
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:layout_weight="20">
 
                 <ImageView
-                    android:layout_weight="0.27"
+                    android:layout_weight="20"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:id="@+id/imageView"
                     android:src="@drawable/logo"
-                    android:adjustViewBounds="true"
-                    android:layout_marginBottom="20dp" />
+                    android:adjustViewBounds="true"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:layout_weight="60"
+            android:weightSum="75">
 
                 <EditText
-                    android:layout_weight="0.15"
+                    android:layout_weight="25"
                     android:id="@+id/UserName"
-                    android:layout_width="240dp"
+                    android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:minHeight="15dp"
-                    android:maxHeight="16dp"
                     android:textColorHint="@android:color/darker_gray"
                     android:hint="@string/userName"
                     android:inputType="text"
-                    android:layout_margin="8dp"
                     android:gravity="center"
                     android:layout_gravity="center_horizontal"
                     android:background="@drawable/edit_text"
-                    android:layout_marginTop="30dp"
-                    android:singleLine="false"
                     android:selectAllOnFocus="false"
+                    android:drawableStart="@drawable/user"
                     android:drawableLeft="@drawable/user"
                     />
 
                 <EditText
-                    android:layout_weight="0.15"
+                    android:layout_weight="25"
                     android:id="@+id/password"
-                    android:layout_width="240dp"
+                    android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:textColorHint="@android:color/darker_gray"
                     android:hint="@string/password"
                     android:inputType="text"
-                    android:minHeight="15dp"
-                    android:maxHeight="16dp"
                     android:gravity="center"
-                    android:layout_marginTop="15dp"
                     android:layout_gravity="center_horizontal"
                     android:background="@drawable/edit_text"
+                    android:drawableStart="@drawable/password"
                     android:drawableLeft="@drawable/password"
 
                     />
 
                 <EditText
-                    android:layout_weight="0.15"
+                    android:layout_weight="25"
                     android:id="@+id/repassword"
-                    android:layout_width="240dp"
+                    android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:minHeight="15dp"
-                    android:maxHeight="16dp"
                     android:textColorHint="@android:color/darker_gray"
                     android:hint="@string/repassword"
-                    android:inputType="text"
                     android:gravity="center"
-                    android:layout_gravity="center_horizontal"
+                    android:inputType="text"
                     android:background="@drawable/edit_text"
+                    android:drawableStart="@drawable/password"
                     android:drawableLeft="@drawable/password"
                     />
 
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:layout_weight="20"
+            android:weightSum="50">
+
                 <Button
-                    android:layout_weight="0.13"
+                    android:layout_weight="25"
                     android:background="@drawable/sing_up"
                     android:text="@string/signUp"
                     android:onClick="addNewUserToDB"
-                    android:layout_width="126dp"
+                    android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:id="@+id/creatUser"
-                    android:layout_centerVertical="true"
-                    android:layout_alignRight="@+id/Background"
-                    android:layout_alignEnd="@+id/Background"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="15dp"
-                    android:textSize="18dp" />
-
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:textSize="18sp" />
                 <Button
-                    android:layout_weight="0.13"
+                    android:layout_weight="25"
                     android:background="@drawable/button"
                     android:onClick="goBack"
-                    android:layout_width="126dp"
+                    android:layout_width="match_parent"
                     android:layout_height="0dp"
+                    android:gravity="center"
                     android:id="@+id/button7"
                     android:text="@string/Back"
-                    android:layout_centerVertical="true"
-                    android:layout_alignRight="@+id/Background"
-                    android:layout_alignEnd="@+id/Background"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="10dp"
-                    android:textSize="18dp" />
+                    android:layout_gravity="center"
+                    android:textSize="18sp" />
 
         </LinearLayout>
-</RelativeLayout>
+
+</LinearLayout>

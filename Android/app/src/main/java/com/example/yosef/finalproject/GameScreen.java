@@ -130,7 +130,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         myListView.setLayoutManager(lm);
         myListView.setItemAnimator(new DefaultItemAnimator());
 
-        myTimer.scheduleAtFixedRate(new MyTask(), 6000, 3000);
+        myTimer.scheduleAtFixedRate(new MyTask(), 4000, 2000);
     }
 
     private class MyTask extends TimerTask {
@@ -149,7 +149,13 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         myTimer.cancel();
         Intent myIntent = new Intent(GameScreen.this, MainMenu.class);
         startActivity(myIntent);
+        this.runOnUiThread((new Runnable() {
+                    public void run() {
+                        Toast.makeText(GameScreen.this, getResources().getString(R.string.player_disconected), Toast.LENGTH_SHORT).show();
+                    }
+                }));
         finish();
+
     }
 
     public void onBackPressed() {
@@ -159,6 +165,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                 .setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         new setGameToInactive().execute(String.valueOf(newGame.getGame_id()));
+
                     }
                 })
                 .setNegativeButton(getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
@@ -179,7 +186,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         if (isMyTurnStatus)
             new takeOneCardFromDeck().execute();
         else
-            Toast.makeText(this, "you cannot take card", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,getResources().getString(R.string.cant_take_card),Toast.LENGTH_SHORT).show();
         // new tryTakeOneCardFromDeck().execute();
     }
 
@@ -187,7 +194,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         if(isMyTurnStatus)
             new moveToNextPlayer().execute();
         else
-            Toast.makeText(this, "wait to your turn", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.wait_too_your_turn), Toast.LENGTH_SHORT).show();
     }
 
     private void setCardsList() {
@@ -225,9 +232,9 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     }
 
     public void addPoint() {
-        Toast.makeText(this, "Series Complete! cards remove from screen", Toast.LENGTH_LONG).show();
-        new refresh().execute();
-        point.setText(getResources().getString(R.string.points) + ": " + (++currentPoint));
+        Toast.makeText(this,getResources().getString(R.string.sereis_comlete),Toast.LENGTH_LONG).show();
+        //new refresh().execute();
+        point.setText(getResources().getString(R.string.finish_series_cnt) + "\n" + (++currentPoint));
     }
 
     @Override
@@ -362,7 +369,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                 deck.remove(myListView.getChildLayoutPosition(cardView));
                 setCardsList();
             } else
-                Toast.makeText(GameScreen.this, "Card didnt send", Toast.LENGTH_LONG).show();
+                Toast.makeText(GameScreen.this, getResources().getString(R.string.send_card_failed), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -413,26 +420,9 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                     new moveToNextPlayer().execute();
                 else {
                     new setdeckIsOver().execute();
-                   /* deckImage.setVisibility(View.INVISIBLE);
-                    moveToNextTurn.setVisibility(View.VISIBLE);
-
-                    timer = new Timer();
-                    timerFlag = true;
-                    timer.schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            if (timerFlag) {
-                                new checkIfAllseriesComplete().execute();
-                            }
-                        }
-                    }, 2500);*/
-
-                    //new moveToNextPlayer().execute();
-                    //new setGameOverStatus().execute("3", String.valueOf(newGame.getGame_id()));
-                    //Toast.makeText(GameScreen.this, "deck end game over!", Toast.LENGTH_SHORT).show();
                 }
             } else
-                Toast.makeText(GameScreen.this, "Take one card failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(GameScreen.this, getResources().getString(R.string.take_card_failed), Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -473,7 +463,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                 }
                 //new refresh().execute();
             } else
-                Toast.makeText(GameScreen.this, "move To Next Player failed", Toast.LENGTH_LONG).show();
+                Toast.makeText(GameScreen.this, getResources().getString(R.string.move_next_player_failed), Toast.LENGTH_LONG).show();
 
         }
 
@@ -517,7 +507,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                 //Toast.makeText(GameScreen.this, "is my turn!", Toast.LENGTH_LONG).show();
                 //painCurrentPlayer();
             } else
-                Toast.makeText(GameScreen.this, "there was problem check if is my turn", Toast.LENGTH_LONG).show();
+                Toast.makeText(GameScreen.this, getResources().getString(R.string.check_if_my_turn_failed), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -618,27 +608,28 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
 
 
+
+                //all these toast not working!!!!!
                 if (newCarRecive) {
-                    Toast.makeText(GameScreen.this, "New Card recived", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(GameScreen.this, getResources().getString(R.string.new_card_recived), Toast.LENGTH_SHORT).show();
                     newCarRecive = false;
                 } else if (cardSend) {
-                    Toast.makeText(GameScreen.this, "Card send", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(GameScreen.this, getResources().getString(R.string.card_send), Toast.LENGTH_SHORT).show();
                     cardSend = false;
                 }
+                //
 
                 setCardsList();
                 if (isMyTurnStatus) {
                     activePlayer.setBackgroundColor(Color.GREEN);
                     myTurnTextView.setVisibility(View.VISIBLE);
-                    //myTurnTextView.setText(getResources().getString(R.string.you_turn));
                 } else {
-                    //myTurnTextView.setText("");
                     myTurnTextView.setVisibility(View.INVISIBLE);
                     activePlayer.setBackgroundColor(Color.TRANSPARENT);
                 }
 
-                /*if (!gameIsActive)
-                     openMainMenu();*/
+              /*  if (!gameIsActive)
+                    Toast.makeText(GameScreen.this,getResources().getString(R.string.player_disconected),Toast.LENGTH_SHORT).show();*/
 
                 if(finisheGame) {
                     //myTimer.cancel();
@@ -646,15 +637,12 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                 }
 
             } else
-                Toast.makeText(GameScreen.this, "refresh failed !", Toast.LENGTH_SHORT).show();
+                Toast.makeText(GameScreen.this, getResources().getString(R.string.refresh_failed), Toast.LENGTH_SHORT).show();
         }
 
     }
 
     public class UpdateFinishSeries extends AsyncTask<String, Void, Boolean> {
-        //String UpdateFinishSeries = "http://10.0.2.2/final_project/db/UpdateFinishSeries.php";
-        //String UpdateFinishSeries = "http://mysite.lidordigital.co.il/Quertets/php/db/UpdateFinishSeries.php";
-
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
@@ -702,7 +690,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
             if (result) {
                 addPoint();
             } else
-                Toast.makeText(GameScreen.this, "Update finish series failed", Toast.LENGTH_LONG).show();
+                Toast.makeText(GameScreen.this,getResources().getString(R.string.update_finis_sereis_failed), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -749,7 +737,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
             if (result) {
                 setCardsList();
             } else
-                Toast.makeText(GameScreen.this, "the deck not load !", Toast.LENGTH_SHORT).show();
+                Toast.makeText(GameScreen.this, getResources().getString(R.string.card_load_failed), Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -782,7 +770,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                 startActivity(myIntent);
                 finish();*/
             } else
-                Toast.makeText(GameScreen.this, "There was problem on log out", Toast.LENGTH_SHORT).show();
+                Toast.makeText(GameScreen.this, getResources().getString(R.string.failed_to_set_game_inactive), Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -870,7 +858,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
 
             } else
-                Toast.makeText(GameScreen.this, "There was problem during gameOver execute", Toast.LENGTH_SHORT).show();
+                Toast.makeText(GameScreen.this, getResources().getString(R.string.get_winner_failde), Toast.LENGTH_SHORT).show();
 
             //stop all timers
             myTimer.cancel();
@@ -905,7 +893,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
             if (result)
                 new GetWinnerName().execute();
             else
-                Toast.makeText(GameScreen.this, "Cant set game Over", Toast.LENGTH_LONG).show();
+                Toast.makeText(GameScreen.this,getResources().getString(R.string.Cant_set_game_Over), Toast.LENGTH_LONG).show();
         }
 
     }
@@ -939,15 +927,15 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         protected void onPostExecute(Boolean result) {
             if (result) {
                 if (newHighScore)
-                    Toast.makeText(GameScreen.this, "You got new high score!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(GameScreen.this, getResources().getString(R.string.high_scores), Toast.LENGTH_LONG).show();
                 else
-                    Toast.makeText(GameScreen.this, "You have been a higher score", Toast.LENGTH_LONG).show();
+                    Toast.makeText(GameScreen.this, getResources().getString(R.string.low_score), Toast.LENGTH_LONG).show();
 
                 Intent myIntent = new Intent(GameScreen.this, MainActivity.class);
                 startActivity(myIntent);
                 finish();
             } else
-                Toast.makeText(GameScreen.this, "Cant set game Over", Toast.LENGTH_LONG).show();
+                Toast.makeText(GameScreen.this, getResources().getString(R.string.Cant_set_game_Over), Toast.LENGTH_LONG).show();
         }
 
     }
@@ -975,7 +963,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
             if (result) {
                 new moveToNextPlayer().execute();
             } else
-                Toast.makeText(GameScreen.this, "There was problem on set Deck is over", Toast.LENGTH_SHORT).show();
+                Toast.makeText(GameScreen.this, getResources().getString(R.string.set_deck_over_failed),Toast.LENGTH_SHORT).show();
         }
 
     }

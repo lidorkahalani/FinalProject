@@ -80,7 +80,7 @@
     <string name="enter_categry_name">הכנס קטגוריה חדשה</string>
     <string name="card_load">טעינת קלפים הצליחה</string>
     <string name="update_series">עדכן סדרה</string>
-    <string name="wait_for_admin_chose">מחכה לבחירת סדרות על ידי האדמין</string>
+    <string name="wait_for_admin_chose">המתן בזמן שיוצר החדר בוחר סדרות למשחק</string>
     <string name="show_my_series">הסדרות שלי</string>
     <string name="no_internet">לא נמצא חיבור לאינטרנט</string>
     <string name="cannot_send_card">אינך יכול להעביר קלף בתורך</string>
@@ -116,6 +116,36 @@
         <item>מחק סדרה</item>
         <item>ערוך סדרה</item>
     </string-array>
+    <string name="Cant_set_game_Over">הייתה בעייה בקביעת סוף משחק</string>
+    <string name="cant_take_card">אינך יכול לקחת קלף חכה לתורך</string>
+    <string name="card_load_failed">טעינת קלפים נכשלה</string>
+    <string name="card_send">קלף נשלח</string>
+    <string name="check_if_my_turn_failed">בדיקת האם התור שלי נכלשה</string>
+    <string name="failed_to_set_game_inactive">נכשל לקבוע כמשחק לא פעיל</string>
+    <string name="get_winner_failde">הייתה בעיה בקבלת שמו של המנצח</string>
+    <string name="invalid_user_login">התחברות נכשלה בדוק שםמ משתמש וסיסמא</string>
+    <string name="low_score">הייתה לך תוצאה גבוהה יותר</string>
+    <string name="move_next_player_failed">מעבר לשחקן הבא נכשל</string>
+    <string name="new_card_recived">קלף חדש התקבל</string>
+    <string name="new_high_score">ברכותי! יש לך שיא חדש</string>
+    <string name="no_recorde_toShow">אין תוצאות להצגה</string>
+    <string name="password_no_match">סיסמאות לא תואמות</string>
+    <string name="player_disconected">משתמש התנתק</string>
+    <string name="push_hold">לחץ והחזק לקבלת אפשרויות נוספות</string>
+    <string name="refresh_failed">ריענון נכשל</string>
+    <string name="room_close">החדר נסגר</string>
+    <string name="send_card_failed">שליחת קלף נכשל</string>
+    <string name="sereis_comlete">השלמת סידרה!</string>
+    <string name="sereis_uplaod_success">העלאת סדרה בוצעה בהצלחה!</string>
+    <string name="series_uplaod_failed">העלאת סידרת נכשלה</string>
+    <string name="set_deck_over_failed">בעייה בקביעת חפיסה כגמורה</string>
+    <string name="take_card_failed">לקיחת קלף מהחפיסה נכשלה</string>
+    <string name="update_finis_sereis_failed">עדכון כסדרה שהושלמה נכשל</string>
+    <string name="user_id_not_known">משתמש לא קיים</string>
+    <string name="user_sign_up_failed">הרשמה נכשלה</string>
+    <string name="user_sign_up_success">הרשמה בוצעה בהצלחה</string>
+    <string name="wait_too_your_turn">אנא המתן לתורך</string>
+    <string name="finish_series_cnt">מספר סדרות שהושלמו:</string>
 
 
 </resources>

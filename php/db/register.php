@@ -10,11 +10,11 @@ $userName = $_POST['username'];
 $passWord = $_POST['password'];
 $user_id=0;
 $score=0;
-
+/*
 if($userName==""||$passWord==""){
 	echo "empty field";
 	return;
-}
+}*/
 mysqli_set_charset($con,"utf8");
 $result = mysqli_query($con,"insert into users (user_name,user_password) values('$userName','$passWord')");
 

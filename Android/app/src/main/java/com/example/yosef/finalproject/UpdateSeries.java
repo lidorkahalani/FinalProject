@@ -117,7 +117,7 @@ public class UpdateSeries extends AppCompatActivity implements View.OnClickListe
         SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(this);
         myId = myPref.getInt("user_id", 0);
         if(myId==0)
-            Toast.makeText(this,"user id is null",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,getResources().getString(R.string.user_id_not_known),Toast.LENGTH_SHORT).show();
 
         category_name.setText(selctedSeries.getCategory_name());
         card1.setText(selctedSeries.getCard_name1());
@@ -355,14 +355,14 @@ public class UpdateSeries extends AppCompatActivity implements View.OnClickListe
             Intent resultIntent = getIntent();
 
             if(result) {
-                Toast.makeText(UpdateSeries.this,"Update successes",Toast.LENGTH_SHORT).show();
+                Toast.makeText(UpdateSeries.this,getResources().getString(R.string.update_succesess),Toast.LENGTH_SHORT).show();
                 Intent intent=new Intent(UpdateSeries.this,MainMenu.class);
                 startActivity(intent);
                 finish();
                 //setResult(RESULT_OK, resultIntent);
             }
             else{
-                Toast.makeText(UpdateSeries.this,"Update failed",Toast.LENGTH_SHORT).show();
+                Toast.makeText(UpdateSeries.this,getResources().getString(R.string.update_failed),Toast.LENGTH_SHORT).show();
                 finish();
             }
 
