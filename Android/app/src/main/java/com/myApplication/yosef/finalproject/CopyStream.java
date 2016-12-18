@@ -1,4 +1,4 @@
-package com.example.yosef.finalproject;
+package com.myApplication.yosef.finalproject;
 
 /**
  * Created by Lidor on 20/09/2016.

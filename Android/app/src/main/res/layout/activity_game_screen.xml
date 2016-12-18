@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_game"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.example.yosef.finalproject.GameScreen"
+    tools:context="com.myApplication.yosef.finalproject.GameScreen"
     android:orientation="vertical"
     android:weightSum="100"
     >

@@ -85,7 +85,8 @@
     <string name="no_internet">לא נמצא חיבור לאינטרנט</string>
     <string name="cannot_send_card">אינך יכול להעביר קלף בתורך</string>
     <string name="game_over">המשחק הסתיים</string>
-    <string name="win">ניצח</string>
+    <string name="win">ניצחת!</string>
+    <string name="Won">ניצח</string>
     <string name="no_one_win">אין מנצח</string>
     <string name="move_to_next_turn">העבר תור</string>
     <string name="you_turn">תורך</string>
@@ -123,7 +124,7 @@
     <string name="check_if_my_turn_failed">בדיקת האם התור שלי נכלשה</string>
     <string name="failed_to_set_game_inactive">נכשל לקבוע כמשחק לא פעיל</string>
     <string name="get_winner_failde">הייתה בעיה בקבלת שמו של המנצח</string>
-    <string name="invalid_user_login">התחברות נכשלה בדוק שםמ משתמש וסיסמא</string>
+    <string name="invalid_user_login">התחברות נכשלה בדוק שם משתמש וסיסמא</string>
     <string name="low_score">הייתה לך תוצאה גבוהה יותר</string>
     <string name="move_next_player_failed">מעבר לשחקן הבא נכשל</string>
     <string name="new_card_recived">קלף חדש התקבל</string>

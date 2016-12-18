@@ -1,4 +1,4 @@
-package com.example.yosef.finalproject;
+package com.myApplication.yosef.finalproject;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

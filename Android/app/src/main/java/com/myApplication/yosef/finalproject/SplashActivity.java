@@ -1,4 +1,4 @@
-package com.example.yosef.finalproject;
+package com.myApplication.yosef.finalproject;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -82,9 +82,6 @@ public class SplashActivity extends AppCompatActivity {
                 Intent myIntent = new Intent(SplashActivity.this, MainActivity.class);
                 startActivity(myIntent);
             } else {
-               /* counter++;
-                if(counter==1)
-                    Toast.makeText(SplashActivity.this, "No internet Connection app try to connect", Toast.LENGTH_LONG).show();*/
                 noConnectionMassage.setVisibility(View.VISIBLE);
                 AlertDialog.Builder builder = new AlertDialog.Builder(SplashActivity.this);
                 builder.setMessage(getResources().getString(R.string.no_internet))
@@ -96,10 +93,12 @@ public class SplashActivity extends AppCompatActivity {
                         });
                 AlertDialog alert = builder.create();
                 alert.show();
-                /*MyLoaderTask tryAgain = new MyLoaderTask();
-                tryAgain.execute("");*/
             }
         }
+
+    }
+
+    public void checkServerResponse(){
 
     }
 }

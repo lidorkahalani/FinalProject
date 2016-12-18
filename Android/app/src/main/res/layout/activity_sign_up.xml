@@ -4,7 +4,7 @@
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.yosef.finalproject.SignUp"
+    tools:context="com.myApplication.yosef.finalproject.SignUp"
     android:background="@drawable/rsz_background_menu_resize"
     android:weightSum="100">
 

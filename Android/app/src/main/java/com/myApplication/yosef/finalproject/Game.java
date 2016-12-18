@@ -1,4 +1,4 @@
-package com.example.yosef.finalproject;
+package com.myApplication.yosef.finalproject;
 
 import java.io.Serializable;
 import java.util.ArrayList;

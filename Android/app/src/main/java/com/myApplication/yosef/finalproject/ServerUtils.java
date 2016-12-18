@@ -1,4 +1,4 @@
-package com.example.yosef.finalproject;
+package com.myApplication.yosef.finalproject;
 
 /**
  * Created by Yosef on 03-Nov-16.
@@ -7,14 +7,14 @@ package com.example.yosef.finalproject;
 public class ServerUtils {
 
 
-     public static String server ="http://192.168.1.13/final_project/db/";
-     public static String imageLoadServer="http://192.168.1.13/final_project/";
+     //public static String server ="http://192.168.1.13/final_project/db/";
+    // public static String imageLoadServer="http://192.168.1.13/final_project/";
 
     //public static String server ="http://10.0.2.2/final_project/db/";
     //public static String imageLoadServer="http://10.0.2.2/final_project/";
 
-    // public static String server="http://mysite.lidordigital.co.il/Quertets/php/db/";
-   // public static String imageLoadServer="http://mysite.lidordigital.co.il/Quertets/php/";
+    public static String server="http://mysite.lidordigital.co.il/Quertets/php/db/";
+    public static String imageLoadServer="http://mysite.lidordigital.co.il/Quertets/php/";
 
 
 

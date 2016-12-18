@@ -1,4 +1,4 @@
-package com.example.yosef.finalproject;
+package com.myApplication.yosef.finalproject;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -46,15 +46,11 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
     private ArrayList<User> allUsers =new ArrayList();
     private  ProgressDialog pDialog;
     private Timer timer;
-    private Timer timerStartGame;
-    boolean timerStartGameFlag = false;
     boolean timerFlag = false;
     private Boolean isGameActive=false;
     private Boolean isAdmin=false;
     private Boolean startGame=false;
     boolean isAdminOpenTheRoomAndCloseIt=false;
-
-
     private Timer timer2;
     boolean timerFlag2 = false;
     private TextView roomName;
@@ -450,8 +446,6 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
     }
 
     public class checkIfRoomNameAvilabale extends AsyncTask<String, User, Integer> {
-        //String checkIfRoomNameAvailable = "http://10.0.2.2/final_project/db/cheekIfRoomNameAvailable.php";
-       //  String checkIfRoomNameAvailable="http://mysite.lidordigital.co.il/Quertets/php/db/cheekIfRoomNameAvailable.php";
         LinkedHashMap parms = new LinkedHashMap<>();
         String roomName;
         @Override
@@ -490,6 +484,8 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                     public void onClick(DialogInterface dialog, int which) {
                         timer.cancel();
                         timerFlag = false;
+                        if(timerFlag2)
+                            timer2.cancel();
                         Intent myIntent = new Intent(Room.this, MainMenu.class);
                         startActivity(myIntent);
                         finish();

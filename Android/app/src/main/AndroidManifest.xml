@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.yosef.finalproject">
+    package="com.myApplication.yosef.finalproject">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -49,8 +49,7 @@
         <activity
             android:name=".AddNewSeries"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitle"
-            android:windowSoftInputMode="adjustResize"/>
+            android:theme="@style/NoTitle" />
         <activity
             android:name=".ShowMySerie"
             android:screenOrientation="portrait"
@@ -58,8 +57,7 @@
         <activity
             android:name=".UpdateSeries"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitle"
-            android:windowSoftInputMode="adjustResize"/>
+            android:theme="@style/NoTitle"/>
 
         <activity android:name=".AdminChooseSeries" />
 

@@ -14,7 +14,7 @@
         android:id="@+id/linearLayout"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true">
-
+<!--
        <Button
             android:textSize="18dip"
             android:onClick="startGame"
@@ -24,7 +24,7 @@
             android:textStyle="bold"
             android:text="@string/startGame"
             android:layout_marginTop="15dp" />
-
+-->
         <Button
             android:textSize="18dip"
             android:onClick="openRoom"

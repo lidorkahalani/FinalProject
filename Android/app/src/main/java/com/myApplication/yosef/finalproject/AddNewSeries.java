@@ -1,4 +1,4 @@
-package com.example.yosef.finalproject;
+package com.myApplication.yosef.finalproject;
 
 import android.Manifest;
 import android.app.ProgressDialog;
@@ -58,7 +58,7 @@ import org.apache.http.util.EntityUtilsHC4;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.example.yosef.finalproject.ServerUtils;
+import com.myApplication.yosef.finalproject.ServerUtils;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;

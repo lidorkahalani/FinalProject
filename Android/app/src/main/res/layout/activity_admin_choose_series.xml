@@ -10,7 +10,7 @@
     android:background="@drawable/rsz_background_menu_resize"
     android:weightSum="100"
     android:orientation="vertical"
-    tools:context="com.example.yosef.finalproject.AdminChooseSeries">
+    tools:context="com.myApplication.yosef.finalproject.AdminChooseSeries">
 
     <LinearLayout
         android:layout_width="match_parent"

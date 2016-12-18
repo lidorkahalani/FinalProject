@@ -94,7 +94,8 @@
     <string name="high_scores">High scores</string>
     <string name="cannot_send_card">you cannot send card on your turn</string>
     <string name="game_over">Game over</string>
-    <string name="win">Won</string>
+    <string name="win">Win!</string>
+    <string name="Won">Won</string>
     <string name="no_one_win">There is no winner</string>
     <string name="move_to_next_turn">Next turn</string>
     <string name="you_turn">You turn</string>
@@ -136,6 +137,7 @@
     <string name="push_hold">push and hold for more option</string>
     <string name="password_no_match">Password no match</string>
     <string name="finish_series_cnt">finish series:</string>
+    <string name="you">you</string>
 
 
 

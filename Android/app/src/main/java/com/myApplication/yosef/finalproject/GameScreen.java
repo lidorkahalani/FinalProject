@@ -1,4 +1,4 @@
-package com.example.yosef.finalproject;
+package com.myApplication.yosef.finalproject;
 
 
 import android.content.DialogInterface;
@@ -289,8 +289,6 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     }
 
     public class startPlay extends AsyncTask<String, Void, Boolean> {
-        //String get4Cards = "http://10.0.2.2/final_project/db/giveMe4Cards.php";
-        //String get4Cards = "http://mysite.lidordigital.co.il/Quertets/php/db/giveMe4Cards.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
@@ -825,7 +823,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                     AlertDialog.Builder builder = new AlertDialog.Builder(GameScreen.this);
                     builder.setTitle(getResources().getString(R.string.game_over));
                     if (currentPlayer.getUserID() == winerUser.getUserID()) {
-                        builder.setMessage("You" + getResources().getString(R.string.win))
+                        builder.setMessage(getResources().getString(R.string.you) + getResources().getString(R.string.win))
                                 .setCancelable(false)
                                 .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
@@ -839,15 +837,13 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                                     }
                                 });
                     }else {
-                        builder.setMessage(winnerName + " " + getResources().getString(R.string.win))
+                        builder.setMessage(winnerName + " " + getResources().getString(R.string.Won))
                                 .setCancelable(false)
                                 .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
-                                        openMainMenu();
-                                         /*   Intent myIntent = new Intent(GameScreen.this, MainMenu.class);
-                                            myIntent.putExtra("User",currentPlayer);
+                                           Intent myIntent = new Intent(GameScreen.this, MainMenu.class);
                                             startActivity(myIntent);
-                                            finish();*/
+                                            finish();
 
                                     }
                                 });

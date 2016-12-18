@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="@drawable/rsz_background_menu_resize"
-    tools:context="com.example.yosef.finalproject.AllRecords">
+    tools:context="com.myApplication.yosef.finalproject.AllRecords">
 <LinearLayout
     android:orientation="vertical"
     android:layout_width="match_parent"
