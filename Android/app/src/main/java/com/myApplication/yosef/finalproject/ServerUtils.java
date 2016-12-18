@@ -7,8 +7,8 @@ package com.myApplication.yosef.finalproject;
 public class ServerUtils {
 
 
-     //public static String server ="http://192.168.1.13/final_project/db/";
-    //public static String imageLoadServer="http://192.168.1.13/final_project/";
+    // public static String server ="http://192.168.1.13/final_project/db/";
+   // public static String imageLoadServer="http://192.168.1.13/final_project/";
 
     //public static String server ="http://10.0.2.2/final_project/db/";
     //public static String imageLoadServer="http://10.0.2.2/final_project/";

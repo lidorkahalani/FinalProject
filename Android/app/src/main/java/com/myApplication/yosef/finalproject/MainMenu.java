@@ -115,6 +115,7 @@ public class MainMenu extends AppCompatActivity {
                     SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(MainMenu.this);
                     SharedPreferences.Editor editor = myPref.edit();
                     editor.remove("username");
+                    editor.remove("loginWhitFacebook");
                     editor.commit();
                     Intent myIntent = new Intent(MainMenu.this, MainActivity.class);
                     startActivity(myIntent);

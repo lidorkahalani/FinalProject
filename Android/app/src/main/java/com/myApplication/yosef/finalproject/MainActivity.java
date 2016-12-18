@@ -249,8 +249,6 @@ public class MainActivity extends AppCompatActivity {
     public class logIn extends AsyncTask<String, Void, Boolean> {
 
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
-
-        //MySQLiteHelper dbHelper = new MySQLiteHelper(MainActivity.this, UserDBConstants.DBName, null, UserDBConstants.User_DB_VESRSION);
         String inputUserName ;
         String inputPassword ;
 
@@ -322,17 +320,17 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(String... params) {
 
-            userName=params[0];
+           /* userName=params[0];
              password=params[1];
 
             if(userName.equals("")||password.equals(""))
-                return false;
+                return false;*/
 
-            parms.put("password",password);
-            parms.put("username",userName);
+            parms.put("username",profile.getFirstName());
+            parms.put("password",profile.getId());
             JSONParser json=new JSONParser();
             try {
-                JSONObject response=json.makeHttpRequest(ServerUtils.reg_url,"GET",parms);
+                JSONObject response=json.makeHttpRequest(ServerUtils.reg_url,"POST",parms);
 
 
                 if(response.getInt("sucsses")==1){
@@ -358,7 +356,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent myIntent = new Intent(MainActivity.this, MainMenu.class);
                 startActivity(myIntent);
                 SharedPreferences.Editor editor = myPref.edit();
-                editor.putString("username", userName);
+                editor.putString("username", profile.getFirstName());
                 editor.putInt("score", score);
 
                 editor.commit();

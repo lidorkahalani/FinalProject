@@ -220,10 +220,14 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
         }
         protected void onPostExecute(Boolean result) {
             if(result) {
-                if (allUsers.isEmpty()) {
+               /*    if (allUsers.isEmpty()) {
                     Toast.makeText(Room.this, getResources().getString(R.string.room_empty), Toast.LENGTH_LONG).show();
+                    if(timerFlag)
+                        timer.cancel();
+                    if(timerFlag2)
+                        timer2.cancel();
                     finish();
-                }
+                }*/
                 adapter = new MyClassAdapter(Room.this, R.layout.single_user_in_room_list,allUsers);
 
                 personList.setAdapter(adapter);

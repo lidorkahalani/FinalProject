@@ -183,8 +183,10 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     }
 
     public void takeCard(View v) {
-        if (isMyTurnStatus)
+        if (isMyTurnStatus) {
+            //
             new takeOneCardFromDeck().execute();
+        }
         else
             Toast.makeText(this,getResources().getString(R.string.cant_take_card),Toast.LENGTH_SHORT).show();
         // new tryTakeOneCardFromDeck().execute();
@@ -414,7 +416,6 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         protected void onPostExecute(Boolean result) {
             if (result) {
                 currentActivePlayerName.setVisibility(View.VISIBLE);
-               // currentActivePlayerName.setText(getResources().getString(R.string.Active_player)+"\n"+activePlayerName);
                 setCardsList();
                 if (!deckIsOver)
                     new moveToNextPlayer().execute();
@@ -815,10 +816,10 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                             .setCancelable(false)
                             .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-                                    openMainMenu();
-                                  /*  Intent myIntent = new Intent(GameScreen.this, MainMenu.class);
-                                    myIntent.putExtra("User",currentPlayer);
-                                    startActivity(myIntent);*/
+                                    Intent myIntent = new Intent(GameScreen.this, MainMenu.class);
+                                    startActivity(myIntent);
+                                    finish();
+
                                 }
                             });
                     AlertDialog alert = builder.create();
@@ -827,7 +828,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                     AlertDialog.Builder builder = new AlertDialog.Builder(GameScreen.this);
                     builder.setTitle(getResources().getString(R.string.game_over));
                     if (currentPlayer.getUserID() == winerUser.getUserID()) {
-                        builder.setMessage(getResources().getString(R.string.you) + getResources().getString(R.string.win))
+                        builder.setMessage(getResources().getString(R.string.win))
                                 .setCancelable(false)
                                 .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
@@ -845,9 +846,9 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                                 .setCancelable(false)
                                 .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
-                                           Intent myIntent = new Intent(GameScreen.this, MainMenu.class);
-                                            startActivity(myIntent);
-                                            finish();
+                                        Intent myIntent = new Intent(GameScreen.this, MainMenu.class);
+                                        startActivity(myIntent);
+                                        finish();
 
                                     }
                                 });
@@ -927,7 +928,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         protected void onPostExecute(Boolean result) {
             if (result) {
                 if (newHighScore)
-                    Toast.makeText(GameScreen.this, getResources().getString(R.string.high_scores), Toast.LENGTH_LONG).show();
+                    Toast.makeText(GameScreen.this, getResources().getString(R.string.new_high_score), Toast.LENGTH_LONG).show();
                 else
                     Toast.makeText(GameScreen.this, getResources().getString(R.string.low_score), Toast.LENGTH_LONG).show();
 
