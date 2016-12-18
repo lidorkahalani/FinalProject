@@ -53,6 +53,7 @@ import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.ContentBody;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.apache.http.util.EntityUtilsHC4;
 import org.json.JSONArray;
@@ -72,6 +73,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
@@ -146,6 +148,9 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
     private StringBuilder sbParams;
     private String paramsString;
     final int MY_PERMISSIONS_REQUEST_READ_STORAGE =1;
+    ContentType contentType= ContentType.create("text/plain", Charset.forName("UTF-8"));
+    //ContentType contentType = ContentType.create(
+    //        HTTP.PLAIN_TEXT_TYPE, HTTP.UTF_8);
 
 
 
@@ -548,12 +553,12 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
             entityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
 
             entityBuilder.addTextBody("category_id", String.valueOf(category_id));
-            entityBuilder.addTextBody("category_name", params[0]);
+            entityBuilder.addTextBody("category_name", params[0],contentType);
             entityBuilder.addTextBody("user_id",String.valueOf(currentPlayer.getUserID()));
-            entityBuilder.addTextBody("card1", params[1]);
-            entityBuilder.addTextBody("card2", params[2]);
-            entityBuilder.addTextBody("card3", params[3]);
-            entityBuilder.addTextBody("card4", params[4]);
+            entityBuilder.addTextBody("card1", params[1],contentType);
+            entityBuilder.addTextBody("card2", params[2],contentType);
+            entityBuilder.addTextBody("card3", params[3],contentType);
+            entityBuilder.addTextBody("card4", params[4],contentType);
             entityBuilder.addPart("image1",new FileBody(imageFile1));
             entityBuilder.addPart("image2",new FileBody(imageFile2));
             entityBuilder.addPart("image3",new FileBody(imageFile3));

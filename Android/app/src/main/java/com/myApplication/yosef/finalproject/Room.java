@@ -69,7 +69,6 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
         isNewRoom=getIntent().getExtras().getBoolean("isNewRoom");
         roomName.setText(getResources().getString(R.string.wellcome)+" To: "+game.getGame_name()+" Room");
         if(isNewRoom) {
-            //new openNewRoom().execute(game.getGame_name());
             new checkIfRoomNameAvilabale().execute(game.getGame_name());
         } else {
             new joinToRoom().execute(game.getGame_name());
@@ -93,6 +92,15 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                 });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    public void openMainMenu(){
+        timer2.cancel();
+        timerFlag2 = false;
+        Intent myIntent = new Intent(Room.this, MainMenu.class);
+        startActivity(myIntent);
+        //Toast.makeText(Room.this, "Admin was lost Connection", Toast.LENGTH_SHORT).show();
+        finish();
     }
 
     @Override
@@ -207,10 +215,7 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                     JSONObject jo = res.getJSONObject(i);
                     User u = new User(jo.getString("user_name"),jo.getString("user_password"),jo.getInt("user_id"));
                     allUsers.add(u);
-
                 }
-
-
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
@@ -220,14 +225,14 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
         }
         protected void onPostExecute(Boolean result) {
             if(result) {
-               /*    if (allUsers.isEmpty()) {
+                if (allUsers.isEmpty()) {
                     Toast.makeText(Room.this, getResources().getString(R.string.room_empty), Toast.LENGTH_LONG).show();
                     if(timerFlag)
                         timer.cancel();
                     if(timerFlag2)
                         timer2.cancel();
                     finish();
-                }*/
+                }
                 adapter = new MyClassAdapter(Room.this, R.layout.single_user_in_room_list,allUsers);
 
                 personList.setAdapter(adapter);
@@ -246,8 +251,6 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
     }
 
     public class checkIfRoomFull extends AsyncTask<String, Void, Boolean> {
-        //String checkIfRoomFull = "http://10.0.2.2/final_project/db/checkIfRoomFull.php";
-       // String checkIfRoomFull = "http://mysite.lidordigital.co.il/Quertets/php/db/checkIfRoomFull.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
@@ -283,8 +286,6 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
     }
 
     public class checkIfImAdmin extends AsyncTask<String, Void, Boolean> {
-        //String checkIfImAdmin = "http://10.0.2.2/final_project/db/checkIfAdmin.php";
-       //  String checkIfImAdmin = "http://mysite.lidordigital.co.il/Quertets/php/db/checkIfAdmin.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
@@ -300,11 +301,6 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                         isAdmin=true;
                     else
                         isAdmin=false;
-
-              /*      return true;
-                } else {
-                    return false;
-                }*/
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
@@ -327,26 +323,11 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                     startActivity(i);
                     finish();
                 }else {
-                    //timer.cancel();
-                  //  timerFlag = false;
                     pDialog.setMessage(getResources().getString(R.string.wait_for_admin_chose));
                     new checkIfGameIsActive().execute(String.valueOf(game.getGame_id()));
-
-                   /* timerStartGame = new Timer();
-                    timerStartGameFlag = true;
-                    timer.schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            if (timerStartGameFlag) {
-                                new checkIfGameIsActive().execute(String.valueOf(game.getGame_id()));
-                            }
-                        }
-                    }, 3000);*/
-                    //new checkIfGameIsActive().execute(String.valueOf(game.getGame_id()));
                 }
             }else {
                 pDialog.setMessage("check admin was failed");
-                //new checkIfGameIsActive().execute(String.valueOf(game.getGame_id()));
             }
 
         }
@@ -354,8 +335,6 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
     }
 
     public class checkIfGameIsActive extends AsyncTask<String, Void, Boolean> {
-        //String checkIfGameIsActive = "http://10.0.2.2/final_project/db/checkIfGameIsActive.php";
-         //String checkIfGameIsActive = "http://mysite.lidordigital.co.il/Quertets/php/db/checkIfGameIsActive.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
@@ -369,7 +348,6 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                     if (response.getJSONObject("result").getInt("is_active") == 1)
                         isGameActive = true;
                     else if (response.getJSONObject("result").getInt("is_active") == 4)
-                        //}else if(response.getJSONObject("result").getInt("is_active")==2) {
                         startGame = true;
                     else
                         return false;
@@ -508,7 +486,7 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                             //new GetRoomStatus().execute(roomName);
                         }
                     }
-                }, 3000);
+                }, 2000);
 
                 //new GetAllConnectedPlayers().execute();
             } else if (result == 0) {//room name already in use
@@ -567,14 +545,7 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
 
     }
 
-    public void openMainMenu(){
-        timer2.cancel();
-        timerFlag2 = false;
-        Intent myIntent = new Intent(Room.this, MainMenu.class);
-        startActivity(myIntent);
-        //Toast.makeText(Room.this, "Admin was lost Connection", Toast.LENGTH_SHORT).show();
-        finish();
-    }
+
 
 
 }
