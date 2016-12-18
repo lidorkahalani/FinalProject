@@ -836,7 +836,6 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                                         SharedPreferences.Editor editor = myPref.edit();
                                         editor.putInt("score", currentPoint);
                                         editor.commit();
-
                                         new UpdateScore().execute(String.valueOf(currentPoint), String.valueOf(winerUser.getUserID()));
 
                                     }
