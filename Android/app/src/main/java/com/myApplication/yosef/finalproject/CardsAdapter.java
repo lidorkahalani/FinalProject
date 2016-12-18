@@ -79,7 +79,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.MyViewHolder
         holder.category.setText(card.getCategoryName());
         //holder.image.setImageDrawable(card.getItemPicture());
        // holder.image.setImageURI(card.getImageName()););
-        if (!holder.isClicked) {
+      /*  if (!holder.isClicked) {
             if (card.getCardName().equals(card.getItemsArray()[0])) {
                 holder.card1.setTypeface(Typeface.DEFAULT_BOLD);
             } else if (card.getCardName().equals(card.getItemsArray()[1])) {
@@ -89,7 +89,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.MyViewHolder
             } else if (card.getCardName().equals(card.getItemsArray()[3])) {
                 holder.card4.setTypeface(Typeface.DEFAULT_BOLD);
             }
-        }
+        }*/
 
         holder.card1.setText(card.getItemsArray()[0]);
         holder.card2.setText(card.getItemsArray()[1]);

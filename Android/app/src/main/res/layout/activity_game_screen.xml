@@ -40,7 +40,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:id="@+id/currentActivePlayerName"
-                android:text="@string/move_to_next_turn"
+                android:text="@string/Active_player"
                 android:textStyle="bold"
                 android:gravity="center"
                 />

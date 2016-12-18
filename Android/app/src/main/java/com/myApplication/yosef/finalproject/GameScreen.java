@@ -413,6 +413,8 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
         protected void onPostExecute(Boolean result) {
             if (result) {
+                currentActivePlayerName.setVisibility(View.VISIBLE);
+               // currentActivePlayerName.setText(getResources().getString(R.string.Active_player)+"\n"+activePlayerName);
                 setCardsList();
                 if (!deckIsOver)
                     new moveToNextPlayer().execute();
@@ -600,9 +602,11 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                     deckImage.setVisibility(View.GONE);
                     moveToNextTurn.setVisibility(View.VISIBLE);
                 }
-
                 if(updateActivePlayerName)
-                    currentActivePlayerName.setText(activePlayerName);
+                  if(!isMyTurnStatus)
+                     currentActivePlayerName.setText(getResources().getString(R.string.Active_player)+"\n"+activePlayerName);
+                else
+                      currentActivePlayerName.setVisibility(View.INVISIBLE);
 
 
 

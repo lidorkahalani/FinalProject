@@ -147,6 +147,8 @@
     <string name="user_sign_up_success">הרשמה בוצעה בהצלחה</string>
     <string name="wait_too_your_turn">אנא המתן לתורך</string>
     <string name="finish_series_cnt">מספר סדרות שהושלמו:</string>
+    <string name="Active_player">שחקן פעיל :</string>
+
 
 
 </resources>
