@@ -36,7 +36,7 @@ $final_query="INSERT into category (category_name,category_color) VALUES('$categ
 
 
 if(move_uploaded_file($image1['tmp_name'], $file_path1)) {
-    chmod($file_path2, 0755);
+    
     $host='localhost';
 	  $username='root';
 	  $password='';

@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -35,6 +36,7 @@ import com.google.gson.Gson;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
@@ -46,8 +48,10 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.LinkedHashMap;
 
 public class UpdateSeries extends AppCompatActivity implements View.OnClickListener {
@@ -83,10 +87,16 @@ public class UpdateSeries extends AppCompatActivity implements View.OnClickListe
     private EditText card2;
     private EditText card3;
     private EditText card4;
+
+    private File file1;
+    private File file2;
+    private File file3;
+    private File file4;
     int myId;
     private Uri filePath;
     private File imageFile;
     private Bitmap bitmap;
+    ContentType contentType= ContentType.create("text/plain", Charset.forName("UTF-8"));
 
 
     Series selctedSeries;
@@ -189,33 +199,42 @@ public class UpdateSeries extends AppCompatActivity implements View.OnClickListe
             Bitmap rotatedBitmap=null;
 
             Matrix matrix = new Matrix();
-            matrix.postRotate(180);
+            ExifInterface ei = null;
             try {
-                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                ei = new ExifInterface(imageFile.getAbsolutePath());
+                matrix.postRotate(setOriention(ei));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                bitmap=Bitmap.createScaledBitmap(MediaStore.Images.Media.getBitmap(getContentResolver(), filePath),200,200,true);
                 rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+
                 if(isbuttonChooseCard1) {
-                    imageName1=getRealPathFromURI_BelowAPI11(getBaseContext(),filePath);
-                    //file1= new File(Environment.getExternalStorageDirectory().getAbsolutePath(),imageFile.getPath());
+                    imageName1=getImageNameFromUriAcordingApi(data);
+                    String[] name=imageName1.split("/");
+                    file1 =convertBitmapToFile(bitmap,name[name.length-1]);
                     imageViewCard1.setImageBitmap(rotatedBitmap);
                     isbuttonChooseCard1=false;
                 }
                 else if(isbuttonChooseCard2) {
-                    imageName2=getRealPathFromURI_BelowAPI11(getBaseContext(),filePath);
-                    //file2= new File(Environment.getExternalStorageDirectory().getAbsolutePath(),imageFile.getPath());
-
+                    imageName2=getImageNameFromUriAcordingApi(data);
+                    String[] name=imageName1.split("/");
+                    file2 =convertBitmapToFile(bitmap,name[name.length-1]);
                     imageViewCard2.setImageBitmap(rotatedBitmap);
                     isbuttonChooseCard2=false;
                 }
                 else if(isbuttonChooseCard3) {
-                    imageName3=getRealPathFromURI_BelowAPI11(getBaseContext(),filePath);
-                    //file3= new File(Environment.getExternalStorageDirectory().getAbsolutePath(),imageFile.getPath());
-
+                    imageName3=getImageNameFromUriAcordingApi(data);
+                    String[] name=imageName1.split("/");
+                    file3 =convertBitmapToFile(bitmap,name[name.length-1]);
                     imageViewCard3.setImageBitmap(rotatedBitmap);
                     isbuttonChooseCard3=false;
                 }
                 else if(isbuttonChooseCard4) {
-                    imageName4=getRealPathFromURI_BelowAPI11(getBaseContext(),filePath);
-                    //file4= new File(Environment.getExternalStorageDirectory().getAbsolutePath(),imageFile.getPath());
+                    imageName4=getImageNameFromUriAcordingApi(data);
+                    String[] name=imageName1.split("/");
+                    file4 =convertBitmapToFile(bitmap,name[name.length-1]);
                     imageViewCard4.setImageBitmap(rotatedBitmap);
                     isbuttonChooseCard4=false;
                 }
@@ -310,7 +329,10 @@ public class UpdateSeries extends AppCompatActivity implements View.OnClickListe
     }
 
     public class UpdateSeriesTask  extends AsyncTask<String, Void, Boolean> {
-
+        File f1;
+        File f2;
+        File f3;
+        File f4;
         LinkedHashMap<String,String> parms=new LinkedHashMap<>();
         @Override
         protected Boolean doInBackground(String... params) {
@@ -323,15 +345,33 @@ public class UpdateSeries extends AppCompatActivity implements View.OnClickListe
             entityBuilder.addTextBody("category_id", String.valueOf(selctedSeries.getCategory_id()));
             entityBuilder.addTextBody("category_name", params[0]);
             entityBuilder.addTextBody("user_id",String.valueOf(myId));
-            entityBuilder.addTextBody("card1", params[1]);
-            entityBuilder.addTextBody("card2", params[2]);
-            entityBuilder.addTextBody("card3", params[3]);
-            entityBuilder.addTextBody("card4", params[4]);
+            entityBuilder.addTextBody("card1", params[1],contentType);
+            entityBuilder.addTextBody("card2", params[2],contentType);
+            entityBuilder.addTextBody("card3", params[3],contentType);
+            entityBuilder.addTextBody("card4", params[4],contentType);
+            if(imageName1.equals(""))
+                f1=new File(getEmptyFile());
+            else
+                f1=file1;
 
-            entityBuilder.addPart("image1",new FileBody(new File(imageName1.equals("")?getEmptyFile():imageName1)));
-            entityBuilder.addPart("image2",new FileBody(new File(imageName2.equals("")?getEmptyFile():imageName2)));
-            entityBuilder.addPart("image3",new FileBody(new File(imageName3.equals("")?getEmptyFile():imageName3)));
-            entityBuilder.addPart("image4",new FileBody(new File(imageName4.equals("")?getEmptyFile():imageName4)));
+            if(imageName2.equals(""))
+                f2=new File(getEmptyFile());
+            else
+                f2=file2;
+
+            if(imageName3.equals(""))
+                f3=new File(getEmptyFile());
+            else
+                f3=file3;
+
+            if(imageName4.equals(""))
+                f4=new File(getEmptyFile());
+            else
+                f4=file4;
+            entityBuilder.addPart("image1",new FileBody(f1));
+            entityBuilder.addPart("image2",new FileBody(f2));
+            entityBuilder.addPart("image3",new FileBody(f3));
+            entityBuilder.addPart("image4",new FileBody(f4));
             httppost.setEntity(entityBuilder.build());
             try {
                 HttpResponse response = httpclient.execute(httppost);
@@ -441,5 +481,77 @@ public class UpdateSeries extends AppCompatActivity implements View.OnClickListe
         }
 
     }
+
+    public String getImageNameFromUriAcordingApi(Intent uri){
+        String name;
+        if (Build.VERSION.SDK_INT < 11) {
+            name = RealPathUtil.getRealPathFromURI_BelowAPI11(this, uri.getData());
+        }
+
+        // SDK >= 11 && SDK < 19
+        else if (Build.VERSION.SDK_INT < 19) {
+            name = RealPathUtil.getRealPathFromURI_API11to18(this, uri.getData());
+        }
+
+        // SDK > 19 (Android 4.4)
+        else {
+            name = RealPathUtil.getRealPathFromURI_API19(this, uri.getData());
+        }
+        return name;
+    }
+
+    public File convertBitmapToFile(Bitmap bitmap,String imageName){
+        File x=getFilesDir();
+        File f = new File(x,imageName);
+        try {
+            f.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+//Convert bitmap to byte array
+
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 50, bos);
+        byte[] bitmapdata = bos.toByteArray();
+
+//write the bytes in file
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(f);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            fos.write(bitmapdata);
+            fos.flush();
+            fos.close();
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return  f;
+    }
+
+    public int setOriention(ExifInterface ei){
+
+        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_UNDEFINED);
+
+        switch(orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                return 90;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                return 180;
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                return 270;
+            case ExifInterface.ORIENTATION_NORMAL:
+                return 1;
+            default:
+                break;
+        }
+        return 0;
+    }
+
 
 }
