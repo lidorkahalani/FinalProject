@@ -166,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
     }
+
     public void logIn(View v) {
         new logIn().execute(userName.getText().toString(),password.getText().toString());
     }

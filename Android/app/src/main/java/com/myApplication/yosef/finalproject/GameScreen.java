@@ -52,6 +52,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     private RelativeLayout left_layout;
     private RelativeLayout top_layout;
     private RelativeLayout right_layout;*/
+
     private LinearLayout activePlayer;
     private TextView point;
     private TextView myTurnTextView;

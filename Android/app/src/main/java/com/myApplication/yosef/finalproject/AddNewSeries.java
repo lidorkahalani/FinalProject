@@ -241,7 +241,8 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
                   //  bitmapResize1=Bitmap.createScaledBitmap(rotatedBitmap,200,200,true);
                     bitmapResize1=bitmap;
                     imageName1=getRealPathFromURI_BelowAPI11(getBaseContext(),filePath);
-                    file1= new File(Environment.getExternalStorageDirectory().getAbsolutePath(),imageFile.getPath());
+                     file1 = new File(getRealPathFromURI(filePath));
+                  //  file1= new File(Environment.getExternalStorageDirectory().getAbsolutePath(),imageFile.getPath());
                     imageViewCard1.setImageBitmap(rotatedBitmap);
                     isbuttonChooseCard1=false;
                 }
@@ -249,7 +250,8 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
                   //  bitmapResize2=Bitmap.createScaledBitmap(rotatedBitmap,200,200,true);
                     bitmapResize2=bitmap;
                     imageName2=getRealPathFromURI_BelowAPI11(getBaseContext(),filePath);
-                    file2= new File(Environment.getExternalStorageDirectory().getAbsolutePath(),imageFile.getPath());
+                   // file2= new File(Environment.getExternalStorageDirectory().getAbsolutePath(),imageFile.getPath());
+                    file2= new File(getRealPathFromURI(filePath));
 
                     imageViewCard2.setImageBitmap(rotatedBitmap);
                     isbuttonChooseCard2=false;
@@ -258,7 +260,9 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
                  //   bitmapResize3=Bitmap.createScaledBitmap(rotatedBitmap,200,200,true);
                     bitmapResize3=bitmap;
                     imageName3=getRealPathFromURI_BelowAPI11(getBaseContext(),filePath);
-                    file3= new File(Environment.getExternalStorageDirectory().getAbsolutePath(),imageFile.getPath());
+                    //file3= new File(Environment.getExternalStorageDirectory().getAbsolutePath(),imageFile.getPath());
+                    file3=new File(getRealPathFromURI(filePath));
+
 
                     imageViewCard3.setImageBitmap(rotatedBitmap);
                     isbuttonChooseCard3=false;
@@ -267,7 +271,8 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
                     //bitmapResize4=Bitmap.createScaledBitmap(rotatedBitmap,200,200,true);
                     bitmapResize4=bitmap;
                     imageName4=getRealPathFromURI_BelowAPI11(getBaseContext(),filePath);
-                    file4= new File(Environment.getExternalStorageDirectory().getAbsolutePath(),imageFile.getPath());
+                    file4=new File(getRealPathFromURI(filePath));
+                    //file4= new File(Environment.getExternalStorageDirectory().getAbsolutePath(),imageFile.getPath());
                     imageViewCard4.setImageBitmap(rotatedBitmap);
                     isbuttonChooseCard4=false;
                 }
@@ -559,10 +564,10 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
             entityBuilder.addTextBody("card2", params[2],contentType);
             entityBuilder.addTextBody("card3", params[3],contentType);
             entityBuilder.addTextBody("card4", params[4],contentType);
-            entityBuilder.addPart("image1",new FileBody(imageFile1));
-            entityBuilder.addPart("image2",new FileBody(imageFile2));
-            entityBuilder.addPart("image3",new FileBody(imageFile3));
-            entityBuilder.addPart("image4",new FileBody(imageFile4));
+            entityBuilder.addPart("image1",new FileBody(file1));
+            entityBuilder.addPart("image2",new FileBody(file2));
+            entityBuilder.addPart("image3",new FileBody(file3));
+            entityBuilder.addPart("image4",new FileBody(file4));
             httppost.setEntity(entityBuilder.build());
 
             try {
@@ -673,5 +678,25 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
         return 0;
     }
 
+    private String getRealPathFromURI(Uri contentURI)
+    {
+        String result = null;
 
+        Cursor cursor = getContentResolver().query(contentURI, null, null, null, null);
+
+        if (cursor == null)
+        { // Source is Dropbox or other similar local file path
+            result = contentURI.getPath();
+        }
+        else
+        {
+            if(cursor.moveToFirst())
+            {
+                int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+                result = cursor.getString(idx);
+            }
+            cursor.close();
+        }
+        return result;
+    }
 }
