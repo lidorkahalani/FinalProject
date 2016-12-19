@@ -240,6 +240,7 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
                 if(isbuttonChooseCard1) {
                   //  bitmapResize1=Bitmap.createScaledBitmap(rotatedBitmap,200,200,true);
                     bitmapResize1=bitmap;
+                    
                     imageName1=getRealPathFromURI_BelowAPI11(getBaseContext(),filePath);
                      file1 = new File(getRealPathFromURI(filePath));
                   //  file1= new File(Environment.getExternalStorageDirectory().getAbsolutePath(),imageFile.getPath());
