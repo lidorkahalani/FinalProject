@@ -26,15 +26,6 @@
             android:orientation="horizontal"
             android:layout_weight="20"
             android:weightSum="50">
-            <TextView
-                android:layout_weight="25"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:id="@+id/pointField"
-                android:text="@string/finish_series_cnt"
-                android:textStyle="bold"
-                android:gravity="center"
-                />
 
             <TextView
                 android:layout_weight="25"
@@ -43,27 +34,30 @@
                 android:id="@+id/currentActivePlayerName"
                 android:text="@string/Active_player"
                 android:textStyle="bold"
+                android:textSize="@dimen/largeFont"
                 android:gravity="center"
                 />
+
+            <TextView
+                android:layout_weight="25"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:id="@+id/pointField"
+                android:text="@string/finish_series_cnt"
+                android:textStyle="bold"
+                android:textSize="@dimen/largeFont"
+                android:gravity="center"
+                />
+
         </LinearLayout>
 
 
 
         <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="30"
             >
-
-            <ImageButton
-                android:onClick="takeCard"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/deck_en"
-                android:id="@+id/ImageDeck"
-                android:background="@android:color/transparent"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"/>
 
             <Button
                 android:onClick="moveToNextTurn"
@@ -73,10 +67,20 @@
                 android:visibility="gone"
                 android:background="@drawable/next_turn"
                 android:text="@string/move_to_next_turn"
+                android:textSize="@dimen/mediumFont"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
-
                 />
+
+            <ImageButton
+                android:onClick="takeCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/deck_en"
+                android:id="@+id/ImageDeck"
+                android:background="@android:color/transparent"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" />
 
         </RelativeLayout>
 
@@ -119,6 +123,7 @@
                     android:visibility="invisible"
                     android:text="@string/you_turn"
                     android:textStyle="bold"
+                    android:textSize="@dimen/mediumFont"
                     android:gravity="center"
                     />
 

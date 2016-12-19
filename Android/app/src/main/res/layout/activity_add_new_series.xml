@@ -7,7 +7,9 @@
     android:background="@drawable/rsz_background_menu_resize"
     tools:context=".MainActivity"
     android:weightSum="100">
+
     <LinearLayout
+        android:textSize="@dimen/largeFont"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
@@ -194,6 +196,7 @@
         android:gravity="center"
         android:weightSum="10">
         <Button
+            android:textSize="@dimen/mediumFont"
             android:layout_weight="10"
             android:layout_width="match_parent"
             android:layout_height="0dp"

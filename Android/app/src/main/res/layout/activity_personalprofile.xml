@@ -6,14 +6,32 @@
     tools:context=".MainMenu"
     android:background="@drawable/rsz_background_menu_resize">
 
+    <TextView
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/WelcomUserName"
+        android:text="hello user"
+        android:layout_marginTop="60dp"
+        android:textSize="@dimen/largeFont"
+        android:textIsSelectable="false"
+        android:textColor="#000000"
+        android:visibility="visible"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:id="@+id/linearLayout"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true">
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 <!--
        <Button
             android:textSize="18dip"
@@ -26,24 +44,26 @@
             android:layout_marginTop="15dp" />
 -->
         <Button
-            android:textSize="18dip"
+            android:textSize="@dimen/regularFont"
             android:onClick="openRoom"
-            android:layout_width="185dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/open_room"
             android:id="@+id/btnOpenRoomId"
             android:textStyle="bold"
             android:text="@string/OpenRoom"
             android:layout_marginTop="15dp"
+            android:padding="@dimen/pading"
             android:layout_above="@+id/button3"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
 
         <Button
-            android:textSize="17.5dip"
+            android:padding="@dimen/pading"
+            android:textSize="@dimen/regularFont"
             android:textStyle="bold"
             android:onClick="addNewSeries"
-            android:layout_width="185dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/btnAddCardId"
             android:layout_marginTop="15dp"
@@ -54,10 +74,11 @@
             android:layout_alignParentEnd="true" />
 
         <Button
-            android:textSize="18dip"
+            android:padding="@dimen/pading"
+            android:textSize="@dimen/regularFont"
             android:textStyle="bold"
             android:onClick="ShowMySerie"
-            android:layout_width="185dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:id="@+id/btnShowMyCardId"
@@ -67,23 +88,25 @@
             android:layout_centerHorizontal="true" />
 
         <Button
+            android:padding="@dimen/pading"
             android:onClick="joinToRoom"
-            android:layout_width="185dp"
+            android:layout_width="match_parent"
             android:textStyle="bold"
             android:layout_height="wrap_content"
             android:background="@drawable/join_room"
             android:text="@string/JoinToRoom"
-            android:textSize="18dip"
+            android:textSize="@dimen/regularFont"
             android:id="@+id/btnJoinRoomId"
             android:layout_marginTop="15dp"
             android:layout_below="@+id/linearLayout"
             android:layout_centerHorizontal="true" />
 
         <Button
-            android:textSize="18dip"
+            android:padding="@dimen/pading"
+            android:textSize="@dimen/regularFont"
             android:textStyle="bold"
             android:onClick="logOut"
-            android:layout_width="185dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/log_off"
             android:text="@string/logOut"
@@ -102,10 +125,11 @@
                     android:layout_gravity="center_horizontal" />
         -->
                 <Button
-                    android:textSize="18dip"
+                    android:padding="@dimen/pading"
+                    android:textSize="@dimen/regularFont"
                     android:textStyle="bold"
                     android:onClick="RecordTable"
-                    android:layout_width="185dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/high_scores"
                     android:layout_marginTop="15dp"
@@ -113,32 +137,50 @@
                     android:background="@android:drawable/dialog_holo_light_frame"
                     android:layout_gravity="center_horizontal"
                     />
+        <!--
+                        <com.facebook.login.widget.LoginButton
+                            xmlns:facebook="http://schemas.android.com/apk/res-auto"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/facbookLogin"
 
-                <com.facebook.login.widget.LoginButton
-                    xmlns:facebook="http://schemas.android.com/apk/res-auto"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/facbookLogin"
+                            android:layout_gravity="center_horizontal"
+                            facebook:com_facebook_confirm_logout="false"
+                            facebook:com_facebook_tooltip_mode="never_display"
+                            />
 
-                    android:layout_gravity="center_horizontal"
-                    facebook:com_facebook_confirm_logout="false"
-                    facebook:com_facebook_tooltip_mode="never_display"
-                    android:layout_marginTop="45dp" />
+        -->
 
-            </LinearLayout>
 
-    <TextView
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/WelcomUserName"
-        android:text="hello user"
-        android:textSize="25dp"
-        android:textIsSelectable="false"
-        android:textColor="#000000"
-        android:visibility="visible"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        <com.facebook.login.widget.LoginButton
+            xmlns:facebook="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/login_facebook_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="20dp"
+            android:paddingBottom="25dp"
+            
+            android:layout_marginRight="30dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="15dp"
 
-</RelativeLayout>
+            android:layout_gravity="center_horizontal"
+            facebook:com_facebook_confirm_logout="false"
+            facebook:com_facebook_tooltip_mode="never_display"
+
+
+
+
+
+
+            />
+
+
+
+
+
+
+
+                    </LinearLayout>
+
+        </RelativeLayout>

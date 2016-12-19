@@ -16,17 +16,22 @@
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/roomName">
+
         <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/PlayerList"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
+            android:textSize="@dimen/regularFont"
+
+
             />
     </LinearLayout>
 
     <TextView
         android:gravity="center"
+        android:textSize="@dimen/largeFont"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/wellcome"
