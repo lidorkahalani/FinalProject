@@ -6,6 +6,16 @@
     <dimen name="regularFont">29sp</dimen>
     <dimen name="mediumFont">25sp</dimen>
     <dimen name="largeFont">37sp</dimen>
-    <dimen name="pading">25dp</dimen>
+    <dimen name="pading">35dp</dimen>
+    <dimen name="paddingMainActivity">155dp</dimen>
+    <dimen name="paddingSiginUpctivity">155dp</dimen>
+    <dimen name="topPadingSigniButton">95dip</dimen>
+
+    <dimen name="padingRightLeftMainMenu">85dp</dimen>
+    <dimen name="padingMainMenu">55dp</dimen>
+    <dimen name="padingTopMainMenu">55dp</dimen>
+
+
+
 
 </resources>

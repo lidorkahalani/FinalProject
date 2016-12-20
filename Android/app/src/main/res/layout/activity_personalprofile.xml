@@ -1,49 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="100"
     tools:context=".MainMenu"
-    android:background="@drawable/rsz_background_menu_resize">
+    android:background="@drawable/rsz_background_menu_resize"
+    >
 
-    <TextView
-        android:gravity="center"
+ <!--
+    <LinearLayout
+        android:layout_weight="15"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/WelcomUserName"
-        android:text="hello user"
-        android:layout_marginTop="60dp"
-        android:textSize="@dimen/largeFont"
-        android:textIsSelectable="false"
-        android:textColor="#000000"
-        android:visibility="visible"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/WelcomUserName"
+            android:text="hello user"
+            android:textSize="@dimen/largeFont"
+            android:textIsSelectable="false"
+            android:textColor="#000000" />
+
+    </LinearLayout>
+
 
     <LinearLayout
-        android:orientation="vertical"
+        android:layout_weight="60"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:gravity="center"
-        android:id="@+id/linearLayout"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
-<!--
-       <Button
-            android:textSize="18dip"
-            android:onClick="startGame"
-            android:layout_width="185dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/start"
-            android:textStyle="bold"
-            android:text="@string/startGame"
-            android:layout_marginTop="15dp" />
--->
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/mainMenuPadding"
+        android:paddingRight="@dimen/mainMenuPadding"
+      >
+
+
+               <Button
+                    android:textSize="18dip"
+                    android:onClick="startGame"
+                    android:layout_width="185dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/start"
+                    android:textStyle="bold"
+                    android:text="@string/startGame"
+                    android:layout_marginTop="15dp" />
+
         <Button
+            android:gravity="center"
             android:textSize="@dimen/regularFont"
             android:onClick="openRoom"
             android:layout_width="match_parent"
@@ -52,29 +62,34 @@
             android:id="@+id/btnOpenRoomId"
             android:textStyle="bold"
             android:text="@string/OpenRoom"
-            android:layout_marginTop="15dp"
-            android:padding="@dimen/pading"
-            android:layout_above="@+id/button3"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+     />
 
         <Button
-            android:padding="@dimen/pading"
+            android:onClick="joinToRoom"
+            android:layout_width="match_parent"
+            android:textStyle="bold"
+            android:layout_height="wrap_content"
+            android:background="@drawable/join_room"
+            android:text="@string/JoinToRoom"
+            android:layout_marginTop="15dp"
+            android:textSize="@dimen/regularFont"
+            android:id="@+id/btnJoinRoomId"
+        />
+
+        <Button
             android:textSize="@dimen/regularFont"
             android:textStyle="bold"
             android:onClick="addNewSeries"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/btnAddCardId"
             android:layout_marginTop="15dp"
+
+            android:id="@+id/btnAddCardId"
             android:background="@drawable/add_new_cards_small"
             android:text="@string/add_new_series"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+    />
 
         <Button
-            android:padding="@dimen/pading"
             android:textSize="@dimen/regularFont"
             android:textStyle="bold"
             android:onClick="ShowMySerie"
@@ -83,26 +98,9 @@
             android:layout_marginTop="15dp"
             android:id="@+id/btnShowMyCardId"
             android:text="@string/show_my_series"
-            android:background="@drawable/my_cards"
-            android:layout_below="@+id/linearLayout"
-            android:layout_centerHorizontal="true" />
+            android:background="@drawable/my_cards" />
 
         <Button
-            android:padding="@dimen/pading"
-            android:onClick="joinToRoom"
-            android:layout_width="match_parent"
-            android:textStyle="bold"
-            android:layout_height="wrap_content"
-            android:background="@drawable/join_room"
-            android:text="@string/JoinToRoom"
-            android:textSize="@dimen/regularFont"
-            android:id="@+id/btnJoinRoomId"
-            android:layout_marginTop="15dp"
-            android:layout_below="@+id/linearLayout"
-            android:layout_centerHorizontal="true" />
-
-        <Button
-            android:padding="@dimen/pading"
             android:textSize="@dimen/regularFont"
             android:textStyle="bold"
             android:onClick="logOut"
@@ -111,47 +109,45 @@
             android:background="@drawable/log_off"
             android:text="@string/logOut"
             android:id="@+id/btnlogOut"
+            android:layout_marginTop="15dp" />
+        <Button
+            android:textStyle="bold"
+            android:onClick="RecordTable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/high_scores"
             android:layout_marginTop="15dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
-        <!--
-                <Button
-                    android:onClick="addNewPerson"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/set_person"
-                    android:id="@+id/button10"
-                    android:layout_gravity="center_horizontal" />
-        -->
-                <Button
-                    android:padding="@dimen/pading"
-                    android:textSize="@dimen/regularFont"
-                    android:textStyle="bold"
-                    android:onClick="RecordTable"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/high_scores"
-                    android:layout_marginTop="15dp"
-                    android:id="@+id/button11"
-                    android:background="@android:drawable/dialog_holo_light_frame"
-                    android:layout_gravity="center_horizontal"
-                    />
-        <!--
-                        <com.facebook.login.widget.LoginButton
-                            xmlns:facebook="http://schemas.android.com/apk/res-auto"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/facbookLogin"
+            android:id="@+id/button11"
+            android:background="@android:drawable/dialog_holo_light_frame"
+            android:layout_gravity="center_horizontal"
+            />
 
-                            android:layout_gravity="center_horizontal"
-                            facebook:com_facebook_confirm_logout="false"
-                            facebook:com_facebook_tooltip_mode="never_display"
-                            />
-
-        -->
+    </LinearLayout>
 
 
+    <LinearLayout
+        android:layout_weight="25"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        >
+
+        <com.facebook.login.widget.LoginButton
+            xmlns:facebook="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/facbookLogin"
+
+            android:layout_gravity="center_horizontal"
+            facebook:com_facebook_confirm_logout="false"
+            facebook:com_facebook_tooltip_mode="never_display"
+            />
+
+    </LinearLayout>
+    -->
+
+<!--
         <com.facebook.login.widget.LoginButton
             xmlns:facebook="http://schemas.android.com/apk/res-auto"
             android:id="@+id/login_facebook_button"
@@ -159,7 +155,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="20dp"
             android:paddingBottom="25dp"
-            
+
             android:layout_marginRight="30dp"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="15dp"
@@ -168,19 +164,117 @@
             facebook:com_facebook_confirm_logout="false"
             facebook:com_facebook_tooltip_mode="never_display"
 
-
-
-
-
-
             />
+        -->
+        <LinearLayout
+            android:layout_weight="10"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/WelcomUserName"
+                android:text="hello user"
+                android:textSize="@dimen/largeFont"
+                android:textIsSelectable="false"
+                android:textColor="#000000"
+                android:visibility="visible" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_weight="90"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:id="@+id/linearLayout"
+            android:paddingLeft="@dimen/padingRightLeftMainMenu"
+            android:paddingRight="@dimen/padingRightLeftMainMenu"
+>
+            <Button
+                android:textSize="@dimen/regularFont"
+                android:onClick="openRoom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/open_room"
+                android:id="@+id/btnOpenRoomId"
+                android:textStyle="bold"
+                android:text="@string/OpenRoom"
+                android:layout_marginTop="15dp" />
+            <Button
+                android:onClick="joinToRoom"
+                android:layout_width="match_parent"
+                android:textStyle="bold"
+                android:layout_height="wrap_content"
+                android:background="@drawable/join_room"
+                android:text="@string/JoinToRoom"
+                android:textSize="@dimen/regularFont"
+                android:id="@+id/btnJoinRoomId"
+                android:layout_marginTop="15dp" />
+
+            <Button
+                android:textSize="@dimen/regularFont"
+                android:textStyle="bold"
+                android:onClick="addNewSeries"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnAddCardId"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/add_new_cards_small"
+                android:text="@string/add_new_series" />
+
+            <Button
+                android:textSize="@dimen/regularFont"
+                android:textStyle="bold"
+                android:onClick="ShowMySerie"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:id="@+id/btnShowMyCardId"
+                android:text="@string/show_my_series"
+                android:background="@drawable/my_cards" />
 
 
 
+            <Button
+                android:textSize="@dimen/regularFont"
+                android:textStyle="bold"
+                android:onClick="logOut"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/log_off"
+                android:text="@string/logOut"
+                android:id="@+id/btnlogOut"
+                android:layout_marginTop="15dp" />
+
+            <Button
+                android:textSize="@dimen/regularFont"
+                android:textStyle="bold"
+                android:onClick="RecordTable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/high_scores"
+                android:layout_marginTop="15dp"
+                android:id="@+id/button11"
+                android:background="@android:drawable/dialog_holo_light_frame"
+                android:layout_gravity="center_horizontal"
+                />
+            <com.facebook.login.widget.LoginButton
+                xmlns:facebook="http://schemas.android.com/apk/res-auto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/facbookLogin"
+                android:layout_gravity="center_horizontal"
+                facebook:com_facebook_confirm_logout="false"
+                facebook:com_facebook_tooltip_mode="never_display"
+                />
+
+        </LinearLayout>
 
 
-
-
-                    </LinearLayout>
-
-        </RelativeLayout>
+    </LinearLayout>

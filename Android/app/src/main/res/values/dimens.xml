@@ -5,7 +5,14 @@
     <dimen name="regularFont">18sp</dimen>
     <dimen name="mediumFont">20sp</dimen>
     <dimen name="largeFont">26sp</dimen>
-    <dimen name="pading">15dp</dimen>
+    <dimen name="pading">25dp</dimen>
+    <dimen name="paddingMainActivity">55dp</dimen>
+    <dimen name="topPadingSigniButton">10dip</dimen>
+    <dimen name="mainMenuPadding">35dp</dimen>
+    <dimen name="padingRightLeftMainMenu">35dp</dimen>
+    <dimen name="padingTopMainMenu">35dp</dimen>
+
+
 
 
 

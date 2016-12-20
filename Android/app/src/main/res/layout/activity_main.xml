@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:facebook="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MainActivity"
     android:background="@drawable/rsz_background_menu_resize"
-    android:weightSum="100">
+    android:weightSum="75">
 
 
     <LinearLayout
@@ -29,19 +30,21 @@
 
     <LinearLayout
 
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center"
         android:gravity="center"
         android:orientation="vertical"
-        android:layout_weight="70"
+        android:layout_weight="50"
+        android:paddingStart="@dimen/paddingMainActivity"
+        android:paddingEnd="@dimen/paddingMainActivity"
         android:weightSum="100">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="vertical"
-            android:layout_weight="45"
+            android:layout_weight="40"
             android:weightSum="100">
 
             <EditText
@@ -68,8 +71,8 @@
                 android:inputType="textPassword"
                 android:gravity="center"
                 android:background="@drawable/edit_text"
-                android:drawableStart="@drawable/user"
-                android:drawableLeft="@drawable/user"
+                android:drawableStart="@drawable/password"
+                android:drawableLeft="@drawable/password"
                 />
         </LinearLayout>
 
@@ -114,14 +117,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_gravity="center"
+        android:layout_gravity="top"
         android:orientation="vertical"
-        android:layout_weight="10"
-        android:weightSum="10">
+        android:layout_weight="5"
+      >
 
         <com.facebook.login.widget.LoginButton
+
             android:layout_weight="10"
-            xmlns:facebook="http://schemas.android.com/apk/res-auto"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:id="@+id/facbookLogin"

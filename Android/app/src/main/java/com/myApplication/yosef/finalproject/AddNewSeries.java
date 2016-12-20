@@ -556,6 +556,7 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
         File imageFile2;
         File imageFile3;
         File imageFile4;
+        Boolean isAllImage=true;
         ProgressDialog loading;
 
         @Override
@@ -594,6 +595,10 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
                 if(response.getStatusLine().getStatusCode()==200){
                     if(json.equals("1"))
                         return true;
+                    else if(json.equals("-1")){
+                        isAllImage=false;
+                        return true;
+                    }
                     else
                         return false;
                 }else
@@ -611,7 +616,11 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
         protected void onPostExecute(Boolean result) {
             loading.dismiss();
             if (result) {
-                Toast.makeText(AddNewSeries.this,getResources().getString(R.string.sereis_uplaod_success), Toast.LENGTH_SHORT).show();
+                if(isAllImage)
+                    Toast.makeText(AddNewSeries.this,getResources().getString(R.string.sereis_uplaod_success), Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(AddNewSeries.this,getResources().getString(R.string.upload_just_image), Toast.LENGTH_SHORT).show();
+
 
             } else {
                 Toast.makeText(AddNewSeries.this, getResources().getString(R.string.series_uplaod_failed), Toast.LENGTH_SHORT).show();

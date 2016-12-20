@@ -1,6 +1,7 @@
 package com.myApplication.yosef.finalproject;
 
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,6 +30,8 @@ public class SignUp extends AppCompatActivity {
 
 
     public void goBack(View v){
+        Intent myIntent = new Intent(SignUp.this, MainActivity.class);
+        startActivity(myIntent);
         finish();
     }
 
@@ -78,6 +81,8 @@ public class SignUp extends AppCompatActivity {
         protected void onPostExecute(Boolean result) {
             if(result) {
                 Toast.makeText(SignUp.this, getResources().getString(R.string.user_sign_up_success), Toast.LENGTH_SHORT).show();
+                Intent myIntent = new Intent(SignUp.this, MainActivity.class);
+                startActivity(myIntent);
                 finish();
             }
             else

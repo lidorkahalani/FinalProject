@@ -3,6 +3,7 @@ package com.myApplication.yosef.finalproject;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
@@ -82,17 +83,26 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.MyViewHolder
         holder.card2.setTypeface(Typeface.DEFAULT);
         holder.card3.setTypeface(Typeface.DEFAULT);
         holder.card4.setTypeface(Typeface.DEFAULT);
+
+        holder.card1.setTextColor(Color.BLACK);
+        holder.card2.setTextColor(Color.BLACK);
+        holder.card3.setTextColor(Color.BLACK);
+        holder.card4.setTextColor(Color.BLACK);
         //holder.image.setImageDrawable(card.getItemPicture());
        // holder.image.setImageURI(card.getImageName()););
         if (!holder.isClicked) {
             if (card.getCardName().equals(card.getItemsArray()[0])) {
                 holder.card1.setTypeface(Typeface.DEFAULT_BOLD);
+                holder.card1.setTextColor(Color.GREEN);
             } else if (card.getCardName().equals(card.getItemsArray()[1])) {
                 holder.card2.setTypeface(Typeface.DEFAULT_BOLD);
+                holder.card2.setTextColor(Color.GREEN);
             } else if (card.getCardName().equals(card.getItemsArray()[2])) {
                 holder.card3.setTypeface(Typeface.DEFAULT_BOLD);
+                holder.card3.setTextColor(Color.GREEN);
             } else if (card.getCardName().equals(card.getItemsArray()[3])) {
                 holder.card4.setTypeface(Typeface.DEFAULT_BOLD);
+                holder.card4.setTextColor(Color.GREEN);
             }
         }
 

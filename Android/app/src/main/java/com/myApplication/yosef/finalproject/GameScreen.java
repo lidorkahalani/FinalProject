@@ -1,6 +1,7 @@
 package com.myApplication.yosef.finalproject;
 
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -131,7 +132,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         myListView.setLayoutManager(lm);
         myListView.setItemAnimator(new DefaultItemAnimator());
 
-        myTimer.scheduleAtFixedRate(new MyTask(), 4000, 2000);
+        myTimer.scheduleAtFixedRate(new MyTask(), 4000, 1500);
     }
 
     private class MyTask extends TimerTask {
@@ -337,8 +338,13 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
                 new isMyTurn().execute();
                 //new checkQuartets().execute();
-            } else
+            } else {
+                myTimer.cancel();
                 Toast.makeText(GameScreen.this, getResources().getString(R.string.card_not_load), Toast.LENGTH_SHORT).show();
+                Intent myIntent = new Intent(GameScreen.this, MainMenu.class);
+                startActivity(myIntent);
+                finish();
+            }
         }
 
 
@@ -376,7 +382,16 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
     public class takeOneCardFromDeck extends AsyncTask<String, Void, Boolean> {
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
+        ProgressDialog loading;
 
+        @Override
+        protected void onPreExecute() {
+
+            super.onPreExecute();
+            loading = ProgressDialog.show(GameScreen.this,
+                    getResources().getString(R.string.take_card),
+                    getResources().getString(R.string.please_wait),true,true);
+        }
         @Override
         protected Boolean doInBackground(String... params) {
             parms.put("user_id", String.valueOf(currentPlayer.getUserID()));
@@ -415,6 +430,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         }
 
         protected void onPostExecute(Boolean result) {
+            loading.dismiss();
             if (result) {
                 currentActivePlayerName.setVisibility(View.VISIBLE);
                 setCardsList();

@@ -41,7 +41,7 @@
     <string name="receive">receive card</string>
     <string name="choose">Choose</string>
     <string name="string_choose_file">Choose image</string>
-    <string name="string_upload_image">Upload image</string>
+    <string name="string_upload_image">Uploading series</string>
     <string name="string_view_image">View image</string>
     <string name="get_All_person">Get Persons</string>
     <string name="set_person">Set Persons</string>
@@ -139,6 +139,8 @@
     <string name="finish_series_cnt">finish series:</string>
     <string name="you">you</string>
     <string name="Active_player">Active player:</string>
+    <string name="take_card">Take a card from the deck</string>
+    <string name="upload_just_image">Please make sure you only select images</string>
 
 
 

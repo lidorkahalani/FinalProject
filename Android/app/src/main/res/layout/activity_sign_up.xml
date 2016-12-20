@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.myApplication.yosef.finalproject.SignUp"
     android:background="@drawable/rsz_background_menu_resize"
-    android:weightSum="100">
+    android:weightSum="85">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -25,11 +25,15 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="vertical"
+            android:paddingTop="@dimen/topPadingSigniButton"
+            android:paddingBottom="@dimen/topPadingSigniButton"
+            android:paddingLeft="@dimen/paddingMainActivity"
+            android:paddingRight="@dimen/paddingMainActivity"
             android:layout_gravity="center"
-            android:layout_weight="60"
+            android:layout_weight="35"
             android:weightSum="75">
 
                 <EditText
@@ -82,9 +86,10 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center"
+            android:gravity="center"
             android:orientation="vertical"
             android:layout_weight="20"
             android:weightSum="50">
@@ -94,22 +99,19 @@
                     android:background="@drawable/sing_up"
                     android:text="@string/signUp"
                     android:onClick="addNewUserToDB"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:id="@+id/creatUser"
-                    android:gravity="center"
-                    android:layout_gravity="center"
                     android:textSize="18sp" />
+
                 <Button
                     android:layout_weight="25"
-                    android:background="@drawable/button"
+                    android:background="@drawable/enter"
                     android:onClick="goBack"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="0dp"
-                    android:gravity="center"
                     android:id="@+id/button7"
                     android:text="@string/Back"
-                    android:layout_gravity="center"
                     android:textSize="18sp" />
 
         </LinearLayout>

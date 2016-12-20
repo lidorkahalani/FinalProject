@@ -168,7 +168,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void logIn(View v) {
-        new logIn().execute(userName.getText().toString(),password.getText().toString());
+        if(userName.getText().toString().equals("")||password.getText().toString().equals(""))
+            Toast.makeText(this,getResources().getString(R.string.empty_field),Toast.LENGTH_SHORT).show();
+        else
+            new logIn().execute(userName.getText().toString(),password.getText().toString());
     }
 
     public void onBackPressed() {
@@ -192,6 +195,7 @@ public class MainActivity extends AppCompatActivity {
     public void SignUp(View v) {
         Intent myIntent = new Intent(this, SignUp.class);
         startActivity(myIntent);
+        finish();
     }
 
     @Override
