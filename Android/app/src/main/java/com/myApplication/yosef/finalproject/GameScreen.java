@@ -102,9 +102,6 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     private Card currentSelectedCard;
     private ArrayList<String> finishSeriesName=new ArrayList<>();
 
-    ListView lvSeries;
-    ListView myListViewSeries;
-    MyClassAdapter adapterSereies;
     Boolean hasFinishSeries=false;
     String finish[];
 
@@ -1079,33 +1076,6 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
             //stop all timers
         }
 
-    }
-
-    class MyClassAdapter extends ArrayAdapter<String> {
-
-        public MyClassAdapter(Context context, int resource, List<String> objects) {
-            super(context, resource, objects);
-        }
-
-        // the method getView is in charge of creating a single line in the list
-        // it receives the position (index) of the line to be created
-        // the method populates the view with the data from the relevant object (according to the position)
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            Log.i("TEST getView", "inside getView position " + position);
-
-            String seriesName = getItem(position);
-            if (convertView == null) {
-                Log.e("TEST getView", "inside if with position " + position);
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.single_chose_series, parent, false);
-            }
-            TextView sereiesName = (TextView) convertView.findViewById(R.id.singleSereisNameTXV);
-
-            sereiesName.setText(seriesName);
-
-            return convertView;
-
-        }
     }
 
 

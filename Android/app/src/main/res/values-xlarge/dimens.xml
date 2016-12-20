@@ -11,7 +11,7 @@
     <dimen name="paddingSiginUpctivity">155dp</dimen>
     <dimen name="topPadingSigniButton">95dip</dimen>
 
-    <dimen name="padingRightLeftMainMenu">85dp</dimen>
+    <dimen name="padingRightLeftMainMenu">155dp</dimen>
     <dimen name="padingMainMenu">55dp</dimen>
     <dimen name="padingTopMainMenu">55dp</dimen>
 

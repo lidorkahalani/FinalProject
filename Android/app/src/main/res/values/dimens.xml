@@ -9,7 +9,7 @@
     <dimen name="paddingMainActivity">55dp</dimen>
     <dimen name="topPadingSigniButton">10dip</dimen>
     <dimen name="mainMenuPadding">35dp</dimen>
-    <dimen name="padingRightLeftMainMenu">35dp</dimen>
+    <dimen name="padingRightLeftMainMenu">75dp</dimen>
     <dimen name="padingTopMainMenu">35dp</dimen>
 
 
