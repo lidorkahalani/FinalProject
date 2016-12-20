@@ -48,6 +48,14 @@
                 android:textSize="@dimen/largeFont"
                 android:gravity="center"
                 />
+            <ImageButton
+                android:onClick="getListFinishSeries"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/"
+                android:id="@+id/finishSeriesBtn"
+                android:visibility="gone"
+               />
 
         </LinearLayout>
 

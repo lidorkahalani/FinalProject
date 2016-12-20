@@ -32,6 +32,8 @@ public class AllRecords extends AppCompatActivity implements AdapterView.OnItemC
     ArrayList<User> uList =new ArrayList<User>();
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

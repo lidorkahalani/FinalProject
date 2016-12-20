@@ -141,6 +141,8 @@
     <string name="Active_player">Active player:</string>
     <string name="take_card">Take a card from the deck</string>
     <string name="upload_just_image">Please make sure you only select images</string>
+    <string name="getSeriesNamesFailde">Get series names failed</string>
+    <string name="serverNotRespond">Server Not Respond</string>
 
 
 

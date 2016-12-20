@@ -2,6 +2,7 @@ package com.myApplication.yosef.finalproject;
 
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,15 +17,20 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +41,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -93,6 +100,13 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     private String winnerName = "";
     private String activePlayerName = "";
     private Card currentSelectedCard;
+    private ArrayList<String> finishSeriesName=new ArrayList<>();
+
+    ListView lvSeries;
+    ListView myListViewSeries;
+    MyClassAdapter adapterSereies;
+    Boolean hasFinishSeries=false;
+    String finish[];
 
     private User winerUser;
 
@@ -177,6 +191,10 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                 });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    public void getListFinishSeries(View view){
+        new getListFinishSeries().execute();
     }
 
     @Override
@@ -656,8 +674,13 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                     new setGameOverStatus().execute("3", String.valueOf(newGame.getGame_id()));
                 }
 
-            } else
-                Toast.makeText(GameScreen.this, getResources().getString(R.string.refresh_failed), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(GameScreen.this, getResources().getString(R.string.serverNotRespond)+"\n"+getResources().getString(R.string.back_Main_Menu), Toast.LENGTH_SHORT).show();
+                myTimer.cancel();
+                Intent myIntent = new Intent(GameScreen.this, MainMenu.class);
+                startActivity(myIntent);
+                finish();
+            }
         }
 
     }
@@ -786,9 +809,9 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
         protected void onPostExecute(Boolean result) {
             if (result) {
-                /*Intent myIntent = new Intent(GameScreen.this, MainMenu.class);
+                Intent myIntent = new Intent(GameScreen.this, MainMenu.class);
                 startActivity(myIntent);
-                finish();*/
+                finish();
             } else
                 Toast.makeText(GameScreen.this, getResources().getString(R.string.failed_to_set_game_inactive), Toast.LENGTH_SHORT).show();
         }
@@ -984,6 +1007,107 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         }
 
     }
+
+    public class getListFinishSeries extends AsyncTask<String, Void, Boolean> {
+        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            parms.put("game_id", String.valueOf(newGame.getGame_id()));
+            parms.put("user_id", String.valueOf(currentPlayer.getUserID()));
+
+            JSONParser json = new JSONParser();
+            try {
+                JSONObject response = json.makeHttpRequest(ServerUtils.getListFinishSeries, "POST", parms);
+                if(response.getInt("success")==1) {
+                    JSONArray res = response.getJSONArray("finishSeriesNameList");
+                     finish=new String[res.length()];
+                    for (int i = 0; i < res.length(); i++) {
+                        JSONObject jo = res.getJSONObject(i);
+                       // finishSeriesName.add(jo.getString("category_name"));
+                        finish[i]=jo.getString("category_name");
+                    }
+                    hasFinishSeries=true;
+                }else if(response.getInt("success")==0)
+                    hasFinishSeries=true;
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return false;
+            }
+            return true;
+        }
+
+        protected void onPostExecute(Boolean result) {
+            if (result) {
+                if(hasFinishSeries) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(GameScreen.this);
+                    builder.setTitle(getResources().getString(R.string.finish_series_cnt));
+                    builder.setItems(finish,new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+
+                    builder.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    builder.show();
+
+
+
+
+                 /*   adapterSereies = new MyClassAdapter(GameScreen.this, R.layout.single_chose_series, finishSeriesName);
+
+                    myListViewSeries.setAdapter(adapterSereies);
+
+                    myListViewSeries.setOnItemClickListener(GameScreen.this);
+
+                    lvSeries = (ListView) findViewById(R.id.finishSeriesListView);
+                    registerForContextMenu(lvSeries);*/
+                }else
+                    Toast.makeText(GameScreen.this,"dont finish Series",Toast.LENGTH_SHORT).show();
+
+            } else
+                Toast.makeText(GameScreen.this, getResources().getString(R.string.getSeriesNamesFailde), Toast.LENGTH_SHORT).show();
+
+            //stop all timers
+        }
+
+    }
+
+    class MyClassAdapter extends ArrayAdapter<String> {
+
+        public MyClassAdapter(Context context, int resource, List<String> objects) {
+            super(context, resource, objects);
+        }
+
+        // the method getView is in charge of creating a single line in the list
+        // it receives the position (index) of the line to be created
+        // the method populates the view with the data from the relevant object (according to the position)
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            Log.i("TEST getView", "inside getView position " + position);
+
+            String seriesName = getItem(position);
+            if (convertView == null) {
+                Log.e("TEST getView", "inside if with position " + position);
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.single_chose_series, parent, false);
+            }
+            TextView sereiesName = (TextView) convertView.findViewById(R.id.singleSereisNameTXV);
+
+            sereiesName.setText(seriesName);
+
+            return convertView;
+
+        }
+    }
+
 
     public void passCardByNFC() {
 

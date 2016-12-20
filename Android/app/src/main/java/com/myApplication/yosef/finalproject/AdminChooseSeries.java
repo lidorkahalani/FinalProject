@@ -262,7 +262,8 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
                 lv = (ListView) findViewById(R.id.choseSeriesList);
                 registerForContextMenu(lv);
 
-                new setGameToActive().execute("1",String.valueOf(game.getGame_id()));
+
+                  new setGameToActive().execute("1",String.valueOf(game.getGame_id()));
 
             }else
                 Toast.makeText(AdminChooseSeries.this,"there was problem to get defult series",Toast.LENGTH_SHORT).show();
@@ -270,10 +271,6 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
     }
 
     public class sendActiveSerie extends AsyncTask<String, Void, Boolean> {
-        //String sendActiveSerie = "http://10.0.2.2/final_project/db/sendActiveSerie.php";
-        //String sendActiveSerie = "http://mysite.lidordigital.co.il/Quertets/php/db/sendActiveSerie.php";
-
-
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
@@ -328,7 +325,6 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
         }
         protected void onPostExecute(Boolean result) {
             if(result) {
-               // new setGameToActive().execute("1",String.valueOf(game.getGame_id()));
                 new setTurnOrder().execute();
             }else
                 Toast.makeText(AdminChooseSeries.this,"set series for game failed",Toast.LENGTH_SHORT).show();
@@ -336,8 +332,6 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
     }
 
     public class setGameToActive extends AsyncTask<String, Void, Boolean> {
-        //String setGameToActive = "http://10.0.2.2/final_project/db/setGameToActive.php";
-         //String setGameToActive = "http://mysite.lidordigital.co.il/Quertets/php/db/setGameToActive.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
@@ -361,6 +355,7 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
         }
         protected void onPostExecute(Boolean result) {
             if(result)
+                if(adminChose)
                 new sendActiveSerie().execute();
            else
                 Toast.makeText(AdminChooseSeries.this,"Cant set game to be active",Toast.LENGTH_LONG).show();
@@ -369,8 +364,6 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
     }
 
     public class setTurnOrder extends AsyncTask<String, Void, Boolean> {
-        //String setTurnOrder = "http://10.0.2.2/final_project/db/moveToNextPlayer.php";
-        //String setTurnOrder = "http://mysite.lidordigital.co.il/Quertets/php/db/moveToNextPlayer.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
