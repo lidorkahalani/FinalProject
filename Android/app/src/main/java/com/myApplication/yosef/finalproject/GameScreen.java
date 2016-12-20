@@ -806,6 +806,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
         protected void onPostExecute(Boolean result) {
             if (result) {
+                myTimer.cancel();
                 Intent myIntent = new Intent(GameScreen.this, MainMenu.class);
                 startActivity(myIntent);
                 finish();
@@ -1026,7 +1027,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                     }
                     hasFinishSeries=true;
                 }else if(response.getInt("success")==0)
-                    hasFinishSeries=true;
+                    hasFinishSeries=false;
 
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -1046,29 +1047,15 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
                         }
                     });
-
                     builder.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
                         }
                     });
-
                     builder.show();
-
-
-
-
-                 /*   adapterSereies = new MyClassAdapter(GameScreen.this, R.layout.single_chose_series, finishSeriesName);
-
-                    myListViewSeries.setAdapter(adapterSereies);
-
-                    myListViewSeries.setOnItemClickListener(GameScreen.this);
-
-                    lvSeries = (ListView) findViewById(R.id.finishSeriesListView);
-                    registerForContextMenu(lvSeries);*/
                 }else
-                    Toast.makeText(GameScreen.this,"dont finish Series",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(GameScreen.this,getResources().getString(R.string.noe_complete_sereis),Toast.LENGTH_SHORT).show();
 
             } else
                 Toast.makeText(GameScreen.this, getResources().getString(R.string.getSeriesNamesFailde), Toast.LENGTH_SHORT).show();

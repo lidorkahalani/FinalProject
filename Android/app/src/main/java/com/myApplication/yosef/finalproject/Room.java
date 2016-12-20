@@ -167,6 +167,8 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                     public void onClick(DialogInterface dialog, int which) {
                         timer.cancel();
                         timerFlag = false;
+                        if(timerFlag2)
+                            timer2.cancel();
                         new setGameToInactive().execute(String.valueOf(game.getGame_id()));
                     }
                 });
@@ -225,13 +227,19 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
         }
         protected void onPostExecute(Boolean result) {
             if(result) {
-                if (allUsers.isEmpty()) {
+                if (allUsers.isEmpty()&&timerFlag) {
                     Toast.makeText(Room.this, getResources().getString(R.string.room_empty), Toast.LENGTH_LONG).show();
-                    if(timerFlag)
+                    if(timerFlag) {
+                        timerFlag = false;
                         timer.cancel();
-                    if(timerFlag2)
+                    }
+                    if(timerFlag2) {
+                        timerFlag2 = false;
                         timer2.cancel();
+                    }
+                    Toast.makeText(Room.this,getResources().getString(R.string.serverNotRespond),Toast.LENGTH_LONG).show();
                     finish();
+
                 }
                 adapter = new MyClassAdapter(Room.this, R.layout.single_user_in_room_list,allUsers);
 
@@ -493,11 +501,16 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                 Toast.makeText(Room.this
                         , getResources().getString(R.string.room_name_in_use),
                         Toast.LENGTH_LONG).show();
-
+                Intent myIntent = new Intent(Room.this, MainMenu.class);
+                startActivity(myIntent);
+                finish();
             } else if (result == -1) {//connection problem
                 Toast.makeText(Room.this
                         , getResources().getString(R.string.connection_error),
                         Toast.LENGTH_LONG).show();
+                Intent myIntent = new Intent(Room.this, MainMenu.class);
+                startActivity(myIntent);
+                finish();
             }
 
         }
