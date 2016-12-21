@@ -238,6 +238,12 @@ public class MainMenu extends AppCompatActivity {
         profileTracker.stopTracking();
     }
 
+    public void webView(View view){
+        Intent intent = new Intent(this,InstructionActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     public void addNewSeries(View v) {
 
         LayoutInflater li = LayoutInflater.from(this);

@@ -158,7 +158,9 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
     }
 
-    public void openMainMenu() {
+    public void openMainMenu()
+
+    {
         myTimer.cancel();
         Intent myIntent = new Intent(GameScreen.this, MainMenu.class);
         startActivity(myIntent);
@@ -189,6 +191,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         AlertDialog alert = builder.create();
         alert.show();
     }
+
 
     public void getListFinishSeries(View view){
         new getListFinishSeries().execute();

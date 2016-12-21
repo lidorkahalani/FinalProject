@@ -12,9 +12,7 @@
     <dimen name="padingRightLeftMainMenu">75dp</dimen>
     <dimen name="padingTopMainMenu">35dp</dimen>
     <dimen name="marginTopMainMenu">15dp</dimen>
-
-
-
+    <dimen name="webViewMargin">2dp</dimen>
 
 
 </resources>

@@ -17,6 +17,8 @@
         <color name="violet">#7F00FF</color>
         <color name="magenta">#FF00FF</color>
         <color name="card_bold_color">#FF9800</color>
+        <color name="circle_btn">#FFCC80</color>
+        <color name="circle_btn_press">#FF9800</color>
 
         <array name="allColors">
             <item>@color/bright_pink</item>
