@@ -9,7 +9,7 @@ $user_id=$_POST['user_id'];
 	$sth = $con->prepare("SELECT is_active FROM game where game_name='$Room_name'");
 	$sth->execute();
 	$result = $sth->fetch(PDO::FETCH_ASSOC);
-	if($result['is_active']!=1){
+	if($result['is_active']!=4){
 		$insert = $con->exec("INSERT INTO game (game_name,is_active,my_turn_user_id,admin_user_id) VALUES('$Room_name',0,0,'$user_id')");
 		if ($insert !== FALSE) {
 	     $id = $con->lastInsertId();
