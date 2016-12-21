@@ -181,6 +181,7 @@
                 android:id="@+id/WelcomUserName"
                 android:text="hello user"
                 android:textSize="@dimen/largeFont"
+                android:paddingTop="40dp"
                 android:textIsSelectable="false"
                 android:textColor="#000000"
                 android:visibility="visible" />
