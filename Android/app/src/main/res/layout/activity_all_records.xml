@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_all_records"
     android:layout_width="match_parent"
@@ -8,13 +9,11 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@drawable/rsz_background_menu_resize"
-    tools:context="com.myApplication.yosef.finalproject.AllRecords">
-<LinearLayout
     android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:weightSum="50"
+    android:background="@drawable/rsz_background_menu_resize"
+    tools:context="com.myApplication.yosef.finalproject.AllRecords"
+    android:weightSum="45">
+
     >
     <TextView
         android:layout_weight="5"
@@ -27,14 +26,21 @@
         android:textSize="@dimen/largeFont"
         />
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:srcCompat="@drawable/cup"
+        android:layout_gravity="center"
+        android:id="@+id/imageView2"
+        android:layout_weight="10" />
+
     <ListView
-        android:layout_weight="45"
+        android:layout_weight="30"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:id="@+id/UserList"
         android:textSize="@dimen/mediumFont"
 
         />
-</LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>
