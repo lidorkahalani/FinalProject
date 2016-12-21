@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_show_my_serie"
     android:layout_width="match_parent"
@@ -8,13 +8,27 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    android:weightSum="50"
     android:background="@drawable/rsz_background_menu_resize"
     tools:context="com.myApplication.yosef.finalproject.ShowMySerie">
 
-    <ListView
+
+    <TextView
+        android:layout_weight="10"
+        android:text="@string/my_series"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/CategoryListView"
-        android:layout_centerHorizontal="true"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:id="@+id/showMyseries"
+        android:textStyle="bold"
+        android:textSize="@dimen/largeFont"
         />
-</RelativeLayout>
+    <ListView
+        android:layout_weight="40"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/CategoryListView"
+        />
+
+</LinearLayout>

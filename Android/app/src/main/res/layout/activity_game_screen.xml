@@ -134,7 +134,7 @@
                     android:visibility="invisible"
                     android:text="@string/you_turn"
                     android:textStyle="bold"
-                    android:textSize="@dimen/mediumFont"
+                    android:textSize="@dimen/regularFont"
                     android:gravity="center"
                     />
 

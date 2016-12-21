@@ -150,7 +150,7 @@ public class ShowMySerie extends AppCompatActivity implements AdapterView.OnItem
         protected Boolean doInBackground(String... params) {
             parms.put("user_id", params[0]);
             JSONParser json = new JSONParser();
-            Series temp_categorys=new Series();;
+            Series temp_categorys=new Series();
             try {
                 JSONObject response = json.makeHttpRequest(ServerUtils.GetMySeries, "GET", parms);
                 if (response.getInt("succsses") == 1) {
@@ -195,7 +195,6 @@ public class ShowMySerie extends AppCompatActivity implements AdapterView.OnItem
                 } else {
                     adapter = new MyClassAdapter(ShowMySerie.this, R.layout.single_quartets_layot, series);
                    // adapter = new MyClassAdapter(ShowMySerie.this, R.layout.single_quartets_layot,allMyCard);
-
                     category_list.setAdapter(adapter);
 
                     category_list.setOnItemClickListener(ShowMySerie.this);

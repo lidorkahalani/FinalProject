@@ -16,6 +16,7 @@
         <color name="blue">#0000FF</color>
         <color name="violet">#7F00FF</color>
         <color name="magenta">#FF00FF</color>
+        <color name="card_bold_color">#FF9800</color>
 
         <array name="allColors">
             <item>@color/bright_pink</item>

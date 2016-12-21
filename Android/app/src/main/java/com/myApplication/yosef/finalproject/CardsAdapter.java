@@ -93,16 +93,16 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.MyViewHolder
         if (!holder.isClicked) {
             if (card.getCardName().equals(card.getItemsArray()[0])) {
                 holder.card1.setTypeface(Typeface.DEFAULT_BOLD);
-                holder.card1.setTextColor(Color.GREEN);
+                holder.card1.setTextColor(Color.rgb(100,221,23));
             } else if (card.getCardName().equals(card.getItemsArray()[1])) {
                 holder.card2.setTypeface(Typeface.DEFAULT_BOLD);
-                holder.card2.setTextColor(Color.GREEN);
+                holder.card2.setTextColor(Color.rgb(100,221,23));
             } else if (card.getCardName().equals(card.getItemsArray()[2])) {
                 holder.card3.setTypeface(Typeface.DEFAULT_BOLD);
-                holder.card3.setTextColor(Color.GREEN);
+                holder.card3.setTextColor(Color.rgb(100,221,23));
             } else if (card.getCardName().equals(card.getItemsArray()[3])) {
                 holder.card4.setTypeface(Typeface.DEFAULT_BOLD);
-                holder.card4.setTextColor(Color.GREEN);
+                holder.card4.setTextColor(Color.rgb(100,221,23));
             }
         }
 

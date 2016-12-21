@@ -39,6 +39,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static android.webkit.ConsoleMessage.MessageLevel.LOG;
+
 public class Room extends AppCompatActivity implements AdapterView.OnItemClickListener {
     private ListView personList;
     private ListView lv;
@@ -287,7 +289,10 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
             if (result) {
                 new checkIfImAdmin().execute(String.valueOf(game.getGame_id()));
             }else
-                new GetAllConnectedPlayers().execute();
+                 if(timerFlag)
+                    new GetAllConnectedPlayers().execute();
+                 else
+                     Toast.makeText(Room.this,"canceeeee",Toast.LENGTH_LONG).show();
 
         }
 
@@ -468,14 +473,15 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                 pDialog.setIndeterminate(true);
                 pDialog.setCancelable(false);
                 pDialog.setMessage(getResources().getString(R.string.waiting_for_players));
-
                 pDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        timer.cancel();
                         timerFlag = false;
-                        if(timerFlag2)
+                        timer.cancel();
+                        if(timerFlag2) {
+                            timerFlag2 = false;
                             timer2.cancel();
+                        }
                         Intent myIntent = new Intent(Room.this, MainMenu.class);
                         startActivity(myIntent);
                         finish();

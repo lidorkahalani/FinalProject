@@ -18,8 +18,6 @@ public class ServerUtils {
 
 
 
-    /*localhost*/
-
     public static final String imageRelativePat = imageLoadServer+"images/";
     public static final String getMaxCategoryId_url= server+"getMaxCategoryId.php";
     public static final String UPLOAD_URL = server +"AddCard.php";
@@ -51,8 +49,5 @@ public class ServerUtils {
     public static final String UpdateSeries=server+"Update_series.php";
     public static final String setdeckIsOver=server+"setdeckIsOver.php";
     public static final String getListFinishSeries=server+"getListFinishSeries.php";
-
-    public static final String checkIfAllseriesComplite=server+"checkIfAllseriesComplite.php";
-
 
 }

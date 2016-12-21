@@ -636,9 +636,12 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                     moveToNextTurn.setVisibility(View.VISIBLE);
                 }
                 if(updateActivePlayerName)
-                  if(!isMyTurnStatus)
-                     currentActivePlayerName.setText(getResources().getString(R.string.Active_player)+"\n"+activePlayerName);
-                else
+                  if(!isMyTurnStatus) {
+                      if(doJustOnTime)
+                          currentActivePlayerName.setVisibility(View.VISIBLE);
+                      currentActivePlayerName.setText(getResources().getString(R.string.Active_player) + "\n" + activePlayerName);
+                  }
+                  else
                       currentActivePlayerName.setVisibility(View.INVISIBLE);
 
 

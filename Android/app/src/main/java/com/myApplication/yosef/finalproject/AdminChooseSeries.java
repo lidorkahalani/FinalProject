@@ -49,10 +49,7 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
     static HashSet<Series> series =new HashSet();
     private ListView lv;
     private MyClassAdapter adapter;
-    private CheckBox checkBoxIndicator;
     private ListView category_list;
-    private User currentPlayer;
-    private boolean isSomoneDisconected=false;
     private ArrayList<User> allUsers =new ArrayList();
     private String allConnectedUsersId[]=new String[4];
     private Game game;
@@ -61,8 +58,6 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
     boolean []chosenList;
     private Boolean setBoolenList=false;
     private Boolean adminChose=false;
-    private Timer timer = new Timer();
-    boolean timerFlag;
     private  Timer myTimer = new Timer("MyTimer", true);
 
     @Override
@@ -144,8 +139,6 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
     }
 
     public class GetMySeries extends AsyncTask<String, Void, Boolean> {
-        //String GetMySeries = "http://10.0.2.2/final_project/db/getMySeries.php";
-        //String GetMySeries = "http://mysite.lidordigital.co.il/Quertets/php/db/getMySeries.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
 
@@ -202,10 +195,6 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
     }
 
     public class GetDefultSeries extends AsyncTask<String, Void, Boolean> {
-        //String GetMySeries = "http://10.0.2.2/final_project/db/getMySeries.php";
-        String GetMySeries = "http://mysite.lidordigital.co.il/Quertets/php/db/getMySeries.php";
-
-
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
@@ -264,9 +253,7 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
 
 
                   new setGameToActive().execute("1",String.valueOf(game.getGame_id()));
-
-            }else
-                Toast.makeText(AdminChooseSeries.this,"there was problem to get defult series",Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -401,9 +388,6 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
     }
 
     public class setGameToInactive extends AsyncTask<String, Void, Boolean> {
-        //String setGameToInactive = "http://10.0.2.2/final_project/db/setGameToInactive.php";
-        //String setGameToInactive = "http://mysite.lidordigital.co.il/Quertets/php/db/setGameToInactive.php";
-
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
@@ -434,8 +418,6 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
     }
 
     public class checkIfGameIsActive extends AsyncTask<String, Void, Boolean> {
-        //String checkIfGameIsActive = "http://10.0.2.2/final_project/db/checkIfGameIsActive.php";
-        // String checkIfGameIsActive = "http://mysite.lidordigital.co.il/Quertets/php/db/checkIfGameIsActive.php";
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
         @Override
@@ -511,75 +493,5 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
 
         }
     }
-
-   /* public class checkIfSomoneDisconected extends AsyncTask<String, Void, Boolean> {
-        //String GetMySeries = "http://10.0.2.2/final_project/db/getMySeries.php";
-        //String GetMySeries = "http://mysite.lidordigital.co.il/Quertets/php/db/getMySeries.php";
-        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
-
-
-        @Override
-        protected Boolean doInBackground(String... params) {
-            //String userName= params[0];
-            parms.put("user_id", params[0]);
-            JSONParser json = new JSONParser();
-            Series temp_categorys = new Series();
-            try {
-                JSONObject response = json.makeHttpRequest(ServerUtils.GetMySeries, "GET", parms);
-                if (response.getInt("succsses") == 1) {
-                    JSONArray jsonArray = response.getJSONArray("myCards");
-                    for (int i = 0; i < jsonArray.length(); i += 4) {
-                        if (i % 4 == 0)
-                            temp_categorys = new Series();
-
-                        JSONObject jo = jsonArray.getJSONObject(i);
-                        temp_categorys.setCategory_id(jo.getInt("category_id"));
-                        temp_categorys.setCategory_name(jo.getString("category_name"));
-                        temp_categorys.setCard_name1(jo.getString("card_name"));
-                        temp_categorys.setCard_name2(jsonArray.getJSONObject(i + 1).getString("card_name"));
-                        temp_categorys.setCard_name3(jsonArray.getJSONObject(i + 2).getString("card_name"));
-                        temp_categorys.setCard_name4(jsonArray.getJSONObject(i + 3).getString("card_name"));
-                        temp_categorys.setImage1(jo.getString("image_name"));
-                        temp_categorys.setImage2(jsonArray.getJSONObject(i + 1).getString("image_name"));
-                        temp_categorys.setImage3(jsonArray.getJSONObject(i + 2).getString("image_name"));
-                        temp_categorys.setImage4(jsonArray.getJSONObject(i + 3).getString("image_name"));
-                        series.add(temp_categorys);
-                    }
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-                return false;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
-            }
-            return true;
-
-        }
-
-        protected void onPostExecute(Boolean result) {
-            if (result) {
-                SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(AdminChooseSeries.this);
-                Boolean faceBookLogIN=myPref.getBoolean("loginWhitFacebook",false);
-
-                SharedPreferences.Editor editor = myPref.edit();
-                editor.putString("username", curentUser.getUserName());
-                editor.putString("password", curentUser.getPassword());
-                editor.putInt("score", curentUser.getScore());
-                editor.putInt("user_id",curentUser.getUserID());
-
-                editor.commit();
-
-                Intent myIntent = new Intent(AdminChooseSeries.this, MainMenu.class);
-                startActivity(myIntent);
-                Toast.makeText(AdminChooseSeries.this,"Somone Disconected",Toast.LENGTH_SHORT).show();
-                finish();
-
-            }
-        }
-
-    }*/
-
 
 }

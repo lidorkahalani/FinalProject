@@ -9,7 +9,7 @@
         android:orientation="horizontal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="50"
+        android:layout_weight="40"
         android:weightSum="10">
 
         <TextView
@@ -17,7 +17,7 @@
             android:textStyle="bold"
             android:textSize="30sp"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:id="@+id/category_name"
             android:gravity="right"
             android:layout_weight="10" />
@@ -27,28 +27,38 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_weight="50"
+        android:layout_weight="60"
         android:weightSum="100"
         >
 
         <ImageView
+            android:layout_margin="3dp"
             android:id="@+id/pic1"
             android:layout_width="0dp"
+            android:src="@drawable/deck_en"
             android:layout_height="match_parent"
             android:layout_weight="25"/>
         <ImageView
+            android:layout_margin="3dp"
             android:id="@+id/pic2"
             android:layout_width="0dp"
+            android:src="@drawable/deck_en"
+
             android:layout_height="match_parent"
             android:layout_weight="25"/>
-
         <ImageView
+            android:layout_margin="3dp"
             android:id="@+id/pic3"
             android:layout_width="0dp"
+            android:src="@drawable/deck_en"
+
             android:layout_height="match_parent"
             android:layout_weight="25"/>
         <ImageView
+            android:layout_margin="3dp"
             android:id="@+id/pic4"
+            android:src="@drawable/deck_en"
+
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="25"/>
