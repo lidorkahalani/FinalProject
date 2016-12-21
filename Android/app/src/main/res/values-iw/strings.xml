@@ -153,6 +153,8 @@
     <string name="upload_just_image">אנא בחר רק תמונות</string>
     <string name="you">אתה</string>
     <string name="serverNotRespond">השרת לא מגיב</string>
+    <string name="noe_complete_sereis">אין סדרות דךמות</string>
+    <string name="game_equals">תוצאת שיוויון!</string>
 
 
 </resources>

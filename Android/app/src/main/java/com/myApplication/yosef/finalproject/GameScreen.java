@@ -826,15 +826,19 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
             JSONParser json = new JSONParser();
             try {
                 JSONObject response = json.makeHttpRequest(ServerUtils.GetWinnerName, "POST", parms);
-                JSONArray res = response.getJSONArray("winner");
 
-                // if (response.getInt("successes") == 1) {
-                for (int i = 0; i < res.length(); i++) {
-                    JSONObject jo = res.getJSONObject(i);
-                    winerUser = new User(jo.getString("user_name"), jo.getString("user_password"), jo.getInt("user_id"));
-                    winnerName = winerUser.getUserName();
-                    //     }
+                if (response.getInt("successes") == 1) {
+                    if(response.getInt("equals")==1)
+                        winnerName="";
+                    }else {
+                    JSONArray res = response.getJSONArray("winner");
+                    for (int i = 0; i < res.length(); i++) {
+                        JSONObject jo = res.getJSONObject(i);
+                        winerUser = new User(jo.getString("user_name"), jo.getString("user_password"), jo.getInt("user_id"));
+                        winnerName = winerUser.getUserName();
+                    }
                 }
+
             } catch (Exception ex) {
                 ex.printStackTrace();
                 return false;
@@ -895,11 +899,16 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                 }//need to add equal alert
 
 
-            } else
+            } else {
                 Toast.makeText(GameScreen.this, getResources().getString(R.string.get_winner_failde), Toast.LENGTH_SHORT).show();
+                Intent myIntent = new Intent(GameScreen.this, MainMenu.class);
+                startActivity(myIntent);
+                finish();
+            }
 
             //stop all timers
             myTimer.cancel();
+            timerFlag=false;
         }
 
     }

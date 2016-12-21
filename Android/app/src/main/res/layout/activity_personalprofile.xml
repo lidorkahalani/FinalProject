@@ -166,37 +166,37 @@
 
             />
         -->
-        <LinearLayout
-            android:layout_weight="10"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+    <LinearLayout
+        android:layout_weight="15"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/marginTopMainMenu"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <TextView
             android:gravity="center"
-            android:layout_gravity="center"
-            android:orientation="vertical">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/WelcomUserName"
+            android:text="user name"
+            android:textSize="@dimen/largeFont"
+            android:textIsSelectable="false"
+            android:textColor="#000000"
+            android:visibility="visible" />
+    </LinearLayout>
 
-            <TextView
-                android:gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/WelcomUserName"
-                android:text="hello user"
-                android:textSize="@dimen/largeFont"
-                android:paddingTop="40dp"
-                android:textIsSelectable="false"
-                android:textColor="#000000"
-                android:visibility="visible" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_weight="90"
+    <LinearLayout
+            android:layout_weight="85"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:gravity="center"
             android:id="@+id/linearLayout"
             android:paddingLeft="@dimen/padingRightLeftMainMenu"
-            android:paddingRight="@dimen/padingRightLeftMainMenu"
->
+            android:paddingRight="@dimen/padingRightLeftMainMenu">
+
             <Button
                 android:textSize="@dimen/regularFont"
                 android:onClick="openRoom"
@@ -217,7 +217,6 @@
                 android:textSize="@dimen/regularFont"
                 android:id="@+id/btnJoinRoomId"
                 android:layout_marginTop="15dp" />
-
             <Button
                 android:textSize="@dimen/regularFont"
                 android:textStyle="bold"
@@ -228,7 +227,6 @@
                 android:layout_marginTop="15dp"
                 android:background="@drawable/add_new_cards_small"
                 android:text="@string/add_new_series" />
-
             <Button
                 android:textSize="@dimen/regularFont"
                 android:textStyle="bold"
@@ -239,9 +237,6 @@
                 android:id="@+id/btnShowMyCardId"
                 android:text="@string/show_my_series"
                 android:background="@drawable/my_cards" />
-
-
-
             <Button
                 android:textSize="@dimen/regularFont"
                 android:textStyle="bold"
@@ -252,7 +247,6 @@
                 android:text="@string/logOut"
                 android:id="@+id/btnlogOut"
                 android:layout_marginTop="15dp" />
-
             <Button
                 android:textSize="@dimen/regularFont"
                 android:textStyle="bold"
@@ -274,7 +268,7 @@
                 facebook:com_facebook_confirm_logout="false"
                 facebook:com_facebook_tooltip_mode="never_display"
                 />
-
+        
         </LinearLayout>
 
 

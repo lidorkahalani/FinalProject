@@ -22,7 +22,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="15"
+            android:layout_weight="20"
             android:text="@string/choose_at_least"
             android:gravity="center"
             android:id="@+id/textView3"
@@ -35,12 +35,11 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="50"
+            android:layout_weight="30"
             android:text="@string/chooseQuartets"
             android:gravity="center"
             android:id="@+id/textView2"
             android:textSize="@dimen/largeFont"
-
             android:textColor="#3F51B5"
             android:layout_gravity="center"
           />
