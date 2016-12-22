@@ -344,8 +344,8 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
             if(result)
                 if(adminChose)
                 new sendActiveSerie().execute();
-           else
-                Toast.makeText(AdminChooseSeries.this,"Cant set game to be active",Toast.LENGTH_LONG).show();
+         //  else
+            //    Toast.makeText(AdminChooseSeries.this,"Cant set game to be active",Toast.LENGTH_LONG).show();
         }
 
     }

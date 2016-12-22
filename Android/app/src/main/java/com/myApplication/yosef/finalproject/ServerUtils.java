@@ -49,5 +49,7 @@ public class ServerUtils {
     public static final String UpdateSeries=server+"Update_series.php";
     public static final String setdeckIsOver=server+"setdeckIsOver.php";
     public static final String getListFinishSeries=server+"getListFinishSeries.php";
+    public static final String UpdateRoomSize=server+"UpdateRoomSize.php";
+    public static final String getRoomSize=server+"getRoomSize.php";
 
 }

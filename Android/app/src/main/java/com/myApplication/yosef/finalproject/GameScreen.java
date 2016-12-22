@@ -56,10 +56,6 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
     private Random randomGenerator;
 
-    /*private RelativeLayout bottomLayout;
-    private RelativeLayout left_layout;
-    private RelativeLayout top_layout;
-    private RelativeLayout right_layout;*/
 
     private LinearLayout activePlayer;
     private TextView point;
@@ -91,11 +87,14 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     private Boolean newCarRecive = false;
     private Boolean finisheGame = false;
     private Boolean cardSend = false;
+    private Boolean showFinishSeriesListBtnOneTime = false;
     private Timer myTimer = new Timer("MyTimer", true);
     private Timer timer ;
     private Boolean timerFlag=false;
     private Boolean showTurnButon=false;
     private Boolean doJustOnTime=false;
+
+    private ImageButton showFinishSeriesListBtn;
 
     private String winnerName = "";
     private String activePlayerName = "";
@@ -114,6 +113,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         point = (TextView) findViewById(R.id.pointField);
         newGame = (Game) getIntent().getSerializableExtra("Game");
         Intent i = getIntent();
+        showFinishSeriesListBtn=(ImageButton)findViewById(R.id.finishSeriesBtn) ;
 
         deckImage=(ImageButton)findViewById(R.id.ImageDeck);
         moveToNextTurn=(Button)findViewById(R.id.nextTurn);
@@ -131,11 +131,6 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
         playerList.add(currentPlayer);
         activePlayer = (LinearLayout) findViewById(R.id.activePlayer);
-
-        /*bottomLayout = (RelativeLayout) findViewById(R.id.myPlayerBackground);
-        left_layout = (RelativeLayout) findViewById(R.id.myPlayerBackground);
-        top_layout = (RelativeLayout) findViewById(R.id.myPlayerBackground);
-        right_layout = (RelativeLayout) findViewById(R.id.myPlayerBackground);*/
 
         myListView = (RecyclerView) findViewById(R.id.listcards);
 
@@ -256,7 +251,11 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     public void addPoint() {
         Toast.makeText(this,getResources().getString(R.string.sereis_comlete),Toast.LENGTH_LONG).show();
         //new refresh().execute();
-        point.setText(getResources().getString(R.string.finish_series_cnt) + "\n" + (++currentPoint));
+        if(!showFinishSeriesListBtnOneTime) {
+            showFinishSeriesListBtnOneTime = true;
+            showFinishSeriesListBtn.setVisibility(View.VISIBLE);
+        }
+       // point.setText(getResources().getString(R.string.finish_series_cnt) + "\n" + (++currentPoint));
     }
 
     @Override
@@ -679,10 +678,8 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
             } else {
                 Toast.makeText(GameScreen.this, getResources().getString(R.string.serverNotRespond)+"\n"+getResources().getString(R.string.back_Main_Menu), Toast.LENGTH_SHORT).show();
-                myTimer.cancel();
-                Intent myIntent = new Intent(GameScreen.this, MainMenu.class);
-                startActivity(myIntent);
-                finish();
+                new setGameToInactive().execute(String.valueOf(newGame.getGame_id()));
+
             }
         }
 
@@ -836,26 +833,27 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                 if (response.getInt("successes") == 1) {
                     if(response.getInt("equals")==1)
                         winnerName="";
-                    }else {
-                    JSONArray res = response.getJSONArray("winner");
-                    for (int i = 0; i < res.length(); i++) {
-                        JSONObject jo = res.getJSONObject(i);
-                        winerUser = new User(jo.getString("user_name"), jo.getString("user_password"), jo.getInt("user_id"));
-                        winnerName = winerUser.getUserName();
+                    else {
+                        JSONArray res = response.getJSONArray("winner");
+                        for (int i = 0; i < res.length(); i++) {
+                            JSONObject jo = res.getJSONObject(i);
+                            winerUser = new User(jo.getString("user_name"), jo.getString("user_password"), jo.getInt("user_id"));
+                            winnerName = winerUser.getUserName();
+                        }
                     }
-                }
+                    return true;
+                }else
+                    return false;
 
             } catch (Exception ex) {
                 ex.printStackTrace();
                 return false;
             }
-            return true;
+
         }
 
         protected void onPostExecute(Boolean result) {
             if (result) {
-
-
                 //tall evryone who is the winner
                 if (winnerName.equals("")) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(GameScreen.this);

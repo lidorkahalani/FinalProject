@@ -29,7 +29,6 @@
 
             <TextView
                 android:layout_weight="25"
-                android:paddingTop="30dp"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:id="@+id/currentActivePlayerName"
@@ -38,29 +37,39 @@
                 android:textSize="@dimen/regularFont"
                 android:gravity="center"
                 />
-
-            <TextView
-                android:layout_weight="25"
+            <LinearLayout
+                android:layout_marginTop="@dimen/topMarginGameScreenShowMyseiresBtn"
+                android:layout_gravity="center"
                 android:layout_width="0dp"
-                android:paddingTop="30dp"
-                android:layout_height="match_parent"
-                android:id="@+id/pointField"
-                android:text="@string/finish_series_cnt"
-                android:textStyle="bold"
-                android:textSize="@dimen/regularFont"
-                android:gravity="center"
-                />
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="25">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/pointField"
+                    android:text="@string/finish_series_cnt"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/regularFont"
+                    android:gravity="center"
+                    />
+                <ImageButton
+                    android:layout_gravity="center"
+                    android:onClick="getListFinishSeries"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible"
+                    android:src="@android:drawable/btn_star_big_on"
+                    android:id="@+id/finishSeriesBtn"
+                    />
+
+            </LinearLayout>
+
+
 
 
         </LinearLayout>
-        <ImageButton
-            android:layout_gravity="center"
-            android:onClick="getListFinishSeries"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@android:drawable/btn_star_big_on"
-            android:id="@+id/finishSeriesBtn"
-            />
 
 
 

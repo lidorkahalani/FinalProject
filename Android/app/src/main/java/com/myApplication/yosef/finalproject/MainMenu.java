@@ -16,8 +16,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,10 +38,11 @@ import com.facebook.login.widget.LoginButton;
 
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
-public class MainMenu extends AppCompatActivity {
+public class MainMenu extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private UsersDBHandler dbHandler;
     private ProfileTracker profileTracker;
@@ -59,6 +63,10 @@ public class MainMenu extends AppCompatActivity {
     private Button logOut;
     private Game newGame = new Game();
     final int MY_PERMISSIONS_REQUEST_WRITE_STORAGE =1;
+
+    ArrayList<String> paths=new ArrayList<>();
+
+    int playerCount=0;
 
 
 
@@ -157,6 +165,11 @@ public class MainMenu extends AppCompatActivity {
         setLayout();
         checkPermission();
 
+        paths.add("1");
+        paths.add("2");
+        paths.add("3");
+        paths.add("4");
+
     }
 
     public void checkPermission(){
@@ -228,7 +241,7 @@ public class MainMenu extends AppCompatActivity {
         String password = myPref.getString("password", "");
         int score = myPref.getInt("score", 0);
         //int score = currentPlayer.getScore();
-        t.setText(getResources().getString(R.string.wellcome) + ":  " + uname + "\n" + getResources().getString(R.string.score) + ":  " +score );
+        t.setText(getResources().getString(R.string.wellcome) + ":  " + uname);
     }
 
     @Override
@@ -311,7 +324,12 @@ public class MainMenu extends AppCompatActivity {
       LayoutInflater li = LayoutInflater.from(MainMenu.this);
         View dialogView = li.inflate(R.layout.open_room_dialog_layout, null);
 
+        final Spinner spinner = (Spinner)dialogView.findViewById(R.id.spinner);
         final EditText roomNameInput = (EditText) dialogView.findViewById(R.id.room_name_input);
+
+
+
+
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MainMenu.this);
         builder.setView(dialogView);
@@ -322,13 +340,12 @@ public class MainMenu extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 Log.i("Room name:", roomNameInput.getText().toString());
                 roomName=roomNameInput.getText().toString();
-                //1. send the room name to server
-                //new SendRoomName().execute(roomNameInput.getText().toString());
-                //new openNewRoom().execute(roomName);
-
+                String playcnt=spinner.getSelectedItem().toString();
+                Log.i("Selected numner",String.valueOf(playcnt));
                 Intent intent=new Intent(MainMenu.this,Room.class);
                 newGame.setGame_name(roomName);
                 intent.putExtra("Game",newGame);
+                intent.putExtra("playerCount",playcnt);
                 intent.putExtra("currentPlayer",currentPlayer);
                 intent.putExtra("isNewRoom",true);
                 startActivity(intent);
@@ -457,6 +474,13 @@ public class MainMenu extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        playerCount=Integer.parseInt(paths.get(position));
+    }
 
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
 
+    }
 }

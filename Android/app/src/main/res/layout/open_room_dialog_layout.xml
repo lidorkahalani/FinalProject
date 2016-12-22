@@ -1,15 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/room_name_input"
-        android:layout_margin="20dp"
+        android:layout_margin="10dp"
         android:hint="@string/room_name"/>
+    <TextView
+        android:id="@+id/dorpDownTitle"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/select_playe_cnt"
+        android:textSize="@dimen/mediumFont"
+
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+    <Spinner
+        android:layout_margin="5dp"
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/player_count"/>
+
 
 </LinearLayout>

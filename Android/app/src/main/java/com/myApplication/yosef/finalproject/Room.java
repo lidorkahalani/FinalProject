@@ -52,6 +52,7 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
     private Boolean isGameActive=false;
     private Boolean isAdmin=false;
     private Boolean startGame=false;
+    private Boolean isRoomSizeSet=false;
     boolean isAdminOpenTheRoomAndCloseIt=false;
     private Timer timer2;
     boolean timerFlag2 = false;
@@ -59,7 +60,8 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
     private  User curentUser;
     private Game game;
     boolean isNewRoom;
-    private String []allConnectedUsersId=new String [4];
+    private String []allConnectedUsersId;
+    private String playerCount;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,10 +72,14 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
         curentUser =(User) getIntent().getSerializableExtra("currentPlayer");
         isNewRoom=getIntent().getExtras().getBoolean("isNewRoom");
         roomName.setText(getResources().getString(R.string.wellcome)+" To: "+game.getGame_name()+" Room");
+        playerCount=(String)getIntent().getSerializableExtra("playerCount");
+
         if(isNewRoom) {
+            allConnectedUsersId=new String [Integer.parseInt(playerCount)];
             new checkIfRoomNameAvilabale().execute(game.getGame_name());
         } else {
-            new joinToRoom().execute(game.getGame_name());
+            new getRoomSize().execute(String.valueOf(game.getGame_name()));
+            //new joinToRoom().execute(game.getGame_name());
         }
     }
 
@@ -142,6 +148,7 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
         protected Boolean doInBackground(String... params) {
             parms.put("room_name", params[0]);
             parms.put("user_id", String.valueOf(curentUser.getUserID()));
+            parms.put("player_count", playerCount);
             JSONParser json = new JSONParser();
             try {
                 JSONObject response = json.makeHttpRequest(ServerUtils.joinToRoom, "POST", parms);
@@ -266,6 +273,7 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
         @Override
         protected Boolean doInBackground(String... params) {
             parms.put("game_id", params[0]);
+            parms.put("player_count", playerCount);
             JSONParser json = new JSONParser();
             try {
                 JSONObject response = json.makeHttpRequest(ServerUtils.checkIfRoomFull, "POST", parms);
@@ -292,7 +300,7 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                  if(timerFlag)
                     new GetAllConnectedPlayers().execute();
                  else
-                     Toast.makeText(Room.this,"canceeeee",Toast.LENGTH_LONG).show();
+                     Toast.makeText(Room.this,getResources().getString(R.string.back_Main_Menu),Toast.LENGTH_LONG).show();
 
         }
 
@@ -499,6 +507,10 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                             // new Room.waitForOtherPlayer().execute(roomName);
                             //new GetRoomStatus().execute(roomName);
                         }
+                        if(!isRoomSizeSet) {
+                            isRoomSizeSet = true;
+                            new UpdateRoomSize().execute(playerCount,String.valueOf(game.getGame_id()));
+                        }
                     }
                 }, 2000);
 
@@ -563,6 +575,81 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
         }
 
     }
+
+    public class UpdateRoomSize extends AsyncTask<String, Void, Boolean> {
+        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            parms.put("room_size",params[0]);
+            parms.put("game_id",params[1]);
+
+            JSONParser json = new JSONParser();
+            try {
+                JSONObject response = json.makeHttpRequest(ServerUtils.UpdateRoomSize, "POST", parms);
+
+                if (response.getInt("successes")== 1) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        protected void onPostExecute(Boolean result) {
+            if(!result) {
+                Toast.makeText(Room.this, "Cant set game size", Toast.LENGTH_LONG).show();
+                timerFlag = false;
+                timer.cancel();
+                if(timerFlag2) {
+                    timerFlag2 = false;
+                    timer2.cancel();
+                }
+                Intent myIntent = new Intent(Room.this, MainMenu.class);
+                startActivity(myIntent);
+                finish();
+            }
+        }
+
+    }
+
+    public class getRoomSize extends AsyncTask<String, Void, Boolean> {
+        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            parms.put("game_name",params[0]);
+
+            JSONParser json = new JSONParser();
+            try {
+                JSONObject response = json.makeHttpRequest(ServerUtils.getRoomSize, "POST", parms);
+
+                if (response.getInt("succsses")== 1) {
+                    playerCount=response.getString("room_size");
+                    return true;
+                } else {
+                    return false;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        protected void onPostExecute(Boolean result) {
+            if(result) {
+                allConnectedUsersId=new String [Integer.parseInt(playerCount)];
+                new joinToRoom().execute(game.getGame_name());
+            }
+            else
+                Toast.makeText(Room.this,"Cant get room size",Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+
+
 
 
 

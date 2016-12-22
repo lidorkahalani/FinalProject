@@ -176,20 +176,22 @@
         android:orientation="vertical"
         android:weightSum="50">
 
+
+
         <Button
-            android:layout_weight="10"
+            android:layout_weight="5"
             android:onClick="webView"
-            android:layout_gravity="left"
+            android:textColor="@color/cardview_light_background"
+            android:layout_gravity="start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/circle_boutun"
-            android:id="@+id/start"
-            android:textStyle="bold"
+            android:background="@android:drawable/ic_dialog_info"
+            android:id="@+id/info"
             android:layout_margin="@dimen/webViewMargin"
              />
 
         <TextView
-            android:layout_weight="40"
+            android:layout_weight="45"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -211,7 +213,7 @@
             android:paddingLeft="@dimen/padingRightLeftMainMenu"
             android:paddingRight="@dimen/padingRightLeftMainMenu">
 
-            <Button
+        <Button
                 android:textSize="@dimen/regularFont"
                 android:onClick="openRoom"
                 android:layout_width="match_parent"

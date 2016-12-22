@@ -96,7 +96,7 @@
     <string name="game_over">Game over</string>
     <string name="win">Win!</string>
     <string name="Won">Won</string>
-    <string name="no_one_win">There is no winner</string>
+    <string name="no_one_win">Equals result</string>
     <string name="move_to_next_turn">Next turn</string>
     <string name="you_turn">You turn</string>
     <string name="choose_at_least">Choose at least 5 series</string>
@@ -146,6 +146,7 @@
     <string name="noe_complete_sereis">You have not completed a series</string>
     <string name="game_equals">Equal result</string>
     <string name="my_series">My series</string>
+    <string name="select_playe_cnt">Select number of players</string>
 
 
     <string-array name="card_click_menu">
@@ -155,6 +156,13 @@
     <string-array name="my_card">
         <item>Delete series</item>
         <item>Edit series</item>
+    </string-array>
+
+    <string-array name="player_count">
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
     </string-array>
 
 
