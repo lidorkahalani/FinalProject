@@ -231,7 +231,7 @@ public class MainMenu extends AppCompatActivity implements AdapterView.OnItemSel
         if (AccessToken.getCurrentAccessToken() == null) {
             facebookButton.setVisibility(View.GONE);
             logOut.setVisibility(View.VISIBLE);
-        } else {
+        }else {
             facebookButton.setVisibility(View.VISIBLE);
             logOut.setVisibility(View.GONE);
         }
