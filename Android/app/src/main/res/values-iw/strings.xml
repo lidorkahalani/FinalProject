@@ -108,6 +108,8 @@
     <string name="must_permission">הרשאה נדרשת</string>
     <string name="points">נקודות</string>
     <string name="select_playe_cnt">בחר כמות שחקנים</string>
+    <string name="empty_room_name">לא ניתן לפתוח חדר ללא שם!</string>
+
 
 
 

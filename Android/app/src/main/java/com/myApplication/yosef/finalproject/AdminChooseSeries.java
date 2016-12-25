@@ -41,12 +41,13 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class AdminChooseSeries extends AppCompatActivity implements AdapterView.OnItemClickListener {
-    static HashSet<Series> series =new HashSet();
+    static LinkedHashSet<Series> series =new LinkedHashSet();
     private ListView lv;
     private MyClassAdapter adapter;
     private ListView category_list;
@@ -70,8 +71,8 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
         allUsers=(ArrayList<User>)getIntent().getSerializableExtra("allUsers");
         allConnectedUsersId=getIntent().getExtras().getStringArray("allConnectedUsersId");
 
-
-        new GetMySeries().execute(String.valueOf(allConnectedUsersId[0]));
+        new GetDefultSeries().execute("0");
+        //new GetMySeries().execute(String.valueOf(allConnectedUsersId[0]));
 
 
         myTimer.scheduleAtFixedRate(new MyTask(), 5000, 2000);
@@ -138,6 +139,66 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
 
     }
 
+    public class GetDefultSeries extends AsyncTask<String, Void, Boolean> {
+        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            parms.put("user_id", params[0]);
+            JSONParser json = new JSONParser();
+            Series temp_categorys=new Series();;
+            try {
+                JSONObject response = json.makeHttpRequest(ServerUtils.GetMySeries, "GET", parms);
+                if (response.getInt("succsses") == 1) {
+                    JSONArray jsonArray = response.getJSONArray("myCards");
+                    for (int i = 0; i < jsonArray.length(); i+=4) {
+                        //   Card card = new Card();
+                        if(i%4==0)
+                            temp_categorys=new Series();
+
+                        JSONObject jo = jsonArray.getJSONObject(i);
+                        temp_categorys.setCategory_id(jo.getInt("category_id"));
+                        temp_categorys.setCategory_name(jo.getString("category_name"));
+                        temp_categorys.setCard_name1(jo.getString("card_name"));
+                        temp_categorys.setCard_name2(jsonArray.getJSONObject(i+1).getString("card_name"));
+                        temp_categorys.setCard_name3(jsonArray.getJSONObject(i+2).getString("card_name"));
+                        temp_categorys.setCard_name4(jsonArray.getJSONObject(i+3).getString("card_name"));
+                        temp_categorys.setImage1(jo.getString("image_name"));
+                        temp_categorys.setImage2(jsonArray.getJSONObject(i+1).getString("image_name"));
+                        temp_categorys.setImage3(jsonArray.getJSONObject(i+2).getString("image_name"));
+                        temp_categorys.setImage4(jsonArray.getJSONObject(i+3).getString("image_name"));
+                        series.add(temp_categorys);
+                    }
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return false;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+
+        }
+
+        protected void onPostExecute(Boolean result) {
+            if(result){
+                new GetMySeries().execute(String.valueOf(allConnectedUsersId[0]));
+             /*   chosenList= new boolean[series.size()];
+                setBoolenList=true;
+                List<Series> list = new ArrayList<Series>(series);
+                adapter = new MyClassAdapter(AdminChooseSeries.this, R.layout.single_chose_series, list);
+                category_list.setAdapter(adapter);
+                category_list.setOnItemClickListener(AdminChooseSeries.this);
+                lv = (ListView) findViewById(R.id.choseSeriesList);
+                registerForContextMenu(lv);
+
+                new setGameToActive().execute("1",String.valueOf(game.getGame_id()));*/
+            }
+        }
+    }
+
     public class GetMySeries extends AsyncTask<String, Void, Boolean> {
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
 
@@ -184,76 +245,24 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
 
         protected void onPostExecute(Boolean result) {
             if(result) {
-                for(;i<(allConnectedUsersId.length-1);i++)
+                for(;i<allConnectedUsersId.length;i++)
                     new GetMySeries().execute(String.valueOf(allConnectedUsersId[i]));
-            }
-            if(i==(allConnectedUsersId.length-1))
-                new GetDefultSeries().execute("0");
 
-
-        }
-    }
-
-    public class GetDefultSeries extends AsyncTask<String, Void, Boolean> {
-        LinkedHashMap<String, String> parms = new LinkedHashMap<>();
-
-        @Override
-        protected Boolean doInBackground(String... params) {
-            parms.put("user_id", params[0]);
-            JSONParser json = new JSONParser();
-            Series temp_categorys=new Series();;
-            try {
-                JSONObject response = json.makeHttpRequest(ServerUtils.GetMySeries, "GET", parms);
-                if (response.getInt("succsses") == 1) {
-                    JSONArray jsonArray = response.getJSONArray("myCards");
-                    for (int i = 0; i < jsonArray.length(); i+=4) {
-                        //   Card card = new Card();
-                        if(i%4==0)
-                            temp_categorys=new Series();
-
-                        JSONObject jo = jsonArray.getJSONObject(i);
-                        temp_categorys.setCategory_id(jo.getInt("category_id"));
-                        temp_categorys.setCategory_name(jo.getString("category_name"));
-                        temp_categorys.setCard_name1(jo.getString("card_name"));
-                        temp_categorys.setCard_name2(jsonArray.getJSONObject(i+1).getString("card_name"));
-                        temp_categorys.setCard_name3(jsonArray.getJSONObject(i+2).getString("card_name"));
-                        temp_categorys.setCard_name4(jsonArray.getJSONObject(i+3).getString("card_name"));
-                        temp_categorys.setImage1(jo.getString("image_name"));
-                        temp_categorys.setImage2(jsonArray.getJSONObject(i+1).getString("image_name"));
-                        temp_categorys.setImage3(jsonArray.getJSONObject(i+2).getString("image_name"));
-                        temp_categorys.setImage4(jsonArray.getJSONObject(i+3).getString("image_name"));
-                        series.add(temp_categorys);
-                    }
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-                return false;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
-            }
-            return true;
-
-        }
-
-        protected void onPostExecute(Boolean result) {
-            if(result) {
                 chosenList= new boolean[series.size()];
                 setBoolenList=true;
                 List<Series> list = new ArrayList<Series>(series);
                 adapter = new MyClassAdapter(AdminChooseSeries.this, R.layout.single_chose_series, list);
-
                 category_list.setAdapter(adapter);
-
                 category_list.setOnItemClickListener(AdminChooseSeries.this);
-
                 lv = (ListView) findViewById(R.id.choseSeriesList);
                 registerForContextMenu(lv);
 
-
-                  new setGameToActive().execute("1",String.valueOf(game.getGame_id()));
+                new setGameToActive().execute("1",String.valueOf(game.getGame_id()));
             }
+           /* if(i==allConnectedUsersId.length)
+                new GetDefultSeries().execute("0");*/
+
+
         }
     }
 
@@ -469,7 +478,7 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
 
             Log.i("TEST getView", "inside getView position " + position);
 
-            Series series = getItem(position);
+            Series oneSeries = getItem(position);
 
             //String card2 = getItem(position);
             if (convertView == null) {
@@ -479,7 +488,10 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
 
 
             CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.checkBox);
-            checkBox.setText(series.getCategory_name());
+            if(oneSeries.getCategory_id()>9)
+             checkBox.setTextColor(getResources().getColor(R.color.red));
+
+            checkBox.setText(oneSeries.getCategory_name());
             if (setBoolenList)
                 checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override

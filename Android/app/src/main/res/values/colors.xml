@@ -6,6 +6,7 @@
     <color name="light_green">#b9f6ca</color>
         <color name="bright_pink">#FF007F</color>
         <color name="red">#ff0000</color>
+        <color name="gray">#696969</color>
         <color name="orange">#FF7F00</color>
         <color name="yellow">#FFFF00</color>
         <color name="chartreuse">#7FFF00</color>

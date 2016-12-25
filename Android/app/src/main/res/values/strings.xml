@@ -147,6 +147,7 @@
     <string name="game_equals">Equal result</string>
     <string name="my_series">My series</string>
     <string name="select_playe_cnt">Select number of players</string>
+    <string name="empty_room_name">room without name is forbid</string>
 
 
     <string-array name="card_click_menu">

@@ -64,7 +64,7 @@ public class MainMenu extends AppCompatActivity implements AdapterView.OnItemSel
     private Game newGame = new Game();
     final int MY_PERMISSIONS_REQUEST_WRITE_STORAGE =1;
 
-    ArrayList<String> paths=new ArrayList<>();
+    //ArrayList<String> paths=new ArrayList<>();
 
     int playerCount=0;
 
@@ -165,10 +165,6 @@ public class MainMenu extends AppCompatActivity implements AdapterView.OnItemSel
         setLayout();
         checkPermission();
 
-        paths.add("1");
-        paths.add("2");
-        paths.add("3");
-        paths.add("4");
 
     }
 
@@ -327,10 +323,6 @@ public class MainMenu extends AppCompatActivity implements AdapterView.OnItemSel
         final Spinner spinner = (Spinner)dialogView.findViewById(R.id.spinner);
         final EditText roomNameInput = (EditText) dialogView.findViewById(R.id.room_name_input);
 
-
-
-
-
         AlertDialog.Builder builder = new AlertDialog.Builder(MainMenu.this);
         builder.setView(dialogView);
         builder.setTitle(getResources().getString(R.string.open_room_dialog_title));
@@ -340,16 +332,29 @@ public class MainMenu extends AppCompatActivity implements AdapterView.OnItemSel
             public void onClick(DialogInterface dialog, int which) {
                 Log.i("Room name:", roomNameInput.getText().toString());
                 roomName=roomNameInput.getText().toString();
-                String playcnt=spinner.getSelectedItem().toString();
-                Log.i("Selected numner",String.valueOf(playcnt));
-                Intent intent=new Intent(MainMenu.this,Room.class);
-                newGame.setGame_name(roomName);
-                intent.putExtra("Game",newGame);
-                intent.putExtra("playerCount",playcnt);
-                intent.putExtra("currentPlayer",currentPlayer);
-                intent.putExtra("isNewRoom",true);
-                startActivity(intent);
-                finish();
+                if(!roomName.isEmpty()) {
+                    String playcnt = spinner.getSelectedItem().toString();
+                    Log.i("Selected numner", String.valueOf(playcnt));
+                    Intent intent = new Intent(MainMenu.this, Room.class);
+                    newGame.setGame_name(roomName);
+                    intent.putExtra("Game", newGame);
+                    intent.putExtra("playerCount", playcnt);
+                    intent.putExtra("currentPlayer", currentPlayer);
+                    intent.putExtra("isNewRoom", true);
+                    startActivity(intent);
+                    finish();
+                }else {
+                    new AlertDialog.Builder(MainMenu.this)
+                            .setTitle(getResources().getString(R.string.Warning))
+                            .setMessage(getResources().getString(R.string.empty_room_name))
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // continue with delete
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                }
 
 
             }
@@ -473,10 +478,9 @@ public class MainMenu extends AppCompatActivity implements AdapterView.OnItemSel
         startActivity(myIntent);
     }
 
-
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        playerCount=Integer.parseInt(paths.get(position));
+       // playerCount=Integer.parseInt(paths.get(position));
     }
 
     @Override

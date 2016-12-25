@@ -407,7 +407,7 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                                 new checkIfGameIsActive().execute(String.valueOf(game.getGame_id()));
                             }
                         }
-                    }, 3000);
+                    }, 2000);
                 }
                 if (!isGameActive) {//somone is disconected go back to mainMenu
                     isAdminOpenTheRoomAndCloseIt = true;
