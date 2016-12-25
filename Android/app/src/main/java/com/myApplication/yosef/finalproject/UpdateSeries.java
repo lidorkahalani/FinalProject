@@ -219,21 +219,21 @@ public class UpdateSeries extends AppCompatActivity implements View.OnClickListe
                 }
                 else if(isbuttonChooseCard2) {
                     imageName2=getImageNameFromUriAcordingApi(data);
-                    String[] name=imageName1.split("/");
+                    String[] name=imageName2.split("/");
                     file2 =convertBitmapToFile(bitmap,name[name.length-1]);
                     imageViewCard2.setImageBitmap(rotatedBitmap);
                     isbuttonChooseCard2=false;
                 }
                 else if(isbuttonChooseCard3) {
                     imageName3=getImageNameFromUriAcordingApi(data);
-                    String[] name=imageName1.split("/");
+                    String[] name=imageName3.split("/");
                     file3 =convertBitmapToFile(bitmap,name[name.length-1]);
                     imageViewCard3.setImageBitmap(rotatedBitmap);
                     isbuttonChooseCard3=false;
                 }
                 else if(isbuttonChooseCard4) {
                     imageName4=getImageNameFromUriAcordingApi(data);
-                    String[] name=imageName1.split("/");
+                    String[] name=imageName4.split("/");
                     file4 =convertBitmapToFile(bitmap,name[name.length-1]);
                     imageViewCard4.setImageBitmap(rotatedBitmap);
                     isbuttonChooseCard4=false;

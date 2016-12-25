@@ -12,6 +12,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,8 +58,8 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
     private Game game;
     private User curentUser;
     int i=1;
-    boolean []chosenList;
-    private Boolean setBoolenList=false;
+    static boolean []chosenList;
+    static private Boolean setBoolenList=false;
     private Boolean adminChose=false;
     private  Timer myTimer = new Timer("MyTimer", true);
 
@@ -112,7 +114,6 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
        // CheckBox cb = (CheckBox) v.getRootView().findViewById(R.id.checkBox);
         //CheckBox checkBox=(CheckBox)v.findViewById(R.id.checkBox);
        // Toast.makeText(AdminChooseSeries.this,cb.getText().toString(),Toast.LENGTH_SHORT).show();
-
          int counter=0;
         final int cnt;
         final List<Series> list = new ArrayList<Series>(series);
@@ -464,23 +465,28 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
 
     }
 
-    class MyClassAdapter extends ArrayAdapter<Series> {
-
+    static class MyClassAdapter extends ArrayAdapter<Series> {
+        private Context context;
+        private int layoutResourceId;
+        private List<Series> seriesList;
         public MyClassAdapter(Context context, int resource, List<Series> objects) {
             super(context, resource, objects);
+            this.layoutResourceId = resource;
+            this.context = context;
+            this.seriesList=objects;
         }
 
         // the method getView is in charge of creating a single line in the list
         // it receives the position (index) of the line to be created
         // the method populates the view with the data from the relevant object (according to the position)
+
+
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
-
+        /*
             Log.i("TEST getView", "inside getView position " + position);
-
             Series oneSeries = getItem(position);
 
-            //String card2 = getItem(position);
             if (convertView == null) {
                 Log.e("TEST getView", "inside if with position " + position);
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.single_chose_series, parent, false);
@@ -489,7 +495,7 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
 
             CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.checkBox);
             if(oneSeries.getCategory_id()>9)
-             checkBox.setTextColor(getResources().getColor(R.color.red));
+                checkBox.setTextColor(context.getResources().getColor(R.color.red));
 
             checkBox.setText(oneSeries.getCategory_name());
             if (setBoolenList)
@@ -500,10 +506,65 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
                     }
                 });
 
+            return convertView;*/
 
-            return convertView;
+            final SingleLayout holder;
+            View rowView=convertView;
+            Log.i("TEST getView", "inside getView position " + position);
 
+
+            if (rowView == null) {
+                Log.e("TEST getView", "inside if with position " + position);
+                rowView = LayoutInflater.from(getContext()).inflate(R.layout.single_chose_series, parent, false);
+                holder=new SingleLayout();
+                holder.checkBox=(CheckBox) rowView.findViewById(R.id.checkBox);
+
+                rowView.setTag(holder);
+            }else
+                holder=(SingleLayout)rowView.getTag();
+
+            //keep the position of the checkBox
+            RelativeLayout.LayoutParams checkBoxLayout =
+                    (RelativeLayout.LayoutParams) holder.checkBox.getLayoutParams();
+            checkBoxLayout.addRule(RelativeLayout.ALIGN_PARENT_LEFT, 0);
+            checkBoxLayout.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            holder.checkBox.setLayoutParams(checkBoxLayout);
+
+            Series oneSeries = seriesList.get(position);
+            if(oneSeries.getCategory_id()>9)
+                holder.checkBox.setTextColor(context.getResources().getColor(R.color.red));
+
+            holder.checkBox.setText(oneSeries.getCategory_name());
+
+            if (setBoolenList)
+                holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        chosenList[position] = isChecked;
+                    }
+                });
+
+            return rowView;
+        }
+
+
+        private static class SingleLayout {
+            CheckBox checkBox;
+        }
+
+        public int getViewTypeCount(){
+            if(getCount()!=0)
+                return getCount();
+            else
+                return 1;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            return position;
         }
     }
+
+
 
 }
