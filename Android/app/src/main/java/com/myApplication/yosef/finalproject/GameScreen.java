@@ -54,29 +54,20 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     static private ArrayList<Card> tempDeck = new ArrayList<Card>();
     private ArrayList<User> playerList = new ArrayList<>();
     private User currentPlayer;
-    private ArrayList<Integer> fullSereiesId = new ArrayList<Integer>();
-
     private Random randomGenerator;
-
-
     private LinearLayout activePlayer;
-    //private TextView point;
     private TextView myTurnTextView;
     private TextView currentActivePlayerName;
     static private int currentPoint = 0;
     private ArrayList<Integer> finishSeriesList = new ArrayList<Integer>();
     private Boolean reloadData = false;
     private Boolean updateActivePlayerName = false;
-    Button moveToNextTurn;
-
-
+    private Button moveToNextTurn;
     private RecyclerView myListView;
     private CardsAdapter cardsAdapter;
     private ImageButton deckImage;
-
     public static int MENU_ID = 0;
     private static final int CARDS_CLICK_MENU = 1;
-
     public static View selectedCard;
     private View cardView;
     private boolean setCardBackgroundTransparent = true;
@@ -95,21 +86,15 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     private Boolean timerFlag=false;
     private Boolean showTurnButon=false;
     private Boolean doJustOnTime=false;
-
     private Button showFinishSeriesListBtn;
-
     private String winnerName = "";
     private String activePlayerName = "";
     private Card currentSelectedCard;
-    private ArrayList<String> finishSeriesName=new ArrayList<>();
-
-    Boolean hasFinishSeries=false;
-    String finish[];
-
+    private Boolean hasFinishSeries=false;
+    private String finish[];
     private User winerUser;
-
-    MediaPlayer tackCardSound;
-    MediaPlayer finsihSerieSound;
+    private MediaPlayer tackCardSound;
+    private MediaPlayer finsihSerieSound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,6 +127,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
         myListView = (RecyclerView) findViewById(R.id.listcards);
 
+        //this set the oriention of the recycler
         RecyclerView.LayoutManager lm = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         myListView.setLayoutManager(lm);
         myListView.setItemAnimator(new DefaultItemAnimator());
@@ -254,7 +240,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     }
 
     public void addPoint() {
-        playfinishSeriesSound();
+
         Toast.makeText(this,getResources().getString(R.string.sereis_comlete),Toast.LENGTH_LONG).show();
         //new refresh().execute();
         if(!showFinishSeriesListBtnOneTime) {
@@ -265,12 +251,21 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
        // point.setText(getResources().getString(R.string.finish_series_cnt) + "\n" + (++currentPoint));
     }
 
+    public void playTackOneCardSound(){
+        tackCardSound.start();
+    }
+
+    public void playfinishSeriesSound(){
+        finsihSerieSound.start();
+    }
+
     @Override
     protected void onPause(){
         super.onPause();
         tackCardSound.release();
         finsihSerieSound.release();
     }
+
     @Override
     public void onCreateContextMenu(ContextMenu menu, View view,
                                     ContextMenu.ContextMenuInfo menuInfo) {
@@ -745,6 +740,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         protected void onPostExecute(Boolean result) {
 
             if (result) {
+                playfinishSeriesSound();
                 addPoint();
             } else
                 Toast.makeText(GameScreen.this,getResources().getString(R.string.update_finis_sereis_failed), Toast.LENGTH_LONG).show();
@@ -1091,14 +1087,6 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         }
 
     }
-
-    public void playTackOneCardSound(){
-        tackCardSound.start();
-    }
-    public void playfinishSeriesSound(){
-        finsihSerieSound.start();
-    }
-
 
     public void passCardByNFC() {
 
