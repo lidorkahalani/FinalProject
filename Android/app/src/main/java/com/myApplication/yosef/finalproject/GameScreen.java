@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -31,6 +32,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.MediaController;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -106,6 +108,9 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
     private User winerUser;
 
+    MediaPlayer tackCardSound;
+    MediaPlayer finsihSerieSound;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,6 +124,9 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         moveToNextTurn=(Button)findViewById(R.id.nextTurn);
         myTurnTextView=(TextView)findViewById(R.id.turnStatus);
         currentActivePlayerName=(TextView)findViewById(R.id.currentActivePlayerName);
+
+        tackCardSound=MediaPlayer.create(this,R.raw.take_card);
+        finsihSerieSound=MediaPlayer.create(this,R.raw.finish_sereis_sound);
 
         currentPlayer = (User) i.getSerializableExtra("currentPlayer");
         debugStatus = getIntent().getExtras().getBoolean("debug");
@@ -246,6 +254,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     }
 
     public void addPoint() {
+        playfinishSeriesSound();
         Toast.makeText(this,getResources().getString(R.string.sereis_comlete),Toast.LENGTH_LONG).show();
         //new refresh().execute();
         if(!showFinishSeriesListBtnOneTime) {
@@ -256,6 +265,12 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
        // point.setText(getResources().getString(R.string.finish_series_cnt) + "\n" + (++currentPoint));
     }
 
+    @Override
+    protected void onPause(){
+        super.onPause();
+        tackCardSound.release();
+        finsihSerieSound.release();
+    }
     @Override
     public void onCreateContextMenu(ContextMenu menu, View view,
                                     ContextMenu.ContextMenuInfo menuInfo) {
@@ -447,6 +462,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         protected void onPostExecute(Boolean result) {
             loading.dismiss();
             if (result) {
+                playTackOneCardSound();
                 currentActivePlayerName.setVisibility(View.VISIBLE);
                 setCardsList();
                 if (!deckIsOver)
@@ -1074,6 +1090,13 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
             //stop all timers
         }
 
+    }
+
+    public void playTackOneCardSound(){
+        tackCardSound.start();
+    }
+    public void playfinishSeriesSound(){
+        finsihSerieSound.start();
     }
 
 
