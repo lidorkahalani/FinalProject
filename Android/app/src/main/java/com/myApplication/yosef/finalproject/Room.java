@@ -44,9 +44,9 @@ import static android.webkit.ConsoleMessage.MessageLevel.LOG;
 public class Room extends AppCompatActivity implements AdapterView.OnItemClickListener {
     private ListView personList;
     private ListView lv;
-    private  MyClassAdapter adapter;
+    private MyClassAdapter adapter;
     private ArrayList<User> allUsers =new ArrayList();
-    private  ProgressDialog pDialog;
+    private ProgressDialog pDialog;
     private Timer timer;
     boolean timerFlag = false;
     private Boolean isGameActive=false;
@@ -57,11 +57,11 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
     private Timer timer2;
     boolean timerFlag2 = false;
     private TextView roomName;
-    private  User curentUser;
+    private User curentUser;
     private Game game;
     boolean isNewRoom;
     private String []allConnectedUsersId;
-    private String playerCount;
+    private String playerCount="0";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -559,8 +559,10 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
 
         protected void onPostExecute(Boolean result) {
             if (result) {
-                timer.cancel();
-                timerFlag = false;
+                if(timerFlag) {
+                    timer.cancel();
+                    timerFlag = false;
+                }
                 pDialog.dismiss();
                 if(timerFlag2) {
                     timer2.cancel();
@@ -642,16 +644,23 @@ public class Room extends AppCompatActivity implements AdapterView.OnItemClickLi
                 allConnectedUsersId=new String [Integer.parseInt(playerCount)];
                 new joinToRoom().execute(game.getGame_name());
             }
-            else
-                Toast.makeText(Room.this,"Cant get room size",Toast.LENGTH_LONG).show();
+            else{
+                new AlertDialog.Builder(Room.this)
+                        .setTitle(getResources().getString(R.string.Warning))
+                        .setMessage(getResources().getString(R.string.Group_Not_Found))
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent myIntent = new Intent(Room.this, MainMenu.class);
+                                startActivity(myIntent);
+                                finish();
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            }
+
         }
 
     }
-
-
-
-
-
-
 
 }
