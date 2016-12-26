@@ -109,18 +109,6 @@
     <string name="points">נקודות</string>
     <string name="select_playe_cnt">בחר כמות שחקנים</string>
     <string name="empty_room_name">לא ניתן לפתוח חדר ללא שם!</string>
-
-
-
-
-    <string-array name="card_click_menu">
-        <item>שלח קלף</item>
-    </string-array>
-
-    <string-array name="my_card">
-        <item>מחק סדרה</item>
-        <item>ערוך סדרה</item>
-    </string-array>
     <string name="Cant_set_game_Over">הייתה בעייה בקביעת סוף משחק</string>
     <string name="cant_take_card">אינך יכול לקחת קלף חכה לתורך</string>
     <string name="card_load_failed">טעינת קלפים נכשלה</string>
@@ -157,9 +145,21 @@
     <string name="upload_just_image">אנא בחר רק תמונות</string>
     <string name="you">אתה</string>
     <string name="serverNotRespond">השרת לא מגיב</string>
-    <string name="noe_complete_sereis">אין סדרות דךמות</string>
+    <string name="noe_complete_sereis">לא השלמת אף סדרה</string>
     <string name="game_equals">תוצאת שיוויון!</string>
     <string name="my_series">הסדרות שלי</string>
+
+
+
+    <string-array name="card_click_menu">
+        <item>שלח קלף</item>
+    </string-array>
+
+    <string-array name="my_card">
+        <item>מחק סדרה</item>
+        <item>ערוך סדרה</item>
+    </string-array>
+
 
 
 </resources>

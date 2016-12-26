@@ -237,7 +237,7 @@ public class MainMenu extends AppCompatActivity implements AdapterView.OnItemSel
         String password = myPref.getString("password", "");
         int score = myPref.getInt("score", 0);
         //int score = currentPlayer.getScore();
-        t.setText(getResources().getString(R.string.wellcome) + ":  " + uname);
+        t.setText(getResources().getString(R.string.wellcome) + ":  " + uname+"\n"+getResources().getString(R.string.score)+" "+score);
     }
 
     @Override

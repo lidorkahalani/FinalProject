@@ -46,22 +46,21 @@
                 android:orientation="vertical"
                 android:layout_weight="25">
 
-                <TextView
+             <!--   <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:id="@+id/pointField"
-                    android:text="@string/finish_series_cnt"
                     android:textStyle="bold"
                     android:textSize="@dimen/regularFont"
                     android:gravity="center"
-                    />
-                <ImageButton
+                    />-->
+                <Button
                     android:layout_gravity="center"
+                    android:visibility="invisible"
                     android:onClick="getListFinishSeries"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="invisible"
-                    android:src="@android:drawable/btn_star_big_on"
+                    android:background="@drawable/menu_copy"
                     android:id="@+id/finishSeriesBtn"
                     />
 

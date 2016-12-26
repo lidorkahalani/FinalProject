@@ -58,7 +58,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
 
     private LinearLayout activePlayer;
-    private TextView point;
+    //private TextView point;
     private TextView myTurnTextView;
     private TextView currentActivePlayerName;
     static private int currentPoint = 0;
@@ -94,7 +94,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     private Boolean showTurnButon=false;
     private Boolean doJustOnTime=false;
 
-    private ImageButton showFinishSeriesListBtn;
+    private Button showFinishSeriesListBtn;
 
     private String winnerName = "";
     private String activePlayerName = "";
@@ -110,10 +110,10 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_screen);
-        point = (TextView) findViewById(R.id.pointField);
+        //point = (TextView) findViewById(R.id.pointField);
         newGame = (Game) getIntent().getSerializableExtra("Game");
         Intent i = getIntent();
-        showFinishSeriesListBtn=(ImageButton)findViewById(R.id.finishSeriesBtn) ;
+        showFinishSeriesListBtn=(Button)findViewById(R.id.finishSeriesBtn) ;
 
         deckImage=(ImageButton)findViewById(R.id.ImageDeck);
         moveToNextTurn=(Button)findViewById(R.id.nextTurn);
@@ -153,9 +153,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
     }
 
-    public void openMainMenu()
-
-    {
+    public void openMainMenu(){
         myTimer.cancel();
         Intent myIntent = new Intent(GameScreen.this, MainMenu.class);
         startActivity(myIntent);
@@ -168,7 +166,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
     }
 
-    public void onBackPressed() {
+    public void onBackPressed(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getResources().getString(R.string.exitWarning))
                 .setCancelable(false)
@@ -186,7 +184,6 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         AlertDialog alert = builder.create();
         alert.show();
     }
-
 
     public void getListFinishSeries(View view){
         new getListFinishSeries().execute();
@@ -255,6 +252,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
             showFinishSeriesListBtnOneTime = true;
             showFinishSeriesListBtn.setVisibility(View.VISIBLE);
         }
+        showFinishSeriesListBtn.setText(getResources().getString(R.string.finish_series_cnt) + "\n" + (++currentPoint));
        // point.setText(getResources().getString(R.string.finish_series_cnt) + "\n" + (++currentPoint));
     }
 
