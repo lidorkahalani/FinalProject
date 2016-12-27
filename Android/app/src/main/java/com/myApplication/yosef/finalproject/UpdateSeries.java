@@ -495,7 +495,7 @@ public class UpdateSeries extends AppCompatActivity implements View.OnClickListe
 
         // SDK > 19 (Android 4.4)
         else {
-            name = RealPathUtil.getRealPathFromURI_API19(this, uri.getData());
+            name = RealPathUtil.getRealPathFromURI_API11to18(this, uri.getData());
         }
         return name;
     }

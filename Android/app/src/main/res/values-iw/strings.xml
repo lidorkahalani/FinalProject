@@ -139,7 +139,7 @@
     <string name="user_sign_up_success">הרשמה בוצעה בהצלחה</string>
     <string name="wait_too_your_turn">אנא המתן לתורך</string>
     <string name="finish_series_cnt">סדרות שהושלמו:</string>
-    <string name="Active_player">שחקן פעיל :</string>
+    <string name="Active_player">התור עבר ל:</string>
     <string name="getSeriesNamesFailde">קבלת שמות הסדרות נכשלה</string>
     <string name="take_card">קח קלף מהחפיסה</string>
     <string name="upload_just_image">אנא בחר רק תמונות</string>
@@ -148,6 +148,8 @@
     <string name="noe_complete_sereis">לא השלמת אף סדרה</string>
     <string name="game_equals">תוצאת שיוויון!</string>
     <string name="my_series">הסדרות שלי</string>
+    <string name="pick_image_intent_text">בחר תמונה</string>
+
 
 
 

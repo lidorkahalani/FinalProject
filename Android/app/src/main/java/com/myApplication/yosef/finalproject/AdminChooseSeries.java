@@ -58,8 +58,8 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
     private Game game;
     private User curentUser;
     int i=1;
-    static boolean []chosenList;
-    static private Boolean setBoolenList=false;
+    public static boolean []chosenList;
+    static  Boolean setBoolenList=false;
     private Boolean adminChose=false;
     private  Timer myTimer = new Timer("MyTimer", true);
 
@@ -115,13 +115,10 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
         //CheckBox checkBox=(CheckBox)v.findViewById(R.id.checkBox);
        // Toast.makeText(AdminChooseSeries.this,cb.getText().toString(),Toast.LENGTH_SHORT).show();
          int counter=0;
-        final int cnt;
         final List<Series> list = new ArrayList<Series>(series);
         for (int i=0;i<series.size();i++)
             if(chosenList[i])//if current item checked
                 counter++;
-        cnt=counter;
-
 
         if(counter>=5){
             adminChose=true;
@@ -248,7 +245,6 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
             if(result) {
                 for(;i<allConnectedUsersId.length;i++)
                     new GetMySeries().execute(String.valueOf(allConnectedUsersId[i]));
-
                 chosenList= new boolean[series.size()];
                 setBoolenList=true;
                 List<Series> list = new ArrayList<Series>(series);
@@ -515,7 +511,7 @@ public class AdminChooseSeries extends AppCompatActivity implements AdapterView.
 
             if (rowView == null) {
                 Log.e("TEST getView", "inside if with position " + position);
-                rowView = LayoutInflater.from(getContext()).inflate(R.layout.single_chose_series, parent, false);
+                rowView = LayoutInflater.from(context).inflate(R.layout.single_chose_series, parent, false);
                 holder=new SingleLayout();
                 holder.checkBox=(CheckBox) rowView.findViewById(R.id.checkBox);
 

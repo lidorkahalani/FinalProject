@@ -82,7 +82,11 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
     public static final String UPLOAD_KEY = "image";
     public static final String TAG = "MY MESSAGE";
 
-    private int PICK_IMAGE_REQUEST = 1;
+    final private int PICK_IMAGE_REQUEST = 1;
+    final private int TAKE_PGOTO_REQUEST = 2;
+    final private int PICK_IMAGE_ID = 3;
+    final private int GALLERY_PICTURE = 4;
+    final private int CAMERA_REQUEST = 5;
 
     //private Button buttonChoose;
     private Button buttonUploadSeries;
@@ -148,6 +152,8 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
     private StringBuilder sbParams;
     private String paramsString;
     final int MY_PERMISSIONS_REQUEST_READ_STORAGE =1;
+    final int MY_PERMISSIONS_CAMERA_STORAGE =123;
+
     ContentType contentType= ContentType.create("text/plain", Charset.forName("UTF-8"));
     //ContentType contentType = ContentType.create(
     //        HTTP.PLAIN_TEXT_TYPE, HTTP.UTF_8);
@@ -204,12 +210,120 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
     }
 
     private void showFileChooser() {
+        //checkPermission();
+
+
+
+        /*Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(takePicture, TAKE_PGOTO_REQUEST);*/
+
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-
         startActivityForResult(Intent.createChooser(intent,getResources().getString(R.string.Select_Picture)), PICK_IMAGE_REQUEST);
     }
+ /*   @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+        bitmap = null;
+
+        if (resultCode == RESULT_OK && requestCode == CAMERA_REQUEST) {
+
+        } else if (resultCode == RESULT_OK && requestCode == GALLERY_PICTURE) {
+
+        }
+    }*/
+/*
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch(requestCode) {
+            case PICK_IMAGE_ID:
+                filePath = data.getData();
+                imageFile=new File(filePath.getPath());
+                Bitmap rotatedBitmap=null;
+                Matrix matrix = new Matrix();
+
+                //deteect the oriention and resize degree
+                ExifInterface ei = null;
+                try {
+                    ei = new ExifInterface(imageFile.getAbsolutePath());
+                    matrix.postRotate(setOriention(ei));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+                try {
+                    bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
+                    bitmap=Bitmap.createScaledBitmap(MediaStore.Images.Media.getBitmap(getContentResolver(), filePath),200,200,true);
+                    rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+
+                    if(isbuttonChooseCard1) {
+                        bitmapResize1=bitmap;
+                        imageName1=getImageNameFromUriAcordingApi(data);
+                        String[] name=imageName1.split("/");
+
+                        //file1 = new File(imageName1);
+                        file1 =convertBitmapToFile(bitmapResize1,name[name.length-1]);
+                        imageViewCard1.setImageBitmap(rotatedBitmap);
+                        isbuttonChooseCard1=false;
+                    }
+                    else if(isbuttonChooseCard2) {
+                        //  bitmapResize2=Bitmap.createScaledBitmap(rotatedBitmap,200,200,true);
+                        bitmapResize2=bitmap;
+                        imageName2=getImageNameFromUriAcordingApi(data);
+                        String[] name=imageName2.split("/");
+
+                        // file2= new File(Environment.getExternalStorageDirectory().getAbsolutePath(),imageFile.getPath());
+                        //file2= new File(imageName2);
+                        file2 =convertBitmapToFile(bitmapResize2,name[name.length-1]);
+
+
+                        imageViewCard2.setImageBitmap(rotatedBitmap);
+                        isbuttonChooseCard2=false;
+                    }
+                    else if(isbuttonChooseCard3) {
+                        //   bitmapResize3=Bitmap.createScaledBitmap(rotatedBitmap,200,200,true);
+                        bitmapResize3=bitmap;
+                        imageName3=getImageNameFromUriAcordingApi(data);
+                        String[] name=imageName3.split("/");
+
+                        //file3= new File(Environment.getExternalStorageDirectory().getAbsolutePath(),imageFile.getPath());
+                        //file3=new File(imageName3);
+                        file3 =convertBitmapToFile(bitmapResize3,name[name.length-1]);
+
+
+
+                        imageViewCard3.setImageBitmap(rotatedBitmap);
+                        isbuttonChooseCard3=false;
+                    }
+                    else if(isbuttonChooseCard4) {
+                        //bitmapResize4=Bitmap.createScaledBitmap(rotatedBitmap,200,200,true);
+                        bitmapResize4=bitmap;
+                        imageName4=getImageNameFromUriAcordingApi(data);
+                        String[] name=imageName4.split("/");
+
+                        // file4=new File(imageName4);
+                        file4 =convertBitmapToFile(bitmapResize4,name[name.length-1]);
+
+                        //file4= new File(Environment.getExternalStorageDirectory().getAbsolutePath(),imageFile.getPath());
+                        imageViewCard4.setImageBitmap(rotatedBitmap);
+                        isbuttonChooseCard4=false;
+                    }
+
+                    imageCoosen=true;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
+                break;
+        }
+    }
+    */
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -297,6 +411,21 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
             }
         }
     }
+
+
+    public void checkPermission(){
+
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA},
+                    MY_PERMISSIONS_CAMERA_STORAGE);
+               startDialog();
+        }else
+            startDialog();
+    }
+
 
     public String getStringImage(Bitmap bmp){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -723,5 +852,10 @@ public class AddNewSeries extends AppCompatActivity implements View.OnClickListe
             name = RealPathUtil.getRealPathFromURI_API19(this, uri.getData());
         }
         return name;
+    }
+
+    private void startDialog() {
+        Intent chooseImageIntent = ImagePicker.getPickImageIntent(this);
+        startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
     }
 }

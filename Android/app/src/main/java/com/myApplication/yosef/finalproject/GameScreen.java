@@ -26,6 +26,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -95,6 +98,8 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     private User winerUser;
     private MediaPlayer tackCardSound;
     private MediaPlayer finsihSerieSound;
+    private MediaPlayer winnerSound;
+    private Animation rotateAnimation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,10 +116,13 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         currentActivePlayerName=(TextView)findViewById(R.id.currentActivePlayerName);
 
         tackCardSound=MediaPlayer.create(this,R.raw.take_card);
+        winnerSound=MediaPlayer.create(this,R.raw.winner_sound);
         finsihSerieSound=MediaPlayer.create(this,R.raw.finish_sereis_sound);
-
+        rotateAnimation = AnimationUtils.loadAnimation(this,R.anim.rotate);
+        rotateAnimation.setRepeatCount(1);
         currentPlayer = (User) i.getSerializableExtra("currentPlayer");
         debugStatus = getIntent().getExtras().getBoolean("debug");
+
         if (debugStatus)
             new getAllCards().execute();
         else
@@ -190,6 +198,8 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
     public void takeCard(View v) {
         if (isMyTurnStatus) {
+
+            deckImage.startAnimation(rotateAnimation);
             //
             new takeOneCardFromDeck().execute();
         }
@@ -257,6 +267,10 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
     public void playfinishSeriesSound(){
         finsihSerieSound.start();
+    }
+
+    public void playWinnerSound(){
+        winnerSound.start();
     }
 
     @Override
@@ -407,15 +421,15 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
     public class takeOneCardFromDeck extends AsyncTask<String, Void, Boolean> {
         LinkedHashMap<String, String> parms = new LinkedHashMap<>();
-        ProgressDialog loading;
+        //ProgressDialog loading;
 
         @Override
         protected void onPreExecute() {
 
             super.onPreExecute();
-            loading = ProgressDialog.show(GameScreen.this,
+        /*    loading = ProgressDialog.show(GameScreen.this,
                     getResources().getString(R.string.take_card),
-                    getResources().getString(R.string.please_wait),true,true);
+                    getResources().getString(R.string.please_wait),true,true);*/
         }
         @Override
         protected Boolean doInBackground(String... params) {
@@ -455,7 +469,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         }
 
         protected void onPostExecute(Boolean result) {
-            loading.dismiss();
+           // loading.dismiss();
             if (result) {
                 playTackOneCardSound();
                 currentActivePlayerName.setVisibility(View.VISIBLE);
@@ -884,6 +898,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                     AlertDialog.Builder builder = new AlertDialog.Builder(GameScreen.this);
                     builder.setTitle(getResources().getString(R.string.game_over));
                     if (currentPlayer.getUserID() == winerUser.getUserID()) {
+                        playWinnerSound();
                         builder.setMessage(getResources().getString(R.string.win))
                                 .setCancelable(false)
                                 .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
