@@ -149,6 +149,8 @@
     <string name="select_playe_cnt">Select number of players</string>
     <string name="empty_room_name">room without name is forbid</string>
     <string name="pick_image_intent_text">Chose image</string>
+    <string name="Instruction">Instruction</string>
+
 
 
     <string-array name="card_click_menu">
@@ -164,7 +166,6 @@
         <item>2</item>
         <item>3</item>
         <item>4</item>
-        <item>5</item>
     </string-array>
 
 
