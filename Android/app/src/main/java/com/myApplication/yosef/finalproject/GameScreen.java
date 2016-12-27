@@ -254,6 +254,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         Toast.makeText(this,getResources().getString(R.string.sereis_comlete),Toast.LENGTH_LONG).show();
         //new refresh().execute();
         if(!showFinishSeriesListBtnOneTime) {
+            currentPoint=0;
             showFinishSeriesListBtnOneTime = true;
             showFinishSeriesListBtn.setVisibility(View.VISIBLE);
         }
