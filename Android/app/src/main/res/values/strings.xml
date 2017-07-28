@@ -150,6 +150,10 @@
     <string name="empty_room_name">room without name is forbid</string>
     <string name="pick_image_intent_text">Chose image</string>
     <string name="Instruction">Instruction</string>
+    <string name="deck_over">Deck over</string>
+    <string name="instructions_pop_up">in your turn you need ask physically one of the players about specific card </string>
+    <string name="do_not_show_again">please do not show again.</string>
+    <string name="attention">Attention</string>
 
 
 

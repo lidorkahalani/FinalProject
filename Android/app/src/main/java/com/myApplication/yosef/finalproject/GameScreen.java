@@ -12,12 +12,14 @@ import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.BoolRes;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Display;
@@ -32,6 +34,7 @@ import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -100,6 +103,10 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     private MediaPlayer finsihSerieSound;
     private MediaPlayer winnerSound;
     private Animation rotateAnimation;
+    private CheckBox dontShowAgain;
+    private String PREFS_NAME="1";
+    private static Boolean instrectionPopIndector=false;
+    private static Boolean dontShowsinstrectionPop=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -284,21 +291,24 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
     @Override
     public void onCreateContextMenu(ContextMenu menu, View view,
                                     ContextMenu.ContextMenuInfo menuInfo) {
-        String menuItems[];
+        String menuItems[]=null;
         switch (view.getId()) {
             case R.id.listcards:
-                setCardBackgroundTransparent = true;
-                AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-                menuItems = getResources().getStringArray(R.array.card_click_menu);
-                menu.setHeaderTitle(getResources().getString(R.string.choose));
-                currentSelectedCard = deck.get(myListView.getChildPosition(cardView));
+                if (!isMyTurnStatus && !debugStatus) {
+                    setCardBackgroundTransparent = true;
+                    AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+                    menuItems = getResources().getStringArray(R.array.card_click_menu);
+                    menu.setHeaderTitle(getResources().getString(R.string.choose));
+                    currentSelectedCard = deck.get(myListView.getChildPosition(cardView));
+                }
                 break;
             default:
                 return;
         }
-
-        for (int i = 0; i < menuItems.length; i++) {
-            menu.add(Menu.NONE, i, i, menuItems[i]);
+        if(menuItems!=null) {
+            for (int i = 0; i < menuItems.length; i++) {
+                menu.add(Menu.NONE, i, i, menuItems[i]);
+            }
         }
     }
 
@@ -515,6 +525,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                 if (isMyTurnStatus) {
                     myTurnTextView.setVisibility(View.VISIBLE);
                     activePlayer.setBackgroundColor(Color.GREEN);
+                    showInsterctionPopUpMassage();
                 }
                 else {
                     myTurnTextView.setVisibility(View.INVISIBLE);
@@ -558,8 +569,10 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         protected void onPostExecute(Boolean result) {
 
             if (result) {
-                if (isMyTurnStatus)
+                if (isMyTurnStatus) {
+                    showInsterctionPopUpMassage();
                     activePlayer.setBackgroundColor(Color.GREEN);
+                }
                 else
                     activePlayer.setBackgroundColor(Color.TRANSPARENT);
                 new refresh().execute();
@@ -685,6 +698,10 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
                 setCardsList();
                 if (isMyTurnStatus) {
+                    if(!instrectionPopIndector&&!dontShowsinstrectionPop) {
+                        showInsterctionPopUpMassage();
+                        instrectionPopIndector=true;
+                    }
                     activePlayer.setBackgroundColor(Color.GREEN);
                     myTurnTextView.setVisibility(View.VISIBLE);
                 } else {
@@ -1108,5 +1125,44 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
     }
 
+    private void showInsterctionPopUpMassage(){
+        AlertDialog.Builder adb = new AlertDialog.Builder(GameScreen.this);
+        LayoutInflater adbInflater = LayoutInflater.from(GameScreen.this);
+        View eulaLayout = adbInflater.inflate(R.layout.checkbox, null);
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        String skipMessage = settings.getString("skipMessage", "NOT checked");
 
+        dontShowAgain = (CheckBox) eulaLayout.findViewById(R.id.skip);
+        adb.setView(eulaLayout);
+        adb.setTitle(getResources().getString(R.string.attention));
+        adb.setMessage(Html.fromHtml(getResources().getString(R.string.instructions_pop_up)));
+
+        adb.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                String checkBoxResult = "NOT checked";
+
+                if (dontShowAgain.isChecked()) {
+                    checkBoxResult = "checked";
+
+                }else {
+                    instrectionPopIndector = false;
+                    dontShowsinstrectionPop = true;
+                }
+
+                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                SharedPreferences.Editor editor = settings.edit();
+
+                editor.putString("skipMessage", checkBoxResult);
+                editor.commit();
+
+                // Do what you want to do on "OK" action
+
+                return;
+            }
+        });
+
+        if (!skipMessage.equals("checked")) {
+            adb.show();
+        }
+    }
 }

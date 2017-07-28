@@ -150,6 +150,10 @@
     <string name="my_series">הסדרות שלי</string>
     <string name="pick_image_intent_text">בחר תמונה</string>
     <string name="Instruction">הוראות</string>
+    <string name="deck_over">חפיסה נגמרה!</string>
+    <string name="instructions_pop_up">עכשיו תורך עליך לשאול פיזית על קלף מסוים את אחד מהמשתתפים</string>
+    <string name="do_not_show_again">אל תציג הודעה זאת שוב</string>
+    <string name="attention">שים לב</string>
 
 
 
