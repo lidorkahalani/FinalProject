@@ -150,11 +150,12 @@
     <string name="empty_room_name">room without name is forbid</string>
     <string name="pick_image_intent_text">Chose image</string>
     <string name="Instruction">Instruction</string>
+    <string name="server_not_responding">Server not responding</string>
 
 
 
     <string-array name="card_click_menu">
-        <item>send card</item>
+        <item>Send card</item>
     </string-array>
 
     <string-array name="my_card">

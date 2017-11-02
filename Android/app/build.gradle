@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    compileSdkVersion 26
+    buildToolsVersion '26.0.2'
     useLibrary 'org.apache.http.legacy'
 
     packagingOptions {
@@ -12,7 +12,7 @@ android {
     defaultConfig {
         applicationId "com.myApplication.yosef.finalproject"
         minSdkVersion 15
-        targetSdkVersion 23
+        targetSdkVersion 26
         versionCode 12
         versionName "1.5.5"
     }

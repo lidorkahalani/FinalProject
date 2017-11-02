@@ -148,72 +148,7 @@
 
             </LinearLayout>
 
-
-
-
     </LinearLayout>
 
-
-    <!--
-       <RelativeLayout
-           android:id="@+id/ac"
-           android:layout_width="20dp"
-           android:layout_height="match_parent"
-           android:layout_above="@+id/bottom_layout"
-           android:layout_alignParentRight="true"
-           android:layout_below="@+id/top_layout"
-           android:background="#FF9800">
-       </RelativeLayout>
-
-
-       <RelativeLayout
-           android:id="@+id/top_layout"
-           android:layout_width="match_parent"
-           android:layout_height="20dp"
-           android:layout_alignParentTop="true"
-           android:layout_gravity="top"
-           android:background="#F44336">
-       </RelativeLayout>
-
-
-
-       <RelativeLayout
-           android:id="@+id/left_layout"
-           android:layout_width="20dp"
-           android:layout_height="match_parent"
-           android:layout_above="@+id/bottom_layout"
-           android:layout_alignParentLeft="true"
-           android:layout_below="@+id/top_layout"
-           android:background="#FFEB3B">
-       </RelativeLayout>
-       -->
-
-
-   <!--
-       <Button
-           android:textSize="18dip"
-           android:onClick="refresh"
-           android:layout_width="185dp"
-           android:layout_height="wrap_content"
-           android:background="@drawable/open_room"
-           android:id="@+id/refreshBtn"
-           android:textStyle="bold"
-           android:text="@string/refresh"
-           android:layout_below="@+id/top_layout"
-           android:layout_toRightOf="@+id/left_layout"
-           android:layout_alignRight="@+id/imageButton4"
-       />
-       -->
-
-
-
-
-    <!--
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/listcards"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </android.support.v7.widget.RecyclerView>
-        -->
 
 </LinearLayout>

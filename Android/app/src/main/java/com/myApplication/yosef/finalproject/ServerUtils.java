@@ -6,10 +6,6 @@ package com.myApplication.yosef.finalproject;
 
 public class ServerUtils {
 
-
-    // public static String server ="http://192.168.1.13/final_project/db/";
-   //  public static String imageLoadServer="http://192.168.1.13/final_project/";
-
     //public static String server ="http://10.0.2.2/final_project/db/";
     //public static String imageLoadServer="http://10.0.2.2/final_project/";
 
@@ -51,5 +47,6 @@ public class ServerUtils {
     public static final String getListFinishSeries=server+"getListFinishSeries.php";
     public static final String UpdateRoomSize=server+"UpdateRoomSize.php";
     public static final String getRoomSize=server+"getRoomSize.php";
+    public static final String connectionToDB=server+"connection.php";
 
 }

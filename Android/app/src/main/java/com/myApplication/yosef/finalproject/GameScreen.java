@@ -287,19 +287,22 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
         String menuItems[];
         switch (view.getId()) {
             case R.id.listcards:
-                setCardBackgroundTransparent = true;
-                AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-                menuItems = getResources().getStringArray(R.array.card_click_menu);
-                menu.setHeaderTitle(getResources().getString(R.string.choose));
-                currentSelectedCard = deck.get(myListView.getChildPosition(cardView));
-                break;
+                if (!isMyTurnStatus) {
+                    setCardBackgroundTransparent = true;
+                    AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+                    menuItems = getResources().getStringArray(R.array.card_click_menu);
+                    //menu.setHeaderTitle(getResources().getString(R.string.choose));
+                    currentSelectedCard = deck.get(myListView.getChildPosition(cardView));
+                    break;
+                }
             default:
                 return;
-        }
 
-        for (int i = 0; i < menuItems.length; i++) {
-            menu.add(Menu.NONE, i, i, menuItems[i]);
         }
+        if (!isMyTurnStatus)
+            for (int i = 0; i < menuItems.length; i++) {
+                menu.add(Menu.NONE, i, i, menuItems[i]+": "+currentSelectedCard.getCardName());
+            }
     }
 
     @Override
@@ -673,7 +676,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
 
 
 
-                //all these toast not working!!!!!
+                /*all these toast not working!!!!!
                 if (newCarRecive) {
                     Toast.makeText(GameScreen.this, getResources().getString(R.string.new_card_recived), Toast.LENGTH_SHORT).show();
                     newCarRecive = false;
@@ -681,7 +684,7 @@ public class GameScreen extends AppCompatActivity implements AdapterView.OnItemC
                     Toast.makeText(GameScreen.this, getResources().getString(R.string.card_send), Toast.LENGTH_SHORT).show();
                     cardSend = false;
                 }
-                //
+                */
 
                 setCardsList();
                 if (isMyTurnStatus) {
