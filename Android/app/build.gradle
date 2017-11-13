@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     buildToolsVersion '26.0.2'
     useLibrary 'org.apache.http.legacy'
 
@@ -12,9 +12,9 @@ android {
     defaultConfig {
         applicationId "com.myApplication.yosef.finalproject"
         minSdkVersion 15
-        targetSdkVersion 26
-        versionCode 12
-        versionName "1.5.5"
+        targetSdkVersion 27
+        versionCode 13
+        versionName "1.5.6"
     }
     buildTypes {
         release {
@@ -32,8 +32,9 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.4.+'
-    compile 'com.android.support:recyclerview-v7:23.4.+'
+    //noinspection GradleCompatible
+    compile 'com.android.support:appcompat-v7:27.0.1'
+    compile 'com.android.support:recyclerview-v7:27.0.1'
     compile 'com.facebook.android:facebook-android-sdk:4.+'
     compile 'com.google.code.gson:gson:2.2.4'
     compile group: 'org.apache.httpcomponents' , name: 'httpclient-android' , version: '4.3.5.1'
